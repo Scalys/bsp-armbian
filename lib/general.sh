@@ -375,17 +375,19 @@ fetch_from_repo()
 	if [[ -f .gitmodules ]]; then
 		display_alert "Updating submodules" "" "ext"
 		# FML: http://stackoverflow.com/a/17692710
-		for i in $(improved_git config -f .gitmodules --get-regexp path | awk '{ print $2 }'); do
+		for i in $(improved_git config -f .gitmodules --get-regexp path | awk '{ print $1 }' | sed 's/^submodule\.\(.*\)\.path$/\1/'); do
 			cd "${SRC}/cache/sources/${workdir}" || exit
-			local surl sref
+			local surl sref spath
+			spath=$(improved_git config -f .gitmodules --get "submodule.$i.path")
 			surl=$(improved_git config -f .gitmodules --get "submodule.$i.url")
-			sref=$(improved_git config -f .gitmodules --get "submodule.$i.branch")
+			# sref=$(improved_git config -f .gitmodules --get "submodule.$i.branch")
+			sref=$(improved_git ls-tree HEAD "${spath}" | awk '{ print $3 }' )
 			if [[ -n $sref ]]; then
-				sref="branch:$sref"
+				sref="commit:$sref"
 			else
 				sref="head"
 			fi
-			fetch_from_repo "$surl" "$workdir/$i" "$sref"
+			fetch_from_repo "$surl" "$workdir/$spath" "$sref"
 		done
 	fi
 } #############################################################################
@@ -1022,10 +1024,10 @@ prepare_host()
 		fi
 		CONTAINER_COMPAT=yes
 		# trying to use nested containers is not a good idea, so don't permit EXTERNAL_NEW=compile
-		if [[ $EXTERNAL_NEW == compile ]]; then
-			display_alert "EXTERNAL_NEW=compile is not available when running in container, setting to prebuilt" "" "wrn"
-			EXTERNAL_NEW=prebuilt
-		fi
+		# if [[ $EXTERNAL_NEW == compile ]]; then
+		#	display_alert "EXTERNAL_NEW=compile is not available when running in container, setting to prebuilt" "" "wrn"
+		#	EXTERNAL_NEW=prebuilt
+		# fi
 		SYNC_CLOCK=no
 	fi
 

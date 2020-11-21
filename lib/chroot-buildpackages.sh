@@ -159,7 +159,7 @@ chroot_build_packages()
 			local t=$target_dir/root/.update-timestamp
 			if [[ ! -f ${t} || $(( ($(date +%s) - $(<"${t}")) / 86400 )) -gt 7 ]]; then
 				display_alert "Upgrading packages" "$release/$arch" "info"
-				systemd-nspawn -a -q -D "${target_dir}" /bin/bash -c "apt-get -q update; apt-get -q -y upgrade; apt-get clean"
+				chroot "${target_dir}" /bin/bash -c "apt-get -q update; apt-get -q -y upgrade; apt-get clean"
 				date +%s > "${t}"
 			fi
 
@@ -206,7 +206,7 @@ chroot_build_packages()
 				export DEB_BUILD_OPTIONS="nocheck noautodbgsym"
 				export CCACHE_TEMPDIR="/tmp"
 				# distcc is disabled to prevent compilation issues due to different host and cross toolchain configurations
-				#export CCACHE_PREFIX="distcc"
+				export CCACHE_PREFIX="distcc"
 				# uncomment for debug
 				#export CCACHE_RECACHE="true"
 				#export CCACHE_DISABLE="true"
@@ -261,14 +261,24 @@ chroot_build_packages()
 
 				fetch_from_repo "$package_repo" "extra/$package_name" "$package_ref"
 
-				eval systemd-nspawn -a -q --capability=CAP_MKNOD -D "${target_dir}" --tmpfs=/root/build --tmpfs=/tmp:mode=777 --bind-ro "${SRC}"/packages/extras-buildpkgs/:/root/overlay \
-					--bind-ro "${SRC}"/cache/sources/extra/:/root/sources /bin/bash -c "/root/build.sh" 2>&1 \
+				mount -o bind,ro "${SRC}"/packages/extras-buildpkgs/ "${target_dir}"/root/overlay/
+				mount -o bind,ro "${SRC}"/cache/sources/extra/ "${target_dir}"/root/sources
+				mount -t tmpfs tmpfs "${target_dir}"/root/build
+				mount -t tmpfs tmpfs "${target_dir}"/tmp
+
+				eval chroot "${target_dir}" /bin/bash -c "/root/build.sh" 2>&1 \
 					${PROGRESS_LOG_TO_FILE:+' | tee -a $DEST/debug/buildpkg.log'}
 				if [[ ${PIPESTATUS[0]} -eq 2 ]]; then
 					failed+=("$package_name:$release/$arch")
 				else
 					built_ok+=("$package_name:$release/$arch")
 				fi
+
+				umount "${target_dir}"/root/overlay/
+				umount "${target_dir}"/root/sources
+				umount "${target_dir}"/root/build
+				umount "${target_dir}"/tmp
+
 				mv "${target_dir}"/root/*.deb "${plugin_target_dir}" 2>/dev/null
 			done
 			# cleanup for distcc

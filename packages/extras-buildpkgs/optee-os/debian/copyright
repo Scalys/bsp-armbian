@@ -1,0 +1,12 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: optee-os
+Upstream-Contact: 
+Source: https://github.com/ms-iot/optee_os
+
+Files: *
+Copyright: aaa
+License: GPL-2
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.
+ 

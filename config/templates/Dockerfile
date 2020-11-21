@@ -96,6 +96,7 @@ RUN apt-get update \
        zip \
        zlib1g-dev \
        zlib1g:i386 \
+       distcc \
     && rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 

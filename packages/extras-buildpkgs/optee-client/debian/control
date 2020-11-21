@@ -1,0 +1,15 @@
+Source: optee-client
+Section: utils
+Priority: optional
+Maintainer: Mikalai Ramanovich <mikalai.ramanovich@edality.by>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.8
+Homepage: https://github.com/ms-iot/optee_client
+Vcs-Git: https://github.com/ms-iot/optee_client.git
+Vcs-Browser: https://github.com/ms-iot/optee_client
+
+Package: optee-client
+Architecture: linux-any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: OP-TEE Client API
+

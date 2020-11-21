@@ -444,7 +444,6 @@ fi
 
 # Compile kernel if packed .deb does not exist or use the one from repository
 if [[ ! -f ${DEB_STORAGE}/${CHOSEN_KERNEL}_${REVISION}_${ARCH}.deb ]]; then
-
 	KDEB_CHANGELOG_DIST=$RELEASE
 	[[ "${REPOSITORY_INSTALL}" != *kernel* ]] && compile_kernel
 

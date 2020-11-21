@@ -579,6 +579,66 @@ compilation_prepare()
 	fi
 
 
+	if linux-version compare $version ge 5.0 && [ "$EXTRAWIFI" == yes ]; then
+
+		# attach to specifics tag or branch
+		local rtl8723buver="branch:master"
+
+		display_alert "Adding" "Wireless drivers for Realtek 8723BU chipsets ${rtl8723buver}" "info"
+
+		fetch_from_repo "https://github.com/lwfinger/rtl8723bu" "rtl8723bu" "${rtl8723buver}" "yes"
+		cd $kerneldir
+		rm -rf $kerneldir/drivers/net/wireless/rtl8723bu
+		mkdir -p $kerneldir/drivers/net/wireless/rtl8723bu/
+		cp -R ${SRC}/cache/sources/rtl8723bu/${rtl8723buver#*:}/{core,hal,include,os_dep,platform} \
+		$kerneldir/drivers/net/wireless/rtl8723bu
+
+		# Makefile
+		cp ${SRC}/cache/sources/rtl8723bu/${rtl8723buver#*:}/Makefile \
+		$kerneldir/drivers/net/wireless/rtl8723bu/Makefile
+
+		# Disable debug
+		sed -i "s/^CONFIG_RTW_DEBUG.*/CONFIG_RTW_DEBUG = n/" \
+		$kerneldir/drivers/net/wireless/rtl8723bu/Makefile
+
+		# Add to section Makefile
+		echo "obj-\$(CONFIG_RTL8723BU) += rtl8723bu/" >> $kerneldir/drivers/net/wireless/Makefile
+		sed -i '/source "drivers\/net\/wireless\/ti\/Kconfig"/a source "drivers\/net\/wireless\/rtl8723bu\/Kconfig"' \
+		$kerneldir/drivers/net/wireless/Kconfig
+
+		process_patch_file "${SRC}/patch/misc/wireless-rtl8723bu.patch" "applying"
+	fi
+
+	if linux-version compare "${version}" ge 5.0 && [ "$CRYPTODEV" == yes ]; then
+
+		local cryptodevver="tag:LSDK-20.04"
+
+		display_alert "Adding" "/dev/crypto device driver"
+
+		fetch_from_repo "https://source.codeaurora.org/external/qoriq/qoriq-components/cryptodev-linux" "cryptodev-linux" "${cryptodevver}" "yes"
+
+		cd ${kerneldir}
+		rm -rf ${kerneldir}/crypto/cryptodev
+		mkdir -p ${kerneldir}/crypto/cryptodev/
+
+		cp -R ${SRC}/cache/sources/cryptodev-linux/${cryptodevver#*:}/*.{c,h} \
+		${kerneldir}/crypto/cryptodev
+
+		cp -R ${SRC}/cache/sources/cryptodev-linux/${cryptodevver#*:}/Makefile \
+		${kerneldir}/crypto/cryptodev
+
+		cp -R ${SRC}/cache/sources/cryptodev-linux/${cryptodevver#*:}/crypto/* \
+		${kerneldir}/include/crypto/
+
+		echo "obj-\$(CONFIG_CRYPTODEV) += cryptodev/" >> $kerneldir/crypto/Makefile
+		
+		sed -i '/source "certs\/Kconfig"/a source "crypto\/cryptodev\/Kconfig"' \
+		$kerneldir/crypto/Kconfig
+
+		process_patch_file "${SRC}/patch/misc/cryptodev.patch" "applying"
+	fi
+
+
 	if linux-version compare $version ge 4.4 && linux-version compare $version lt 5.8; then
 		display_alert "Adjustin" "Framebuffer driver for ST7789 IPS display" "info"
 		process_patch_file "${SRC}/patch/misc/fbtft-st7789v-invert-color.patch" "applying"

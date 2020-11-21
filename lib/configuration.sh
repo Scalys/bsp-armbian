@@ -92,7 +92,7 @@ ATF_COMPILE=yes
 [[ -z $EXTRAWIFI ]] && EXTRAWIFI="yes"
 [[ -z $AUFS ]] && AUFS="yes"
 [[ -z $IMAGE_PARTITION_TABLE ]] && IMAGE_PARTITION_TABLE="msdos"
-
+[[ -z CRYPTODEV ]] && CRYPTODEV="yes"
 # single ext4 partition is the default and preferred configuration
 #BOOTFS_TYPE=''
 

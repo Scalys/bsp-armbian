@@ -1,0 +1,8 @@
+#!/usr/bin/make -f
+
+CROSS_COMPILE ?= ""
+export CROSS_COMPILE
+
+%:
+	dh $@
+

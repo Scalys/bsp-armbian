@@ -1,0 +1,15 @@
+Source: optee-os
+Section: utils
+Priority: optional
+Maintainer: Mikalai Ramanovich <mikalai.ramanovich@edality.by>
+Build-Depends: debhelper (>= 7.0.50~), python3, python3-pycryptodome, python3-pyelftools
+Standards-Version: 3.9.8
+Homepage: https://github.com/ms-iot/optee_os
+Vcs-Git: https://github.com/ms-iot/optee_os.git
+Vcs-Browser: https://github.com/ms-iot/optee_os
+
+Package: optee-os
+Architecture: linux-any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: OP-TEE OS
+

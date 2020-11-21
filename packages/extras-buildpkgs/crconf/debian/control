@@ -1,0 +1,15 @@
+Source: crconf
+Section: utils
+Priority: optional
+Maintainer: Mikalai Ramanovich <mikalai.ramanovich@edality.by>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.8
+Homepage: https://github.com/Thermi/crconf
+Vcs-Git: https://github.com/Thermi/crconf.git
+Vcs-Browser: https://github.com/Thermi/crconf
+
+Package: crconf
+Architecture: linux-any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Linux cryptoapi configuration tool
+
