@@ -1,0 +1,14 @@
+Source: libpkcs11-qoriq
+Section: utils
+Priority: optional
+Maintainer: Mikalai Ramanovich <mikalai.ramanovich@edality.by>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.8
+Homepage: https://source.codeaurora.org/external/qoriq/qoriq-components/libpkcs11
+Vcs-Git: https://source.codeaurora.org/external/qoriq/qoriq-components/libpkcs11
+Vcs-Browser: https://source.codeaurora.org/external/qoriq/qoriq-components/libpkcs11
+
+Package: libpkcs11-qoriq
+Architecture: linux-any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Secure Object libpkcs11

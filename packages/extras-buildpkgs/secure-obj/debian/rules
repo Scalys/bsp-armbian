@@ -1,0 +1,43 @@
+#!/usr/bin/make -f
+
+CROSS_COMPILE ?= ""
+export CROSS_COMPILE
+
+MACHINE ?= "trustbox"
+export MACHINE
+
+TA_DEV_KIT_DIR = /usr/include/optee/export-user_ta
+export TA_DEV_KIT_DIR
+
+export SECURE_STORAGE_PATH = ../secure_storage_ta/ta
+export OPTEE_CLIENT_EXPORT = /usr
+export OPENSSL_PATH = /usr
+
+
+DEB_DESTDIR = debian/secure-obj
+
+%:
+	dh $@
+
+override_dh_auto_clean:
+	for APP in secure_storage_ta securekey_lib secure_obj-openssl-engine; do \
+            $(MAKE) -C $$APP clean; \
+        done
+
+override_dh_auto_build:
+	for APP in secure_storage_ta securekey_lib secure_obj-openssl-engine; do \
+            $(MAKE) -C $$APP ; \
+        done 
+
+override_dh_auto_install:
+	install -d ${DEB_DESTDIR}/usr/bin
+	install -d ${DEB_DESTDIR}/usr/include
+	install -d ${DEB_DESTDIR}/lib/optee_armtz
+	install -d ${DEB_DESTDIR}/usr/lib/$(DEB_BUILD_GNU_TYPE)/openssl-1.0.0/engines
+	cp secure_storage_ta/ta/b05bcf48-9732-4efa-a9e0-141c7c888c34.ta ${DEB_DESTDIR}/lib/optee_armtz
+	cp securekey_lib/out/export/lib/libsecure_obj.so ${DEB_DESTDIR}/usr/lib
+	cp secure_obj-openssl-engine/libeng_secure_obj.so ${DEB_DESTDIR}/usr/lib/$(DEB_BUILD_GNU_TYPE)/openssl-1.0.0/engines
+	cp securekey_lib/out/export/app/*_app ${DEB_DESTDIR}/usr/bin
+	cp securekey_lib/out/export/app/mp_verify ${DEB_DESTDIR}/usr/bin
+	cp secure_obj-openssl-engine/app/sobj_eng_app ${DEB_DESTDIR}/usr/bin
+	cp securekey_lib/out/export/include/*  ${DEB_DESTDIR}/usr/include

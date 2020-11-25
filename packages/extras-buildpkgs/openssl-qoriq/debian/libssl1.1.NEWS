@@ -1,0 +1,7 @@
+openssl (1.1.0f-5) unstable; urgency=medium
+
+  By default the minimum supported TLS version is 1.2. If you still need to
+  talk to applications that only support TLS 1.0 you should configure the
+  application to set the minimum supported version.
+
+ -- Kurt Roeckx <kurt@roeckx.be>  Thu, 24 Aug 2017 22:19:17 +0200

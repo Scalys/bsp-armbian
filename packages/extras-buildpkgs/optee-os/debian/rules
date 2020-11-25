@@ -27,6 +27,11 @@ override_dh_auto_install:
 		cp -aR $$f ${DEB_DESTDIR}/usr/include/optee/export-user_ta/ ; \
 	done
 
+	chmod +x ${DEB_DESTDIR}/usr/include/optee/export-user_ta/scripts/*
+
 	install -d ${DEB_DESTDIR}/lib/optee_armtz
 	cp out/arm-plat-ls/ta/*/*.ta $(DEB_DESTDIR)/lib/optee_armtz
 
+override_dh_fixperms:
+	dh_fixperms
+	chmod +x ${DEB_DESTDIR}/usr/include/optee/export-user_ta/scripts/*

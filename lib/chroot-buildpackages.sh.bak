@@ -164,7 +164,7 @@ chroot_build_packages()
 			fi
 
 			for plugin in "${SRC}"/packages/extras-buildpkgs/*.conf; do
-				unset package_name package_repo package_ref package_builddeps package_install_chroot package_fetch package_install_target \
+				unset package_name package_repo package_ref package_builddeps package_install_chroot package_install_target \
 					package_upstream_version needs_building plugin_target_dir package_component "package_builddeps_${release}"
 				source "${plugin}"
 
@@ -259,17 +259,12 @@ chroot_build_packages()
 
 				chmod +x "${target_dir}"/root/build.sh
 
-				if [[ $(type -t package_fetch) == function ]]; then
-					mkdir -p "${SRC}/cache/sources/extra/$package_name"
-					package_fetch "${SRC}/cache/sources/extra/$package_name"
-				else
-					fetch_from_repo "$package_repo" "extra/$package_name" "$package_ref"
-				fi
+				fetch_from_repo "$package_repo" "extra/$package_name" "$package_ref"
 
-				mount_chroot "${target_dir}"
 				mount -o bind,ro "${SRC}"/packages/extras-buildpkgs/ "${target_dir}"/root/overlay/
 				mount -o bind,ro "${SRC}"/cache/sources/extra/ "${target_dir}"/root/sources
 				mount -t tmpfs tmpfs "${target_dir}"/root/build
+				mount -t tmpfs tmpfs "${target_dir}"/tmp
 
 				eval chroot "${target_dir}" /bin/bash -c "/root/build.sh" 2>&1 \
 					${PROGRESS_LOG_TO_FILE:+' | tee -a $DEST/debug/buildpkg.log'}
@@ -282,8 +277,7 @@ chroot_build_packages()
 				umount "${target_dir}"/root/overlay/
 				umount "${target_dir}"/root/sources
 				umount "${target_dir}"/root/build
-
-				umount_chroot "${target_dir}"
+				umount "${target_dir}"/tmp
 
 				mv "${target_dir}"/root/*.deb "${plugin_target_dir}" 2>/dev/null
 			done

@@ -1,0 +1,15 @@
+Source: ppa-generic
+Section: utils
+Priority: optional
+Maintainer: Mikalai Ramanovich <mikalai.ramanovich@edality.by>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.8
+Homepage: https://source.codeaurora.org/external/qoriq/qoriq-components/ppa-generic
+Vcs-Git: https://source.codeaurora.org/external/qoriq/qoriq-components/ppa-generic
+Vcs-Browser: https://source.codeaurora.org/external/qoriq/qoriq-components/ppa-generic
+
+Package: ppa-generic
+Architecture: linux-any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: OP-TEE OS
+

@@ -1,0 +1,43 @@
+# SZERVÁC Attila <sas@321.hu>,
+# Dr. Nagy Elemér Károly <eknagy@omikk.bme.hu>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: glibc\n"
+"Report-Msgid-Bugs-To: glibc@packages.debian.org\n"
+"POT-Creation-Date: 2017-08-26 13:35+0200\n"
+"PO-Revision-Date: 2013-05-14 18:47+0200\n"
+"Last-Translator: Dr. Nagy Elemér Károly <eknagy@omikk.bme.hu>\n"
+"Language-Team: Hungarian <debian-l10n-hungarian@lists.d.o>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: UTF-8\n"
+"Plural-Forms: ???\n"
+"X-Poedit-Language: Hungarian\n"
+"X-Poedit-Country: HUNGARY\n"
+
+#. Type: boolean
+#. Description
+#: ../debhelper.in/libc.templates:5001
+msgid "Restart services during package upgrades without asking?"
+msgstr "A csomag frissítésekor kérdés nélkül újraindítsam a szolgáltatásokat?"
+
+#. Type: boolean
+#. Description
+#: ../debhelper.in/libc.templates:5001
+msgid ""
+"There are services installed on your system which need to be restarted when "
+"certain libraries, such as libpam, libc, and libssl, are upgraded. Since "
+"these restarts may cause interruptions of service for the system, you will "
+"normally be prompted on each upgrade for the list of services you wish to "
+"restart.  You can choose this option to avoid being prompted; instead, all "
+"necessary restarts will be done for you automatically so you can avoid being "
+"asked questions on each library upgrade."
+msgstr ""
+"Ezen a rendszeren olyan szolgáltatások vannak telepítve, amelyeket újra kell "
+"indítani, bizonyos könyvtárak (mint a libpam, libc, libssl) frissítésekor. "
+"Mivel ezek az újraindítások megszakítják a szolgáltatásokat, alapesetben "
+"minden frissítésnél megkérdezi az újraindítandó szolgáltatások listáját a "
+"rendszer. Dönthetsz úgy, hogy ne kérdezzen  - ilyenkor minden szükséges "
+"szolgáltatás-újraindítást elvégez a rendszer és nem kérdezget."

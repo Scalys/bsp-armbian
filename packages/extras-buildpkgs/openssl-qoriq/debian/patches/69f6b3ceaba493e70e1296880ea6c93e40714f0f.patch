@@ -1,0 +1,29 @@
+From 69f6b3ceaba493e70e1296880ea6c93e40714f0f Mon Sep 17 00:00:00 2001
+From: Richard Levitte <levitte@openssl.org>
+Date: Thu, 28 Feb 2019 11:30:19 +0100
+Subject: [PATCH] apps/ca.c: only output DER with SPKAC input and when -out is
+ chosen
+
+So say the docs
+
+Fixes #8055
+
+Reviewed-by: Matt Caswell <matt@openssl.org>
+(Merged from https://github.com/openssl/openssl/pull/8368)
+---
+ apps/ca.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/apps/ca.c b/apps/ca.c
+index b4ac86d4aac..4464b2ba86a 100644
+--- a/apps/ca.c
++++ b/apps/ca.c
+@@ -722,7 +722,7 @@ int ca_main(int argc, char **argv)
+ 
+     /*****************************************************************/
+     if (req || gencrl) {
+-        if (spkac_file != NULL) {
++        if (spkac_file != NULL && outfile != NULL) {
+             output_der = 1;
+             batch = 1;
+         }

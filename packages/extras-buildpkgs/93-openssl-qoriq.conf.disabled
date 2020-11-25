@@ -1,0 +1,24 @@
+# openssl-qoriq
+local package_name="openssl-qoriq"
+# local package_repo="https://source.codeaurora.org/external/qoriq/qoriq-components/libpkcs11"
+# local package_ref="branch:LSDK-20.04"
+local package_install_target="openssl libssl1.1"
+local package_component="${release}-utils"
+local package_install_chroot=""
+local package_builddeps="bc"
+
+package_fetch() 
+{
+	wget -qO - http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/openssl_1.1.1.orig.tar.gz | \
+		tar -xzf - --strip-components=1 -C "$1"
+}
+
+package_checkbuild()
+{
+	true
+}
+
+package_checkinstall()
+{
+	[[ $RELEASE == "xenial" ]]
+}

@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+
+CROSS_COMPILE ?= ""
+export CROSS_COMPILE
+
+MACHINE ?= "trustbox"
+export MACHINE
+
+DEB_DESTDIR = debian/ppa-generic
+
+%:
+	dh $@
+
+override_dh_auto_clean:
+	@cd ppa/ && ./build prod clean ls1012
+
+override_dh_auto_configure:
+	@cp /lib/firmware/tee_$(MACHINE).bin ppa/soc-ls1012/tee.bin
+
+override_dh_auto_build:
+	@cd ppa/ && ./build prod rdb-fit spd=on ls1012
+
+override_dh_auto_install:
+	install -d ${DEB_DESTDIR}/lib/firmware/
+	install -m 644 ppa/soc-ls1012/build/obj/ppa.itb ${DEB_DESTDIR}/lib/firmware/ppa_${MACHINE}.itb
+
+

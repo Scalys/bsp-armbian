@@ -1,0 +1,12 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: libpkcs11-qoriq
+Upstream-Contact: 
+Source: https://source.codeaurora.org/external/qoriq/qoriq-components/libpkcs11
+
+Files: *
+Copyright: aaa
+License: GPL-2
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.
+ 
