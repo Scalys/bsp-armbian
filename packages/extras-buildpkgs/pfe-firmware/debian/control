@@ -1,0 +1,15 @@
+Source: pfe-firmware
+Section: utils
+Priority: optional
+Maintainer: Mikalai Ramanovich <mikalai.ramanovich@edality.by>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.8
+Homepage: https://github.com/NXP/qoriq-engine-pfe-bin
+Vcs-Git: https://github.com/NXP/qoriq-engine-pfe-bin
+Vcs-Browser: https://github.com/NXP/qoriq-engine-pfe-bin
+
+Package: pfe-firmware
+Architecture: linux-any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: QoriQ PFE Firmware
+

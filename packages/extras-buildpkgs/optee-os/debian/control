@@ -10,6 +10,15 @@ Vcs-Browser: https://github.com/ms-iot/optee_os
 
 Package: optee-os
 Architecture: linux-any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: OP-TEE OS
+Depends: ${misc:Depends}
+Description: OP-TEE OS Needed binaries
 
+Package: optee-os-bin
+Architecture: linux-any
+Depends: ${misc:Depends}
+Description: OP-TEE OS firmware (needed only to build PPA)
+
+Package: optee-os-dev
+Architecture: linux-any
+Depends: ${Python3:Depends}, ${misc:Depends}
+Description: OP-TEE OS devkit

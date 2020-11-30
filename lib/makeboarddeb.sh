@@ -220,6 +220,7 @@ create_board_package()
     [ -f /boot/boot.ini ] && sed -i "s/setenv rootdev.*/setenv rootdev \\"\$rootdev\\"/" /boot/boot.ini
     [ -f /boot/boot.ini ] && sed -i "s/setenv rootfstype.*/setenv rootfstype \\"\$rootfstype\\"/" /boot/boot.ini
     [ -f /boot/boot.cmd ] && mkimage -C none -A arm -T script -d /boot/boot.cmd /boot/boot.scr  >/dev/null 2>&1
+    [ -f /boot/${bootscript_dst} ] && mkimage -C none -A arm -T script -d /boot/${bootscript_dst} $(echo "/boot/${bootscript_dst}" | sed -e "s/\.cmd/\.scr/g")  >/dev/null 2>&1
 
 fi
 

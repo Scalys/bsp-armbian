@@ -1,12 +1,16 @@
 #!/usr/bin/make -f
 
-CROSS_COMPILE ?= ""
-export CROSS_COMPILE
+include /usr/share/dpkg/architecture.mk
+include /usr/share/dpkg/pkg-info.mk
 
-MACHINE ?= "trustbox"
-export MACHINE
+export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
+
+
+export MACHINE = "trustbox"
 
 DEB_DESTDIR = debian/optee-os
+
+export PLATFORM=ls-ls1012grapeboard
 
 %:
 	dh $@
@@ -15,23 +19,26 @@ override_dh_auto_configure:
 	sed -i 's/from Crypto\./from Cryptodome\./g' scripts/*.py
 
 override_dh_auto_build:
-	$(MAKE) PLATFORM=ls-ls1012grapeboard CFG_ARM64_core=y ARCH=arm CFG_WERROR=n LDFLAGS= CFLAGS=-Wno-error=implicit-function-declaration CFG_TEE_TA_LOG_LEVEL=0 
+	$(MAKE) PLATFORM=ls-ls1012grapeboard CFG_ARM64_core=y ARCH=arm LDFLAGS= CFLAGS= 
 	objcopy -v -O binary out/arm-plat-ls/core/tee.elf out/arm-plat-ls/core/tee_${MACHINE}.bin
 
-override_dh_auto_install:
-	install -d ${DEB_DESTDIR}/lib/firmware/
-	install -m 644 out/arm-plat-ls/core/tee.bin ${DEB_DESTDIR}/lib/firmware/tee_${MACHINE}.bin
+#override_dh_auto_install:
+#	install -d ${DEB_DESTDIR}/lib/firmware/
+#	install -m 644 out/arm-plat-ls/core/tee_${MACHINE}.bin ${DEB_DESTDIR}/lib/firmware/tee_${MACHINE}.bin
+	
 
-	install -d ${DEB_DESTDIR}/usr/include/optee/export-user_ta/
-	for f in out/arm-plat-ls/export-ta_arm64/* ; do \
-		cp -aR $$f ${DEB_DESTDIR}/usr/include/optee/export-user_ta/ ; \
-	done
+#	install -d ${DEB_DESTDIR}/usr/include/optee/export-user_ta/
+#	for f in out/arm-plat-ls/export-ta_arm64/* ; do \
+#		cp -aR $$f ${DEB_DESTDIR}/usr/include/optee/export-user_ta/ ; \
+#	done
 
-	chmod +x ${DEB_DESTDIR}/usr/include/optee/export-user_ta/scripts/*
+#	chmod +x ${DEB_DESTDIR}/usr/include/optee/export-user_ta/scripts/*
+#
+#	install -d ${DEB_DESTDIR}/lib/optee_armtz
+#	cp out/arm-plat-ls/ta/*/*.ta $(DEB_DESTDIR)/lib/optee_armtz
 
-	install -d ${DEB_DESTDIR}/lib/optee_armtz
-	cp out/arm-plat-ls/ta/*/*.ta $(DEB_DESTDIR)/lib/optee_armtz
+override_dh_strip:
+	true
 
 override_dh_fixperms:
-	dh_fixperms
-	chmod +x ${DEB_DESTDIR}/usr/include/optee/export-user_ta/scripts/*
+	dh_fixperms --exclude usr/include/optee/export-user_ta/scripts/*

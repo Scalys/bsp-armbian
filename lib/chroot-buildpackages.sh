@@ -96,7 +96,7 @@ chroot_prepare_distccd()
 	gcc_version['buster']='8.3'
 	gcc_version['bullseye']='9.2'
 	gcc_version['xenial']='5.4'
-	gcc_version['bionic']='5.4'
+	gcc_version['bionic']='7.4'
 	gcc_version['focal']='9.2'
 	gcc_version['groovy']='10.2'
 	gcc_type['armhf']='arm-linux-gnueabihf-'
@@ -107,7 +107,7 @@ chroot_prepare_distccd()
 	toolchain_path=$(find_toolchain "${gcc_type[${arch}]}" "== ${gcc_version[${release}]}")
 	ln -sf "${toolchain_path}/${gcc_type[${arch}]}gcc" "${dest}"/cc
 	echo "${dest}/cc" >> "${dest}"/cmdlist
-	for compiler in gcc cpp g++ c++; do
+	for compiler in gcc cpp g++ c++ objcopy ld strip; do
 		echo "${dest}/$compiler" >> "${dest}"/cmdlist
 		echo "${dest}/${gcc_type[$arch]}${compiler}" >> "${dest}"/cmdlist
 		ln -sf "${toolchain_path}/${gcc_type[${arch}]}${compiler}" "${dest}/${compiler}"
@@ -207,6 +207,7 @@ chroot_build_packages()
 				export CCACHE_TEMPDIR="/tmp"
 				# distcc is disabled to prevent compilation issues due to different host and cross toolchain configurations
 				#export CCACHE_PREFIX="distcc"
+				#export CROSS_COMPILE=aarch64-linux-gnu-
 				# uncomment for debug
 				#export CCACHE_RECACHE="true"
 				#export CCACHE_DISABLE="true"
@@ -316,6 +317,7 @@ chroot_installpackages_local()
 	# NOTE: this works recursively
 	aptly -config="${conf}" repo add temp "${DEB_STORAGE}/extra/${RELEASE}-desktop/"
 	aptly -config="${conf}" repo add temp "${DEB_STORAGE}/extra/${RELEASE}-utils/"
+	aptly -config="${conf}" repo add temp "${DEB_STORAGE}/extra/${RELEASE}-firmware/"
 	# -gpg-key="925644A6"
 	aptly -keyring="${SRC}/packages/extras-buildpkgs/buildpkg-public.gpg" -secret-keyring="${SRC}/packages/extras-buildpkgs/buildpkg.gpg" -batch=true -config="${conf}" \
 		 -gpg-key="925644A6" -passphrase="testkey1234" -component=temp -distribution="${RELEASE}" publish repo temp
