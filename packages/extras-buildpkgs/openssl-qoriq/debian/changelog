@@ -1,4 +1,10 @@
-openssl (1.1.1-1ubuntu2.1~18.04.6) bionic-security; urgency=medium
+openssl-qoriq (1.1.1d) bionic-security; urgency=medium
+
+  * Use NXP branch
+
+ -- Mikalai Ramanovich <mikalai.ramanovich@edality.by>  Wed, 02 Dec 2020 15:15:54 -040
+
+openssl-qoriq (1.1.1-1ubuntu2.1~18.04.6) bionic-security; urgency=medium
 
   * SECURITY UPDATE: ECDSA remote timing attack
     - debian/patches/CVE-2019-1547.patch: for ECC parameters with NULL or
@@ -25,7 +31,7 @@ openssl (1.1.1-1ubuntu2.1~18.04.6) bionic-security; urgency=medium
 
  -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Wed, 27 May 2020 15:15:54 -0400
 
-openssl (1.1.1-1ubuntu2.1~18.04.5) bionic-security; urgency=medium
+openssl-qoriq (1.1.1-1ubuntu2.1~18.04.5) bionic-security; urgency=medium
 
   * debian/patches/OPENSSL_malloc_init_hang.patch: make
     OPENSSL_malloc_init() a no-op to remove a potential infinite loop that
@@ -33,7 +39,7 @@ openssl (1.1.1-1ubuntu2.1~18.04.5) bionic-security; urgency=medium
 
  -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Tue, 12 Nov 2019 11:58:35 -0500
 
-openssl (1.1.1-1ubuntu2.1~18.04.4) bionic; urgency=medium
+openssl-qoriq (1.1.1-1ubuntu2.1~18.04.4) bionic; urgency=medium
 
   * Import libraries/restart-without-asking as used in postinst, to
     prevent failure to configure the package without debconf database.
@@ -41,7 +47,7 @@ openssl (1.1.1-1ubuntu2.1~18.04.4) bionic; urgency=medium
 
  -- Dimitri John Ledkov <xnox@ubuntu.com>  Thu, 20 Jun 2019 18:36:28 +0100
 
-openssl (1.1.1-1ubuntu2.1~18.04.3) bionic; urgency=medium
+openssl-qoriq (1.1.1-1ubuntu2.1~18.04.3) bionic; urgency=medium
 
   * Fix path to Xorg for reboot notifications on desktop. LP: #1832421
   * Cherrypick upstream fix to allow succesful init of libssl and
@@ -49,7 +55,7 @@ openssl (1.1.1-1ubuntu2.1~18.04.3) bionic; urgency=medium
 
  -- Dimitri John Ledkov <xnox@ubuntu.com>  Fri, 14 Jun 2019 13:50:28 +0100
 
-openssl (1.1.1-1ubuntu2.1~18.04.2) bionic; urgency=medium
+openssl-qoriq (1.1.1-1ubuntu2.1~18.04.2) bionic; urgency=medium
 
   * Cherrypick upstream patch to fix ca -spkac output to be text again.
     LP: #1828215
@@ -61,14 +67,14 @@ openssl (1.1.1-1ubuntu2.1~18.04.2) bionic; urgency=medium
 
  -- Dimitri John Ledkov <xnox@ubuntu.com>  Wed, 12 Jun 2019 00:12:47 +0100
 
-openssl (1.1.1-1ubuntu2.1~18.04.1) bionic; urgency=medium
+openssl-qoriq (1.1.1-1ubuntu2.1~18.04.1) bionic; urgency=medium
 
   * Backport OpenSSL 1.1.1 to 18.04 LTS. LP: #1797386
   * Adjust Breaks on versions published in bionic-release.
 
  -- Dimitri John Ledkov <xnox@ubuntu.com>  Thu, 13 Dec 2018 14:02:15 +1100
 
-openssl (1.1.1-1ubuntu2.1) cosmic-security; urgency=medium
+openssl-qoriq (1.1.1-1ubuntu2.1) cosmic-security; urgency=medium
 
   * SECURITY UPDATE: timing side channel attack in DSA
     - debian/patches/CVE-2018-0734-1.patch: fix mod inverse in
@@ -85,13 +91,13 @@ openssl (1.1.1-1ubuntu2.1) cosmic-security; urgency=medium
 
  -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Tue, 04 Dec 2018 08:15:09 -0500
 
-openssl (1.1.1-1ubuntu2) cosmic; urgency=medium
+openssl-qoriq (1.1.1-1ubuntu2) cosmic; urgency=medium
 
   * Fixup typpos in the autopkgtest binary name.
 
  -- Dimitri John Ledkov <xnox@ubuntu.com>  Tue, 25 Sep 2018 15:41:07 +0100
 
-openssl (1.1.1-1ubuntu1) cosmic; urgency=medium
+openssl-qoriq (1.1.1-1ubuntu1) cosmic; urgency=medium
 
   * Merge from Debian unstable, remaining changes:
     - Replace duplicate files in the doc directory with symlinks.
@@ -103,11 +109,11 @@ openssl (1.1.1-1ubuntu1) cosmic; urgency=medium
     - Revert "Enable system default config to enforce TLS1.2 as a
       minimum" & "Increase default security level from 1 to 2".
     - Further decrease security level from 1 to 0, for compatibility with
-      openssl 1.0.2.
+      openssl-qoriq 1.0.2.
 
  -- Dimitri John Ledkov <xnox@ubuntu.com>  Mon, 17 Sep 2018 13:24:38 +0100
 
-openssl (1.1.1-1) unstable; urgency=medium
+openssl-qoriq (1.1.1-1) unstable; urgency=medium
 
   * New upstream version.
    - Update symbol file for 1.1.1
@@ -120,7 +126,7 @@ openssl (1.1.1-1) unstable; urgency=medium
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Wed, 12 Sep 2018 20:39:24 +0200
 
-openssl (1.1.1~~pre9-1) unstable; urgency=medium
+openssl-qoriq (1.1.1~~pre9-1) unstable; urgency=medium
 
   * New upstream version.
     - Support the final TLS 1.3 version (RFC 8446)
@@ -128,13 +134,13 @@ openssl (1.1.1~~pre9-1) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 21 Aug 2018 21:00:17 +0200
 
-openssl (1.1.1~~pre8-1) experimental; urgency=medium
+openssl-qoriq (1.1.1~~pre8-1) experimental; urgency=medium
 
   * New upstream version.
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Thu, 05 Jul 2018 00:21:00 +0200
 
-openssl (1.1.1~~pre7-1) experimental; urgency=medium
+openssl-qoriq (1.1.1~~pre7-1) experimental; urgency=medium
 
   * Drop afalgeng on kfreebsd-* which go enabled because they inherit from
     the linux target.
@@ -148,18 +154,18 @@ openssl (1.1.1~~pre7-1) experimental; urgency=medium
     - this moves the examples to /usr/share/doc/libssl-{doc->dev}/demos but it
       seems to make sense.
   * Add a 25-test_verify.t for autopkgtest which runs against intalled
-    openssl binary.
+    openssl-qoriq binary.
   * Fix CVE-2018-0737 (Closes: #895844).
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Wed, 30 May 2018 19:49:26 +0200
 
-openssl (1.1.1~~pre6-2) experimental; urgency=medium
+openssl-qoriq (1.1.1~~pre6-2) experimental; urgency=medium
 
   * Update libssl1.1.symbols
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 01 May 2018 16:34:27 +0200
 
-openssl (1.1.1~~pre6-1) experimental; urgency=medium
+openssl-qoriq (1.1.1~~pre6-1) experimental; urgency=medium
 
   * New upstream version
   * Increase default security level from 1 to 2. This moves from the 80 bit
@@ -168,14 +174,14 @@ openssl (1.1.1~~pre6-1) experimental; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 01 May 2018 16:00:55 +0200
 
-openssl (1.1.1~~pre4-1) experimental; urgency=medium
+openssl-qoriq (1.1.1~~pre4-1) experimental; urgency=medium
 
   * Update to 1.1.1-pre4 (Closes: #892276, #894282).
   * Add riscv64 target (Closes: #891797).
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Tue, 03 Apr 2018 21:41:55 +0200
 
-openssl (1.1.1~~pre3-1) experimental; urgency=medium
+openssl-qoriq (1.1.1~~pre3-1) experimental; urgency=medium
 
   * Update to 1.1.1-pre3
   * Don't suggest 1024 bit RSA key to be typical (Closes: #878303).
@@ -184,13 +190,13 @@ openssl (1.1.1~~pre3-1) experimental; urgency=medium
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Wed, 21 Mar 2018 00:01:08 +0100
 
-openssl (1.1.1~~pre2-1) experimental; urgency=medium
+openssl-qoriq (1.1.1~~pre2-1) experimental; urgency=medium
 
   * Update to 1.1.1-pre2
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Tue, 27 Feb 2018 21:25:09 +0100
 
-openssl (1.1.1~~pre1-1) experimental; urgency=medium
+openssl-qoriq (1.1.1~~pre1-1) experimental; urgency=medium
 
   * Abort the build if symbols are discovered which are not part of the
     symbols file.
@@ -200,13 +206,13 @@ openssl (1.1.1~~pre1-1) experimental; urgency=medium
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Sun, 25 Feb 2018 21:03:52 +0100
 
-openssl (1.1.0g-2) unstable; urgency=high
+openssl-qoriq (1.1.0g-2) unstable; urgency=high
 
   * Avoid problems with aes assembler on armhf using binutils 2.29
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 04 Nov 2017 12:48:13 +0100
 
-openssl (1.1.0g-1) unstable; urgency=medium
+openssl-qoriq (1.1.0g-1) unstable; urgency=medium
 
   [ Kurt Roeckx ]
   * New upstream version
@@ -219,7 +225,7 @@ openssl (1.1.0g-1) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 02 Nov 2017 15:22:48 +0100
 
-openssl (1.1.0f-5) unstable; urgency=medium
+openssl-qoriq (1.1.0f-5) unstable; urgency=medium
 
   * Instead of completly disabling TLS 1.0 and 1.1, just set the minimum
     version to TLS 1.2 by default. TLS 1.0 and 1.1 can be enabled again by
@@ -227,7 +233,7 @@ openssl (1.1.0f-5) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 08 Aug 2017 16:13:54 +0200
 
-openssl (1.1.0f-4) unstable; urgency=medium
+openssl-qoriq (1.1.0f-4) unstable; urgency=medium
 
   [ Sebastian Andrzej Siewior ]
   * Add support for arm64ilp32, patch by Wookey (Closes: #867240)
@@ -241,20 +247,20 @@ openssl (1.1.0f-4) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 07 Aug 2017 01:08:45 +0200
 
-openssl (1.1.0f-3) unstable; urgency=medium
+openssl-qoriq (1.1.0f-3) unstable; urgency=medium
 
   * Don't cleanup a thread-local key we didn't create it (Closes: #863707)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 05 Jun 2017 11:40:42 +0200
 
-openssl (1.1.0f-2) unstable; urgency=medium
+openssl-qoriq (1.1.0f-2) unstable; urgency=medium
 
   * Make the udeb use a versioned depends (Closes: #864080)
   * Conflict with libssl1.0-dev (Closes: #863367)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 04 Jun 2017 12:07:38 +0200
 
-openssl (1.1.0f-1) unstable; urgency=medium
+openssl-qoriq (1.1.0f-1) unstable; urgency=medium
 
   * New upstream version
     - Fix regression in req -x509 (Closes: #839575)
@@ -265,13 +271,13 @@ openssl (1.1.0f-1) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 25 May 2017 18:29:01 +0200
 
-openssl (1.1.0e-2) unstable; urgency=medium
+openssl-qoriq (1.1.0e-2) unstable; urgency=medium
 
-  * Make openssl depend on perl-base (Closes: #860254)
+  * Make openssl-qoriq depend on perl-base (Closes: #860254)
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Mon, 01 May 2017 21:50:37 +0200
 
-openssl (1.1.0e-1) unstable; urgency=high
+openssl-qoriq (1.1.0e-1) unstable; urgency=high
 
   * New upstream version
     - Fixes CVE-2017-3733
@@ -279,7 +285,7 @@ openssl (1.1.0e-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 16 Feb 2017 18:57:58 +0100
 
-openssl (1.1.0d-2) unstable; urgency=medium
+openssl-qoriq (1.1.0d-2) unstable; urgency=medium
 
   * Fix building of arch and all packages in a minimal environment
     (Closes: #852900).
@@ -291,7 +297,7 @@ openssl (1.1.0d-2) unstable; urgency=medium
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Mon, 30 Jan 2017 23:20:07 +0100
 
-openssl (1.1.0d-1) unstable; urgency=medium
+openssl-qoriq (1.1.0d-1) unstable; urgency=medium
 
   * New Upstream release
     - Fixes CVE-2017-3731
@@ -303,34 +309,34 @@ openssl (1.1.0d-1) unstable; urgency=medium
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Thu, 26 Jan 2017 16:38:34 +0100
 
-openssl (1.1.0c-4) unstable; urgency=medium
+openssl-qoriq (1.1.0c-4) unstable; urgency=medium
 
   * Make build-indep build again.
-  * Don't depend on perl:any in openssl as it breaks debootstrap
+  * Don't depend on perl:any in openssl-qoriq as it breaks debootstrap
    ("Closes: #852017).
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Fri, 20 Jan 2017 22:18:15 +0100
 
-openssl (1.1.0c-3) unstable; urgency=medium
+openssl-qoriq (1.1.0c-3) unstable; urgency=medium
 
   * Add myself as Uploader.
   * Add support for tilegx, patch by Helmut Grohne (Closes: #848957).
   * redo the rules file to some newer debhelper:
     - everyfile should remain, nothing should get lost
     - the scripts in the doc package gained an exec bit
-    - openssl gained a dep on perl (the package contains perl scripts)
+    - openssl-qoriq gained a dep on perl (the package contains perl scripts)
     - libssl1.0.2-dbg is gone, we have dbgsym now
     - dh compat 10
     - pkg.install instead of pkg.files is used for install
   * Mark libssl-doc as MA foreign
   * Update Standards-Version from 3.9.5 to 3.9.8. No changes required.
-  * Document the change for openssl's enc command between 1.1.0 and pre 1.1.0
+  * Document the change for openssl-qoriq's enc command between 1.1.0 and pre 1.1.0
     in the NEWS file (Closes: #843064).
   * Add an override for lintian for the non-standard private directory
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Thu, 19 Jan 2017 23:00:01 +0100
 
-openssl (1.1.0c-2) unstable; urgency=medium
+openssl-qoriq (1.1.0c-2) unstable; urgency=medium
 
   * Revert behaviour of SSL_read() and SSL_write(), and update documentation.
     (Closes: #844234)
@@ -339,7 +345,7 @@ openssl (1.1.0c-2) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 21 Nov 2016 22:20:00 +0100
 
-openssl (1.1.0c-1) unstable; urgency=medium
+openssl-qoriq (1.1.0c-1) unstable; urgency=medium
 
   * New upstrem release
     - Fix CVE-2016-7053
@@ -351,20 +357,20 @@ openssl (1.1.0c-1) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 10 Nov 2016 19:05:44 +0100
 
-openssl (1.1.0b-2) unstable; urgency=low
+openssl-qoriq (1.1.0b-2) unstable; urgency=low
 
   * Upload to unstable
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 01 Nov 2016 22:02:32 +0100
 
-openssl (1.1.0b-1) experimental; urgency=medium
+openssl-qoriq (1.1.0b-1) experimental; urgency=medium
 
   * New upstream release
     - Fixes CVE-2016-6309
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 26 Sep 2016 18:21:09 +0200
 
-openssl (1.1.0a-1) experimental; urgency=medium
+openssl-qoriq (1.1.0a-1) experimental; urgency=medium
 
   * New upstream release
     - Fix CVE-2016-6304
@@ -376,7 +382,7 @@ openssl (1.1.0a-1) experimental; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 22 Sep 2016 20:13:59 +0200
 
-openssl (1.1.0-1) experimental; urgency=medium
+openssl-qoriq (1.1.0-1) experimental; urgency=medium
 
   [ Kurt Roeckx ]
   * New upstream version
@@ -389,11 +395,11 @@ openssl (1.1.0-1) experimental; urgency=medium
   * drop config-hurd.patch, we don't use `config' and it works without the
     patch.
   * Drop depend on zlib1g-dev since we don't use it anymore (Closes: #767207)
-  * Make the openssl package Multi-Arch: foregin (Closes: #827028)
+  * Make the openssl-qoriq package Multi-Arch: foregin (Closes: #827028)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 25 Aug 2016 18:52:22 +0200
 
-openssl (1.1.0~pre6-1) experimental; urgency=medium
+openssl-qoriq (1.1.0~pre6-1) experimental; urgency=medium
 
   [ Sebastian Andrzej Siewior ]
   * drop engines-path.patch. Upstream uses a 1.1 suffixes now.
@@ -406,13 +412,13 @@ openssl (1.1.0~pre6-1) experimental; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 04 Aug 2016 18:33:24 +0200
 
-openssl (1.1.0~pre5-5) experimental; urgency=medium
+openssl-qoriq (1.1.0~pre5-5) experimental; urgency=medium
 
   * Update snapshot to commit fe964f0c88f6780fd30b26e306484b981b0a8480
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 02 Jul 2016 14:54:51 +0200
 
-openssl (1.1.0~pre5-4) experimental; urgency=medium
+openssl-qoriq (1.1.0~pre5-4) experimental; urgency=medium
 
   * Update snapshot to commit c32bdbf171ce6650ef045ec47b5abe0de7c264db
   * Remove utils-mkdir-p-check-if-dir-exists-also-after-mkdir-f.patch, applied
@@ -420,14 +426,14 @@ openssl (1.1.0~pre5-4) experimental; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 26 Jun 2016 15:07:48 +0200
 
-openssl (1.1.0~pre5-3) experimental; urgency=medium
+openssl-qoriq (1.1.0~pre5-3) experimental; urgency=medium
 
   [ Kurt Roeckx ]
   * Don't use assembler on hppa, it's not writen for Linux.
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Fri, 10 Jun 2016 22:33:06 +0200
 
-openssl (1.1.0~pre5-2) experimental; urgency=medium
+openssl-qoriq (1.1.0~pre5-2) experimental; urgency=medium
 
   [ Sebastian Andrzej Siewior ]
   * Run the testsuite with verbose output.
@@ -438,7 +444,7 @@ openssl (1.1.0~pre5-2) experimental; urgency=medium
 
  -- Sebastian Andrzej Siewior <sebastian@breakpoint.cc>  Fri, 10 Jun 2016 21:49:55 +0200
 
-openssl (1.1.0~pre5-1) experimental; urgency=medium
+openssl-qoriq (1.1.0~pre5-1) experimental; urgency=medium
 
   * New upstream version with soname change.  Upload to experimental.
     - Rename binary packages
@@ -469,7 +475,7 @@ openssl (1.1.0~pre5-1) experimental; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 28 May 2016 20:58:31 +0200
 
-openssl (1.0.2h-1) unstable; urgency=high
+openssl-qoriq (1.0.2h-1) unstable; urgency=high
 
   * New upstream version
     - Fixes CVE-2016-2107
@@ -480,7 +486,7 @@ openssl (1.0.2h-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 03 May 2016 18:31:22 +0200
 
-openssl (1.0.2g-2) unstable; urgency=medium
+openssl-qoriq (1.0.2g-2) unstable; urgency=medium
 
   * Use assembler of arm64 (Closes: #794326)
     Patch from Riku Voipio <riku.voipio@iki.fi>
@@ -497,7 +503,7 @@ openssl (1.0.2g-2) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 21 Apr 2016 23:43:06 +0200
 
-openssl (1.0.2g-1) unstable; urgency=high
+openssl-qoriq (1.0.2g-1) unstable; urgency=high
 
   * New upstream version
   * Fix CVE-2016-0797
@@ -511,7 +517,7 @@ openssl (1.0.2g-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 01 Mar 2016 18:31:09 +0100
 
-openssl (1.0.2f-2) unstable; urgency=high
+openssl-qoriq (1.0.2f-2) unstable; urgency=high
 
   * New upstream version.
     - Fixes CVE-2016-0701
@@ -519,7 +525,7 @@ openssl (1.0.2f-2) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 28 Jan 2016 19:32:02 +0100
 
-openssl (1.0.2e-1) unstable; urgency=high
+openssl-qoriq (1.0.2e-1) unstable; urgency=high
 
   * New upstream release
     - Fix CVE-2015-3193
@@ -528,17 +534,17 @@ openssl (1.0.2e-1) unstable; urgency=high
     - Fix CVE-2015-3196
   * Remove all symlinks during clean
   * Run make depend after configure
-  * Remove openssl_button.* from the doc package
+  * Remove openssl-qoriq_button.* from the doc package
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 03 Dec 2015 19:33:05 +0100
 
-openssl (1.0.2d-3) unstable; urgency=medium
+openssl-qoriq (1.0.2d-3) unstable; urgency=medium
 
   * Upload to unstable
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 01 Nov 2015 19:14:34 +0100
 
-openssl (1.0.2d-2) experimental; urgency=medium
+openssl-qoriq (1.0.2d-2) experimental; urgency=medium
 
   * Build with no-ssl3-method to remove all SSLv3 support.  This results in
     the functions SSLv3_method(), SSLv3_server_method() and
@@ -550,21 +556,21 @@ openssl (1.0.2d-2) experimental; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 06 Sep 2015 14:21:27 +0200
 
-openssl (1.0.2d-1) unstable; urgency=high
+openssl-qoriq (1.0.2d-1) unstable; urgency=high
 
   * New upstream version
     - Fixes CVE-2015-1793
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 09 Jul 2015 18:22:26 +0200
 
-openssl (1.0.2c-1) unstable; urgency=medium
+openssl-qoriq (1.0.2c-1) unstable; urgency=medium
 
   * New upstream version
     - Fixes ABI (Closes: #788511)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Fri, 12 Jun 2015 20:35:12 +0200
 
-openssl (1.0.2b-1) unstable; urgency=high
+openssl-qoriq (1.0.2b-1) unstable; urgency=high
 
   * New upstream version
     - Fix CVE-2015-4000
@@ -574,11 +580,11 @@ openssl (1.0.2b-1) unstable; urgency=high
     - Fix CVE-2015-1792
     - Fix CVE-2015-1791
   * Update c_rehash-compat.patch to make it apply to the new version.
-  * Remove openssl-pod-misspell.patch applied upstream
+  * Remove openssl-qoriq-pod-misspell.patch applied upstream
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 11 Jun 2015 18:20:38 +0200
 
-openssl (1.0.2a-1) unstable; urgency=medium
+openssl-qoriq (1.0.2a-1) unstable; urgency=medium
 
   * New upstrema version
     - Fix CVE-2015-0286
@@ -598,7 +604,7 @@ openssl (1.0.2a-1) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 30 Apr 2015 23:37:27 +0200
 
-openssl (1.0.2-1) experimental; urgency=medium
+openssl-qoriq (1.0.2-1) experimental; urgency=medium
 
   * New upstream release
     - Fixes CVE-2014-3571
@@ -616,7 +622,7 @@ openssl (1.0.2-1) experimental; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Fri, 23 Jan 2015 18:54:13 +0100
 
-openssl (1.0.2~beta3-1) experimental; urgency=low
+openssl-qoriq (1.0.2~beta3-1) experimental; urgency=low
 
   * New usptream beta version
   * Add git snapshot
@@ -642,7 +648,7 @@ openssl (1.0.2~beta3-1) experimental; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Fri, 07 Nov 2014 00:20:10 +0100
 
-openssl (1.0.2~beta2-1) experimental; urgency=medium
+openssl-qoriq (1.0.2~beta2-1) experimental; urgency=medium
 
   * New usptream beta version
     - Fix CVE-2014-0224
@@ -655,7 +661,7 @@ openssl (1.0.2~beta2-1) experimental; urgency=medium
     - Fix CVE-2014-0076
   * Merge changes between 1.0.1f-1 and 1.0.1h-3:
     - postinst: Updated check for restarting services
-  * libdoc-manpgs-pod-spell.patch and openssl-pod-misspell.patch
+  * libdoc-manpgs-pod-spell.patch and openssl-qoriq-pod-misspell.patch
     partially applied upstream
   * Drop fix-pod-errors.patch, applied upstream.
   * Add support for ppc64le (Closes: #745657)
@@ -663,7 +669,7 @@ openssl (1.0.2~beta2-1) experimental; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 23 Jul 2014 19:54:09 +0200
 
-openssl (1.0.2~beta1-1) experimental; urgency=medium
+openssl-qoriq (1.0.2~beta1-1) experimental; urgency=medium
 
   * New upstream beta version
     - Update list of symbols that should be exported and adjust the symbols
@@ -676,13 +682,13 @@ openssl (1.0.2~beta1-1) experimental; urgency=medium
       pod_x509setflags.misspell.patch, pod_ec.misspell.patch,
       pkcs12-doc.patch, req_bits.patch
     - Following patches have been partially applied upstream:
-      libdoc-manpgs-pod-spell.patch, openssl-pod-misspell.patch
-    - Remove openssl_fix_for_x32.patch, different patch applied upstream.
+      libdoc-manpgs-pod-spell.patch, openssl-qoriq-pod-misspell.patch
+    - Remove openssl-qoriq_fix_for_x32.patch, different patch applied upstream.
   * Add support for cross compiling (Closes: #465248)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 25 Feb 2014 00:36:51 +0100
 
-openssl (1.0.1f-1) unstable; urgency=high
+openssl-qoriq (1.0.1f-1) unstable; urgency=high
 
   * New upstream version
     - Fix for TLS record tampering bug CVE-2013-4353
@@ -692,7 +698,7 @@ openssl (1.0.1f-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 06 Jan 2014 18:50:54 +0100
 
-openssl (1.0.1e-6) unstable; urgency=medium
+openssl-qoriq (1.0.1e-6) unstable; urgency=medium
 
   * Add Breaks: openssh-client (<< 1:6.4p1-1.1), openssh-server (<<
     1:6.4p1-1.1).  This is to prevent people running into #732940.
@@ -700,7 +706,7 @@ openssl (1.0.1e-6) unstable; urgency=medium
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 23 Dec 2013 15:19:17 +0100
 
-openssl (1.0.1e-5) unstable; urgency=low
+openssl-qoriq (1.0.1e-5) unstable; urgency=low
 
   * Change default digest to SHA256 instead of SHA1.  (Closes: #694738)
   * Drop support for multiple certificates in 1 file.  It never worked
@@ -723,7 +729,7 @@ openssl (1.0.1e-5) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 22 Dec 2013 19:25:35 +0100
 
-openssl (1.0.1e-4) unstable; urgency=low
+openssl-qoriq (1.0.1e-4) unstable; urgency=low
 
   [ Peter Michael Green ]
   * Fix pod errors (Closes: #723954)
@@ -745,9 +751,9 @@ openssl (1.0.1e-4) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Fri, 01 Nov 2013 17:11:53 +0100
 
-openssl (1.0.1e-3) unstable; urgency=low
+openssl-qoriq (1.0.1e-3) unstable; urgency=low
 
-  * Move <openssl/opensslconf.h> to /usr/include/$(DEB_HOST_MULTIARCH), and
+  * Move <openssl-qoriq/openssl-qoriqconf.h> to /usr/include/$(DEB_HOST_MULTIARCH), and
     mark libssl-dev Multi-Arch: same.
     Patch by Colin Watson <cjwatson@ubuntu.com> (Closes: #689093)
   * Add Polish translation (Closes: #658162)
@@ -759,7 +765,7 @@ openssl (1.0.1e-3) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 20 May 2013 16:56:06 +0200
 
-openssl (1.0.1e-2) unstable; urgency=high
+openssl-qoriq (1.0.1e-2) unstable; urgency=high
 
   * Bump shlibs.  It's needed for the udeb.
   * Make cpuid work on cpu's that don't set ecx (Closes: #699692)
@@ -769,7 +775,7 @@ openssl (1.0.1e-2) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 18 Mar 2013 20:37:11 +0100
 
-openssl (1.0.1e-1) unstable; urgency=high
+openssl-qoriq (1.0.1e-1) unstable; urgency=high
 
   * New upstream version (Closes: #699889)
     - Fixes CVE-2013-0169, CVE-2012-2686, CVE-2013-0166
@@ -779,14 +785,14 @@ openssl (1.0.1e-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 11 Feb 2013 19:39:44 +0100
 
-openssl (1.0.1c-5) unstable; urgency=low
+openssl-qoriq (1.0.1c-5) unstable; urgency=low
 
   * Re-enable assembler versions on sparc.  They shouldn't have
     been disabled for sparc v9.  (Closes: #649841)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 09 Sep 2012 08:43:40 +0200
 
-openssl (1.0.1c-4) unstable; urgency=low
+openssl-qoriq (1.0.1c-4) unstable; urgency=low
 
   * Fix the configure rules for alpha (Closes: #672710)
   * Switch the postinst to sh again, there never was a reason to
@@ -800,13 +806,13 @@ openssl (1.0.1c-4) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 17 Jul 2012 11:49:19 +0200
 
-openssl (1.0.1c-3) unstable; urgency=low
+openssl-qoriq (1.0.1c-3) unstable; urgency=low
 
   * Disable padlock engine again, causes problems for hosts not supporting it.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 06 Jun 2012 18:29:37 +0200
 
-openssl (1.0.1c-2) unstable; urgency=high
+openssl-qoriq (1.0.1c-2) unstable; urgency=high
 
   * Fix renegiotation when using TLS > 1.0.  This breaks tor.  Patch from
     upstream.  (Closes: #675990)
@@ -815,14 +821,14 @@ openssl (1.0.1c-2) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 06 Jun 2012 00:55:42 +0200
 
-openssl (1.0.1c-1) unstable; urgency=high
+openssl-qoriq (1.0.1c-1) unstable; urgency=high
 
   * New upstream version
     - Fixes CVE-2012-2333 (Closes: #672452)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Fri, 11 May 2012 18:44:51 +0200
 
-openssl (1.0.1b-1) unstable; urgency=high
+openssl-qoriq (1.0.1b-1) unstable; urgency=high
 
   * New upstream version
     - Remaps SSL_OP_NO_TLSv1_1, so applications linked to 1.0.0
@@ -831,19 +837,19 @@ openssl (1.0.1b-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 26 Apr 2012 23:34:34 +0200
 
-openssl (1.0.1a-3) unstable; urgency=low
+openssl-qoriq (1.0.1a-3) unstable; urgency=low
 
   * Use patch from upstream for the rc4_hmac_md5 issue.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 19 Apr 2012 23:16:30 +0200
 
-openssl (1.0.1a-2) unstable; urgency=low
+openssl-qoriq (1.0.1a-2) unstable; urgency=low
 
   * Fix rc4_hmac_md5 on non-i386/amd64 arches.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 19 Apr 2012 21:54:42 +0200
 
-openssl (1.0.1a-1) unstable; urgency=high
+openssl-qoriq (1.0.1a-1) unstable; urgency=high
 
   * New upstream version
     - Fixes CVE-2012-2110
@@ -855,13 +861,13 @@ openssl (1.0.1a-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 19 Apr 2012 19:54:12 +0200
 
-openssl (1.0.1-4) unstable; urgency=low
+openssl-qoriq (1.0.1-4) unstable; urgency=low
 
   * Use official patch for the vpaes problem, also covering amd64.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 31 Mar 2012 20:54:13 +0200
 
-openssl (1.0.1-3) unstable; urgency=high
+openssl-qoriq (1.0.1-3) unstable; urgency=high
 
   * Fix crash in vpaes (Closes: #665836)
   * use client version when deciding whether to send supported signature
@@ -869,17 +875,17 @@ openssl (1.0.1-3) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 31 Mar 2012 18:35:59 +0200
 
-openssl (1.0.1-2) unstable; urgency=low
+openssl-qoriq (1.0.1-2) unstable; urgency=low
 
   * Properly quote the new cflags in Configure
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 19 Mar 2012 19:56:05 +0100
 
-openssl (1.0.1-1) unstable; urgency=low
+openssl-qoriq (1.0.1-1) unstable; urgency=low
 
   * New upstream version
     - Remove kfreebsd-pipe.patch, fixed upstream
-    - Update pic.patch, openssl-pod-misspell.patch and make-targets.patch
+    - Update pic.patch, openssl-qoriq-pod-misspell.patch and make-targets.patch
     - Add OPENSSL_1.0.1 to version-script.patch and libssl1.0.0.symbols for
       the new functions.
     - AES-NI support (Closes: #644743)
@@ -893,7 +899,7 @@ openssl (1.0.1-1) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 19 Mar 2012 18:23:32 +0100
 
-openssl (1.0.0h-1) unstable; urgency=high
+openssl-qoriq (1.0.0h-1) unstable; urgency=high
 
   * New upstream version
     - Fixes CVE-2012-0884
@@ -908,14 +914,14 @@ openssl (1.0.0h-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 13 Mar 2012 21:08:17 +0100
 
-openssl (1.0.0g-1) unstable; urgency=high
+openssl-qoriq (1.0.0g-1) unstable; urgency=high
 
   * New upstream version
     - Fixes CVE-2012-0050
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 18 Jan 2012 20:46:13 +0100
 
-openssl (1.0.0f-1) unstable; urgency=high
+openssl-qoriq (1.0.0f-1) unstable; urgency=high
 
   * New upstream version
     - Fixes CVE-2011-4108, CVE-2011-4576, CVE-2011-4619, CVE-2012-0027,
@@ -923,7 +929,7 @@ openssl (1.0.0f-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 12 Jan 2012 19:02:43 +0100
 
-openssl (1.0.0e-3) unstable; urgency=low
+openssl-qoriq (1.0.0e-3) unstable; urgency=low
 
   * Don't build v8 and v9 variants of sparc anymore, they're older than
     the default.  (Closes: #649841)
@@ -932,7 +938,7 @@ openssl (1.0.0e-3) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 28 Nov 2011 22:17:26 +0100
 
-openssl (1.0.0e-2.1) unstable; urgency=high
+openssl-qoriq (1.0.0e-2.1) unstable; urgency=high
 
   * Non-maintainer upload by the Security Team.
   * Block Malaysian's Digicert Sdn. Bhd. certificates by marking them
@@ -940,13 +946,13 @@ openssl (1.0.0e-2.1) unstable; urgency=high
 
  -- Raphael Geissert <geissert@debian.org>  Sun, 06 Nov 2011 01:39:30 -0600
 
-openssl (1.0.0e-2) unstable; urgency=low
+openssl-qoriq (1.0.0e-2) unstable; urgency=low
 
   * Add a missing $(DEB_HOST_MULTIARCH)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 10 Sep 2011 17:02:29 +0200
 
-openssl (1.0.0e-1) unstable; urgency=low
+openssl-qoriq (1.0.0e-1) unstable; urgency=low
 
   * New upstream version
     - Fix bug where CRLs with nextUpdate in the past are sometimes accepted
@@ -969,7 +975,7 @@ openssl (1.0.0e-1) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 10 Sep 2011 12:03:13 +0200
 
-openssl (1.0.0d-3) unstable; urgency=low
+openssl-qoriq (1.0.0d-3) unstable; urgency=low
 
   * Make it build on sparc64.  Patch from Aurelien Jarno.  (Closes: #626060)
   * Apply patches from Scott Schaefer <saschaefer@neurodiverse.org> to
@@ -983,14 +989,14 @@ openssl (1.0.0d-3) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 13 Jun 2011 12:39:54 +0200
 
-openssl (1.0.0d-2) unstable; urgency=high
+openssl-qoriq (1.0.0d-2) unstable; urgency=high
 
   * Make c_rehash also generate the old subject hash.  Gnutls applications
     seem to require it.  (Closes: #611102)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 13 Apr 2011 22:36:49 +0200
 
-openssl (1.0.0d-1) unstable; urgency=low
+openssl-qoriq (1.0.0d-1) unstable; urgency=low
 
   * New upstream version
     - Fixes CVE-2011-0014
@@ -1002,7 +1008,7 @@ openssl (1.0.0d-1) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 02 Apr 2011 13:19:19 +0000
 
-openssl (1.0.0c-2) experimental; urgency=low
+openssl-qoriq (1.0.0c-2) experimental; urgency=low
 
   * Set $ in front of {sparcv9_asm} so that the sparc v9 variant builds.
   * Always define _GNU_SOURCE, not only for Linux.
@@ -1010,7 +1016,7 @@ openssl (1.0.0c-2) experimental; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 19 Dec 2010 16:24:16 +0100
 
-openssl (1.0.0c-1) experimental; urgency=low
+openssl-qoriq (1.0.0c-1) experimental; urgency=low
 
   * New upstream version (Closes: #578376)
     - New soname: Rename library packages
@@ -1020,7 +1026,7 @@ openssl (1.0.0c-1) experimental; urgency=low
     - Update Configure for the new fields for the assembler options
       per arch.  alpha now makes use of assembler.
   * Move man3 manpages and demos to libssl-doc (Closes: #470594)
-  * Drop .pod files from openssl package (Closes: #518167)
+  * Drop .pod files from openssl-qoriq package (Closes: #518167)
   * Don't use RC4_CHAR on amd64 and drop rc4-amd64.patch
   * Stop using BF_PTR2 on (kfreebd-)amd64.
   * Drop debian-arm from the list of arches.
@@ -1033,13 +1039,13 @@ openssl (1.0.0c-1) experimental; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 12 Dec 2010 15:37:21 +0100
 
-openssl (0.9.8o-4) unstable; urgency=low
+openssl-qoriq (0.9.8o-4) unstable; urgency=low
 
   * Fix CVE-2010-4180 (Closes: #529221)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 06 Dec 2010 20:33:21 +0100
 
-openssl (0.9.8o-3) unstable; urgency=high
+openssl-qoriq (0.9.8o-3) unstable; urgency=high
 
   * Fix TLS extension parsing race condition (CVE-2010-3864) (Closes: #603709)
   * Re-add the engines.  They were missing since 0.9.8m-1.
@@ -1056,13 +1062,13 @@ openssl (0.9.8o-3) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 16 Nov 2010 19:20:55 +0100
 
-openssl (0.9.8o-2) unstable; urgency=high
+openssl-qoriq (0.9.8o-2) unstable; urgency=high
 
   * Fix CVE-2010-2939: Double free using ECDH. (Closes: #594415)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 26 Aug 2010 18:25:29 +0200
 
-openssl (0.9.8o-1) unstable; urgency=low
+openssl-qoriq (0.9.8o-1) unstable; urgency=low
 
   * New upstream version
     - Add SHA2 algorithms to SSL_library_init().
@@ -1071,7 +1077,7 @@ openssl (0.9.8o-1) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 18 Apr 2010 01:42:44 +0200
 
-openssl (0.9.8n-1) unstable; urgency=high
+openssl-qoriq (0.9.8n-1) unstable; urgency=high
 
   * New upstream version.
     - Fixes CVE-2010-0740.
@@ -1079,14 +1085,14 @@ openssl (0.9.8n-1) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 25 Mar 2010 20:30:52 +0100
 
-openssl (0.9.8m-2) unstable; urgency=low
+openssl-qoriq (0.9.8m-2) unstable; urgency=low
 
   * Revert CFB block length change preventing reading older files.
     (Closes: #571810, #571940)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 28 Feb 2010 22:08:49 +0100
 
-openssl (0.9.8m-1) unstable; urgency=low
+openssl-qoriq (0.9.8m-1) unstable; urgency=low
 
   * New upstream version
     - Implements RFC5746, reenables renegotiation but requires the extension.
@@ -1107,14 +1113,14 @@ openssl (0.9.8m-1) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 27 Feb 2010 12:24:03 +0000
 
-openssl (0.9.8k-8) unstable; urgency=high
+openssl-qoriq (0.9.8k-8) unstable; urgency=high
 
   * Clean up zlib state so that it will be reinitialized on next use and
     not cause a memory leak.  (CVE-2009-4355, CVE-2008-1678)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 13 Jan 2010 21:26:49 +0100
 
-openssl (0.9.8k-7) unstable; urgency=low
+openssl-qoriq (0.9.8k-7) unstable; urgency=low
 
   * Bump the shlibs to require 0.9.8k-1.  The following symbols
     to added between g and k: AES_wrap_key, AES_unwrap_key,
@@ -1134,20 +1140,20 @@ openssl (0.9.8k-7) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 28 Nov 2009 14:34:26 +0100
 
-openssl (0.9.8k-6) unstable; urgency=low
+openssl-qoriq (0.9.8k-6) unstable; urgency=low
 
   * Disable SSL/TLS renegotiation (CVE-2009-3555) (Closes: #555829)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 12 Nov 2009 18:10:31 +0000
 
-openssl (0.9.8k-5) unstable; urgency=low
+openssl-qoriq (0.9.8k-5) unstable; urgency=low
 
   * Don't check self signed certificate signatures in X509_verify_cert()
     (Closes: #541735)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Fri, 11 Sep 2009 15:42:32 +0200
 
-openssl (0.9.8k-4) unstable; urgency=low
+openssl-qoriq (0.9.8k-4) unstable; urgency=low
 
   * Split all the patches into a separate files
   * Stop undefinging HZ, the issue on alpha should be fixed.
@@ -1155,7 +1161,7 @@ openssl (0.9.8k-4) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 11 Aug 2009 21:19:18 +0200
 
-openssl (0.9.8k-3) unstable; urgency=low
+openssl-qoriq (0.9.8k-3) unstable; urgency=low
 
   * Make rc4-x86_64 PIC.  Based on patch from Petr Salinger (Closes: #532336)
   * Add workaround for kfreebsd that can't see the different between
@@ -1163,7 +1169,7 @@ openssl (0.9.8k-3) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 13 Jun 2009 18:15:46 +0200
 
-openssl (0.9.8k-2) unstable; urgency=low
+openssl-qoriq (0.9.8k-2) unstable; urgency=low
 
   * Move libssl0.9.8-dbg to the debug section.
   * Use the rc4 assembler on kfreebsd-amd64 (Closes: #532336)
@@ -1175,7 +1181,7 @@ openssl (0.9.8k-2) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 08 Jun 2009 19:05:56 +0200
 
-openssl (0.9.8k-1) unstable; urgency=low
+openssl-qoriq (0.9.8k-1) unstable; urgency=low
 
   * New upstream release
     - 0.9.8i fixed denial of service via a DTLS ChangeCipherSpec packet
@@ -1191,14 +1197,14 @@ openssl (0.9.8k-1) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 16 May 2009 17:33:55 +0200
 
-openssl (0.9.8g-16) unstable; urgency=high
+openssl-qoriq (0.9.8g-16) unstable; urgency=high
 
   * Properly validate the length of an encoded BMPString and UniversalString
     (CVE-2009-0590)  (Closes: #522002)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 01 Apr 2009 22:04:53 +0200
 
-openssl (0.9.8g-15) unstable; urgency=low
+openssl-qoriq (0.9.8g-15) unstable; urgency=low
 
   * Internal calls to didn't properly check for errors which
     resulted in malformed DSA and ECDSA signatures being treated as
@@ -1208,7 +1214,7 @@ openssl (0.9.8g-15) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 05 Jan 2009 21:14:31 +0100
 
-openssl (0.9.8g-14) unstable; urgency=low
+openssl-qoriq (0.9.8g-14) unstable; urgency=low
 
   * Don't give the warning about security updates when upgrading
     from etch since it doesn't have any known security problems.
@@ -1217,7 +1223,7 @@ openssl (0.9.8g-14) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Fri, 31 Oct 2008 22:45:14 +0100
 
-openssl (0.9.8g-13) unstable; urgency=low
+openssl-qoriq (0.9.8g-13) unstable; urgency=low
 
   * Fix a problem with tlsext preventing firefox 3 from connection.
     Patch from upstream CVS and part of 0.9.8h.
@@ -1225,13 +1231,13 @@ openssl (0.9.8g-13) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 03 Aug 2008 19:47:10 +0200
 
-openssl (0.9.8g-12) unstable; urgency=low
+openssl-qoriq (0.9.8g-12) unstable; urgency=low
 
   * add the changelog of the 10.1 NMU to make bugtracking happy
 
  -- Christoph Martin <Christoph.Martin@Uni-Mainz.DE>  Tue, 22 Jul 2008 14:58:26 +0200
 
-openssl (0.9.8g-11) unstable; urgency=low
+openssl-qoriq (0.9.8g-11) unstable; urgency=low
 
   [ Christoph Martin ]
   * updated cs, gl, sv, ru, ro debconf translation (closes: #480926, #480967,
@@ -1245,34 +1251,34 @@ openssl (0.9.8g-11) unstable; urgency=low
     - Fix denial of service if the 'Server Key exchange message'
       is omitted from a TLS handshake which could lead to a client
       crash (CVE-2008-1672; Closes: #483379).
-      This only works if openssl is compiled with enable-tlsext which is
+      This only works if openssl-qoriq is compiled with enable-tlsext which is
       done in Debian.
   * fix some lintian warnings
   * update to newest standards version
 
  -- Christoph Martin <Christoph.Martin@Uni-Mainz.DE>  Thu, 17 Jul 2008 09:53:01 +0200
 
-openssl (0.9.8g-10.1) unstable; urgency=high
+openssl-qoriq (0.9.8g-10.1) unstable; urgency=high
 
   * Non-maintainer upload by the Security team.
   * Fix denial of service if the 'Server Key exchange message'
     is omitted from a TLS handshake which could lead to a client
     crash (CVE-2008-1672; Closes: #483379).
-    This only works if openssl is compiled with enable-tlsext which is
+    This only works if openssl-qoriq is compiled with enable-tlsext which is
     done in Debian.
   * Fix double free in TLS server name extension which leads to a remote
     denial of service (CVE-2008-0891; Closes: #483379).
 
  -- Nico Golde <nion@debian.org>  Tue, 27 May 2008 11:13:44 +0200
 
-openssl (0.9.8g-10) unstable; urgency=low
+openssl-qoriq (0.9.8g-10) unstable; urgency=low
 
   * undefine HZ so that the code falls back to sysconf(_SC_CLK_TCK)
     to fix a build failure on alpha.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 08 May 2008 17:56:13 +0000
 
-openssl (0.9.8g-9) unstable; urgency=high
+openssl-qoriq (0.9.8g-9) unstable; urgency=high
 
   [ Christoph Martin ]
   * Include updated debconf translations (closes: #473477, #461597,
@@ -1283,33 +1289,33 @@ openssl (0.9.8g-9) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 07 May 2008 20:32:12 +0200
 
-openssl (0.9.8g-8) unstable; urgency=high
+openssl-qoriq (0.9.8g-8) unstable; urgency=high
 
   * Don't add extensions to ssl v3 connections.  It breaks with some
     other software.  (Closes: #471681)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 23 Mar 2008 17:50:04 +0000
 
-openssl (0.9.8g-7) unstable; urgency=low
+openssl-qoriq (0.9.8g-7) unstable; urgency=low
 
   * Upload to unstable.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 13 Feb 2008 22:22:29 +0000
 
-openssl (0.9.8g-6) experimental; urgency=low
+openssl-qoriq (0.9.8g-6) experimental; urgency=low
 
   * Bump shlibs.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 09 Feb 2008 15:42:22 +0100
 
-openssl (0.9.8g-5) experimental; urgency=low
+openssl-qoriq (0.9.8g-5) experimental; urgency=low
 
   * Enable tlsext.  This changes the ABI, but should hopefully
     not cause any problems. (Closes: #462596)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 09 Feb 2008 13:32:49 +0100
 
-openssl (0.9.8g-4) unstable; urgency=low
+openssl-qoriq (0.9.8g-4) unstable; urgency=low
 
   * Fix aes ige test speed not to overwrite it's buffer and
     cause segfauls.  Thanks to Tim Hudson (Closes: #459619)
@@ -1323,7 +1329,7 @@ openssl (0.9.8g-4) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 16 Jan 2008 21:49:43 +0100
 
-openssl (0.9.8g-3) unstable; urgency=low
+openssl-qoriq (0.9.8g-3) unstable; urgency=low
 
   * aes-586.pl: push %ebx on the stack before we put some things on the
     stack and call a function, giving AES_decrypt() wrong values to work
@@ -1331,7 +1337,7 @@ openssl (0.9.8g-3) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 04 Nov 2007 21:49:00 +0100
 
-openssl (0.9.8g-2) unstable; urgency=low
+openssl-qoriq (0.9.8g-2) unstable; urgency=low
 
   * Avoid text relocations on i386 caused by the assembler versions:
     - x86unix.pl: Create a function_begin_B_static to create a
@@ -1356,21 +1362,21 @@ openssl (0.9.8g-2) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 03 Nov 2007 13:25:45 +0100
 
-openssl (0.9.8g-1) unstable; urgency=low
+openssl-qoriq (0.9.8g-1) unstable; urgency=low
 
   * New upstream release
     - Fixes version number not to say it's a development version.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 20 Oct 2007 12:47:10 +0200
 
-openssl (0.9.8f-1) unstable; urgency=low
+openssl-qoriq (0.9.8f-1) unstable; urgency=low
 
   * New upstream release
     - Fixes DTLS issues, also fixes CVE-2007-4995 (Closes: #335703, #439737)
-    - Proper inclusion of opensslconf.h in pq_compat.h (Closes: #408686)
+    - Proper inclusion of openssl-qoriqconf.h in pq_compat.h (Closes: #408686)
     - New function SSL_set_SSL_CTX: bump shlibs.
   * Remove build dependency on gcc > 4.2
-  * Remove the openssl preinst, it looks like a workaround
+  * Remove the openssl-qoriq preinst, it looks like a workaround
     for a change in 0.9.2b where config files got moved.  (Closes: #445095)
   * Update debconf translations:
     - Vietnamese (Closes: #426988)
@@ -1380,7 +1386,7 @@ openssl (0.9.8f-1) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 13 Oct 2007 00:47:22 +0200
 
-openssl (0.9.8e-9) unstable; urgency=high
+openssl-qoriq (0.9.8e-9) unstable; urgency=high
 
   * CVE-2007-5135: Fix off by one error in SSL_get_shared_ciphers().
     (Closes: #444435)
@@ -1388,7 +1394,7 @@ openssl (0.9.8e-9) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Fri, 28 Sep 2007 19:47:33 +0200
 
-openssl (0.9.8e-8) unstable; urgency=low
+openssl-qoriq (0.9.8e-8) unstable; urgency=low
 
   * Fix another case of the "if this code is reached, the program will abort"
     (Closes: #429740)
@@ -1396,7 +1402,7 @@ openssl (0.9.8e-8) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 02 Sep 2007 18:12:11 +0200
 
-openssl (0.9.8e-7) unstable; urgency=low
+openssl-qoriq (0.9.8e-7) unstable; urgency=low
 
   * Fix problems with gcc-4.2 (Closes: #429740)
   * Stop using -Bsymbolic to create the shared library.
@@ -1404,13 +1410,13 @@ openssl (0.9.8e-7) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 02 Sep 2007 16:15:18 +0200
 
-openssl (0.9.8e-6) unstable; urgency=high
+openssl-qoriq (0.9.8e-6) unstable; urgency=high
 
   * Add fix for CVE-2007-3108 (Closes: #438142)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 15 Aug 2007 19:49:54 +0200
 
-openssl (0.9.8e-5) unstable; urgency=low
+openssl-qoriq (0.9.8e-5) unstable; urgency=low
 
   [ Christian Perrier ]
   * Debconf templates proofread and slightly rewritten by
@@ -1445,9 +1451,9 @@ openssl (0.9.8e-5) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 15 May 2007 17:21:08 +0000
 
-openssl (0.9.8e-4) unstable; urgency=low
+openssl-qoriq (0.9.8e-4) unstable; urgency=low
 
-  * openssl should depend on libssl0.9.8 0.9.8e-1 since it
+  * openssl-qoriq should depend on libssl0.9.8 0.9.8e-1 since it
     uses some of the defines that changed to functions.
     Other things build against libssl or libcrypto shouldn't
     have this problem since they use the old headers.
@@ -1455,7 +1461,7 @@ openssl (0.9.8e-4) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 10 Mar 2007 17:11:46 +0000
 
-openssl (0.9.8e-3) unstable; urgency=low
+openssl-qoriq (0.9.8e-3) unstable; urgency=low
 
   * Add nagios-nrpe-server to the list of services to be checked
     (Closes: #391188)
@@ -1466,14 +1472,14 @@ openssl (0.9.8e-3) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun,  4 Mar 2007 23:22:51 +0000
 
-openssl (0.9.8e-2) unstable; urgency=low
+openssl-qoriq (0.9.8e-2) unstable; urgency=low
 
   * Undo include changes that change defines into real functions,
     but keep the new functions in the library.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 25 Feb 2007 19:19:19 +0000
 
-openssl (0.9.8e-1) unstable; urgency=low
+openssl-qoriq (0.9.8e-1) unstable; urgency=low
 
   * New upstream release
     - Inludes security fixes for CVE-2006-2937, CVE-2006-2940,
@@ -1491,7 +1497,7 @@ openssl (0.9.8e-1) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 25 Feb 2007 18:06:28 +0000
 
-openssl (0.9.8c-4) unstable; urgency=low
+openssl-qoriq (0.9.8c-4) unstable; urgency=low
 
   * Add German debconf translation.  Thanks to
     Johannes Starosta <feedback-an-johannes@arcor.de> (Closes: #388108)
@@ -1506,20 +1512,20 @@ openssl (0.9.8c-4) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu, 30 Nov 2006 20:57:46 +0000
 
-openssl (0.9.8c-3) unstable; urgency=low
+openssl-qoriq (0.9.8c-3) unstable; urgency=low
 
   * Fix patch for CVE-2006-2940, it left ctx unintiliased.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon,  2 Oct 2006 18:05:00 +0200
 
-openssl (0.9.8c-2) unstable; urgency=high
+openssl-qoriq (0.9.8c-2) unstable; urgency=high
 
   * Fix security vulnerabilities (CVE-2006-2937, CVE-2006-2940,
     CVE-2006-3738, CVE-2006-4343).  Urgency set to high.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 27 Sep 2006 21:24:55 +0000
 
-openssl (0.9.8c-1) unstable; urgency=low
+openssl-qoriq (0.9.8c-1) unstable; urgency=low
 
   * New upstream release
     - block padding bug with compression now fixed upstream, using
@@ -1545,7 +1551,7 @@ openssl (0.9.8c-1) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sun, 17 Sep 2006 14:47:59 +0000
 
-openssl (0.9.8b-3) unstable; urgency=high
+openssl-qoriq (0.9.8b-3) unstable; urgency=high
 
   * Fix RSA Signature Forgery (CVE-2006-4339) using patch provided
     by upstream.
@@ -1555,24 +1561,24 @@ openssl (0.9.8b-3) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue,  5 Sep 2006 18:26:10 +0000
 
-openssl (0.9.8b-2) unstable; urgency=low
+openssl-qoriq (0.9.8b-2) unstable; urgency=low
 
   * Don't call gcc with -mcpu on i386, we already use -march, so no need for
     -mtune either.
   * Always make all directories when building something:
     - The engines directory didn't get build for the static directory, so
       where missing in libcrypo.a
-    - The apps directory didn't always get build, so we didn't have an openssl
+    - The apps directory didn't always get build, so we didn't have an openssl-qoriq
       and a small part of the regression tests failed.
   * Make the package fail to build if the regression tests fail.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 15 May 2006 16:00:58 +0000
 
-openssl (0.9.8b-1) unstable; urgency=low
+openssl-qoriq (0.9.8b-1) unstable; urgency=low
 
   * New upstream release
     - New functions added (EVP_CIPHER_CTX_new, EVP_CIPHER_CTX_free), bump shlibs.
-    - CA.pl/CA.sh now calls openssl ca with -extensions v3_ca, setting CA:TRUE
+    - CA.pl/CA.sh now calls openssl-qoriq ca with -extensions v3_ca, setting CA:TRUE
       instead of FALSE.
     - CA.pl/CA.sh creates crlnumber now.  (Closes: #347612)
   * Run debconf-updatepo, which really already was in the 0.9.8a-8 version
@@ -1601,27 +1607,27 @@ openssl (0.9.8b-1) unstable; urgency=low
   * Don't add uninitialised data to the random number generator.  This stop
     valgrind from giving error messages in unrelated code.
     (Closes: #363516)
-  * Put the FAQ in the openssl docs.
+  * Put the FAQ in the openssl-qoriq docs.
   * Add russian debconf translations from Yuriy Talakan <yt@amur.elektra.ru>
     (Closes #367216)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Thu,  4 May 2006 20:40:03 +0200
 
-openssl (0.9.8a-8) unstable; urgency=low
+openssl-qoriq (0.9.8a-8) unstable; urgency=low
 
   * Call pod2man with the proper section.  Section changed
     from 1/3/5/7 to 1SSL/3SSL/5SSL/7SSL.  The name of the files
     already had the ssl in, the section didn't.  The references
     to other manpage is still wrong.
   * Don't install the LICENSE file, it's already in the copyright file.
-  * Don't set an rpath on openssl to point to /usr/lib.
+  * Don't set an rpath on openssl-qoriq to point to /usr/lib.
   * Add support for kfreebsd-amd64. (Closes: #355277)
   * Add udeb to the shlibs.  Patch from Frans Pop <aragorn@tiscali.nl>
     (Closes: #356908)
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat, 11 Feb 2006 14:14:37 +0100
 
-openssl (0.9.8a-7) unstable; urgency=high
+openssl-qoriq (0.9.8a-7) unstable; urgency=high
 
   * Add italian debconf templates.  Thanks to Luca Monducci.
     (Closes: #350249)
@@ -1633,7 +1639,7 @@ openssl (0.9.8a-7) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Sat,  9 Feb 2006 19:07:56 +0100
 
-openssl (0.9.8a-6) unstable; urgency=low
+openssl-qoriq (0.9.8a-6) unstable; urgency=low
 
   * Remove empty postinst/preinst/prerm scripts.  There is no need
     to have empty ones, debhelper will add them when needed.
@@ -1649,20 +1655,20 @@ openssl (0.9.8a-6) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 21 Jan 2006 16:25:41 +0100
 
-openssl (0.9.8a-5) unstable; urgency=low
+openssl-qoriq (0.9.8a-5) unstable; urgency=low
 
   * Stop ssh from crashing randomly on sparc (Closes: #335912)
     Patch from upstream cvs.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 13 Dec 2005 21:37:42 +0100
 
-openssl (0.9.8a-4) unstable; urgency=low
+openssl-qoriq (0.9.8a-4) unstable; urgency=low
 
   * Call dh_makeshlibs with the proper version instead of putting
     it in shlibs.local, which doesn't seem to do anything.  0.9.8a-1
     added symbol versioning, so it should have bumped the shlibs.
     (Closes: #338284)
-  * The openssl package had a duplicate dependency on libssl0.9.8,
+  * The openssl-qoriq package had a duplicate dependency on libssl0.9.8,
     only require the version as required by the shlibs.
   * Make libssl-dev depend on zlib1g-dev, since it's now required for
     static linking. (Closes: #338313)
@@ -1679,7 +1685,7 @@ openssl (0.9.8a-4) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 13 Nov 2005 16:01:05 +0100
 
-openssl (0.9.8a-3) unstable; urgency=high
+openssl-qoriq (0.9.8a-3) unstable; urgency=high
 
   * Link to libz instead of dynamicly loading it.  It gets loaded
     at the moment the library is initialised, so there is no point
@@ -1692,7 +1698,7 @@ openssl (0.9.8a-3) unstable; urgency=high
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue,  1 Nov 2005 14:56:40 +0100
 
-openssl (0.9.8a-2) unstable; urgency=low
+openssl-qoriq (0.9.8a-2) unstable; urgency=low
 
   * Add Build-Dependency on m4, since sparc needs it to generate
     it's assembler files.  (Closes: #334542)
@@ -1701,7 +1707,7 @@ openssl (0.9.8a-2) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Tue, 18 Oct 2005 19:05:53 +0200
 
-openssl (0.9.8a-1) unstable; urgency=low
+openssl-qoriq (0.9.8a-1) unstable; urgency=low
 
   Christoph Martin:
   * fix asm entries for some architectures, fixing #332758 properly.
@@ -1719,14 +1725,14 @@ openssl (0.9.8a-1) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon, 17 Oct 2005 17:01:06 +0200
 
-openssl (0.9.8-3) unstable; urgency=low
+openssl-qoriq (0.9.8-3) unstable; urgency=low
 
   * Apply security fix for CAN-2005-2969. (Closes: #333500)
   * Change priority of -dbg package to extra.
 
  -- Kurt Roeckx <kurt@roeckx.be>  Wed, 12 Oct 2005 22:38:58 +0200
 
-openssl (0.9.8-2) unstable; urgency=low
+openssl-qoriq (0.9.8-2) unstable; urgency=low
 
   * Don't use arch specific assembler.  Should fix build failure on
     ia64, sparc and amd64. (Closes: #332758)
@@ -1734,13 +1740,13 @@ openssl (0.9.8-2) unstable; urgency=low
 
  -- Kurt Roeckx <kurt@roeckx.be>  Mon, 10 Oct 2005 19:22:36 +0200
 
-openssl (0.9.8-1) unstable; urgency=low
+openssl-qoriq (0.9.8-1) unstable; urgency=low
 
   * New upstream release (closes: #311826)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Thu, 29 Sep 2005 14:20:04 +0200
 
-openssl (0.9.7g-3) unstable; urgency=low
+openssl-qoriq (0.9.7g-3) unstable; urgency=low
 
   * change Configure line for debian-freebsd-i386 to debian-kfreebsd-i386
     (closes: #327692)
@@ -1749,7 +1755,7 @@ openssl (0.9.7g-3) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Fri, 23 Sep 2005 13:51:57 +0200
 
-openssl (0.9.7g-2) unstable; urgency=low
+openssl-qoriq (0.9.7g-2) unstable; urgency=low
 
   * really include nl translation
   * remove special ia64 code from rc4 code to make the abi compatible to
@@ -1763,11 +1769,11 @@ openssl (0.9.7g-2) unstable; urgency=low
     #321721)
   * remove leftover files from ssleay
   * move from dh_installmanpages to dh_installman
-  * change Maintainer to pkg-openssl-devel@lists.alioth.debian.org
+  * change Maintainer to pkg-openssl-qoriq-devel@lists.alioth.debian.org
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed,  7 Sep 2005 15:32:54 +0200
 
-openssl (0.9.7g-1) unstable; urgency=low
+openssl-qoriq (0.9.7g-1) unstable; urgency=low
 
   * New upstream release
     * Added support for proxy certificates according to RFC 3820.
@@ -1793,7 +1799,7 @@ openssl (0.9.7g-1) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon,  9 May 2005 23:32:03 +0200
 
-openssl (0.9.7e-3) unstable; urgency=high
+openssl-qoriq (0.9.7e-3) unstable; urgency=high
 
   * really fix der_chop. The fix from -1 was not really included (closes:
     #281212)
@@ -1804,7 +1810,7 @@ openssl (0.9.7e-3) unstable; urgency=high
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Thu, 16 Dec 2004 18:41:29 +0100
 
-openssl (0.9.7e-2) unstable; urgency=high
+openssl-qoriq (0.9.7e-2) unstable; urgency=high
 
   * fix perl path in der_chop and c_rehash (closes: #281212)
   * still fixes security problem CAN-2004-0975 etc.
@@ -1814,7 +1820,7 @@ openssl (0.9.7e-2) unstable; urgency=high
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sun, 14 Nov 2004 20:16:21 +0100
 
-openssl (0.9.7e-1) unstable; urgency=high
+openssl-qoriq (0.9.7e-1) unstable; urgency=high
 
   * SECURITY UPDATE: fix insecure temporary file handling
   * apps/der_chop:
@@ -1831,7 +1837,7 @@ openssl (0.9.7e-1) unstable; urgency=high
     - Reduce the chances of duplicate issuer name and serial numbers (in
       violation of RFC3280) using the OpenSSL certificate creation
       utilities.
-  * depends openssl on perl-base instead of perl (closes: #280225)
+  * depends openssl-qoriq on perl-base instead of perl (closes: #280225)
   * support powerpc64 in Configure (closes: #275224)
   * include cs translation (closes: #273517)
   * include nl translation (closes: #272479)
@@ -1839,14 +1845,14 @@ openssl (0.9.7e-1) unstable; urgency=high
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Fri, 12 Nov 2004 14:11:15 +0100
 
-openssl (0.9.7d-5) unstable; urgency=low
+openssl-qoriq (0.9.7d-5) unstable; urgency=low
 
   * Make S/MIME encrypt work again (backport from CVS) (closes: #241407,
     #241386)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon, 26 Jul 2004 17:22:42 +0200
 
-openssl (0.9.7d-4) unstable; urgency=low
+openssl-qoriq (0.9.7d-4) unstable; urgency=low
 
   * add Catalan translation (closes: #248749)
   * add Spanish translation (closes: #254561)
@@ -1858,13 +1864,13 @@ openssl (0.9.7d-4) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed, 14 Jul 2004 14:31:02 +0200
 
-openssl (0.9.7d-3) unstable; urgency=low
+openssl-qoriq (0.9.7d-3) unstable; urgency=low
 
   * rename -pic.a libraries to _pic.a (closes: #250016)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon, 24 May 2004 17:02:29 +0200
 
-openssl (0.9.7d-2) unstable; urgency=low
+openssl-qoriq (0.9.7d-2) unstable; urgency=low
 
   * include PIC libs (libcrypto-pic.a and libssl-pic.a) to libssl-dev
     (closes: #246928, #243999)
@@ -1874,41 +1880,41 @@ openssl (0.9.7d-2) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Tue, 11 May 2004 10:13:49 +0200
 
-openssl (0.9.7d-1) unstable; urgency=high
+openssl-qoriq (0.9.7d-1) unstable; urgency=high
 
   * new upstream
-  * fixes security holes (http://www.openssl.org/news/secadv_20040317.txt)
+  * fixes security holes (http://www.openssl-qoriq.org/news/secadv_20040317.txt)
     (closes: #238661)
   * includes support for debian-amd64 (closes: #235551, #232310)
   * fix typo in pem.pod (closes: #219873)
   * fix typo in libssl0.9.7.templates (closes: #224690)
-  * openssl suggests ca-certificates (closes: #217180)
+  * openssl-qoriq suggests ca-certificates (closes: #217180)
   * change debconf template to gettext format (closes: #219013)
   * include french debconf template (closes: #219014)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Thu, 18 Mar 2004 16:18:43 +0100
 
-openssl (0.9.7c-5) unstable; urgency=low
+openssl-qoriq (0.9.7c-5) unstable; urgency=low
 
-  * include openssl.pc into libssl-dev (closes: #212545)
+  * include openssl-qoriq.pc into libssl-dev (closes: #212545)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Thu, 16 Oct 2003 16:31:32 +0200
 
-openssl (0.9.7c-4) unstable; urgency=low
+openssl-qoriq (0.9.7c-4) unstable; urgency=low
 
   * change question to restart services to debconf (closes: #214840)
   * stop using dh_undocumented (closes: #214831)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Fri, 10 Oct 2003 15:40:48 +0200
 
-openssl (0.9.7c-3) unstable; urgency=low
+openssl-qoriq (0.9.7c-3) unstable; urgency=low
 
   * fix POSIX conformance for head in libssl0.9.7.postinst (closes:
     #214700)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed,  8 Oct 2003 14:02:38 +0200
 
-openssl (0.9.7c-2) unstable; urgency=low
+openssl-qoriq (0.9.7c-2) unstable; urgency=low
 
   * add filerc macro to libssl0.9.7.postinst (closes: #213906)
   * restart spamassassins spamd on upgrade (closes: #214106)
@@ -1917,7 +1923,7 @@ openssl (0.9.7c-2) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Tue,  7 Oct 2003 15:01:32 +0200
 
-openssl (0.9.7c-1) unstable; urgency=high
+openssl-qoriq (0.9.7c-1) unstable; urgency=high
 
   * upstream security fix (closes: #213451)
    - Fix various bugs revealed by running the NISCC test suite:
@@ -1933,18 +1939,18 @@ openssl (0.9.7c-1) unstable; urgency=high
   * fix formatting in c_issuer (closes: #190026)
   * fix Debian-FreeBSD support (closes: #200381)
   * restart some services in postinst to make them use the new libraries
-  * remove duplicated openssl.1, crypto.3 and ssl.3 (closes: #198594)
+  * remove duplicated openssl-qoriq.1, crypto.3 and ssl.3 (closes: #198594)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed,  1 Oct 2003 08:54:27 +0200
 
-openssl (0.9.7b-2) unstable; urgency=high
+openssl-qoriq (0.9.7b-2) unstable; urgency=high
 
   * fix permission of /etc/ssl/private to 700 again
   * change section of libssl-dev to libdevel
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed, 23 Apr 2003 11:13:24 +0200
 
-openssl (0.9.7b-1) unstable; urgency=high
+openssl-qoriq (0.9.7b-1) unstable; urgency=high
 
   * upstream security fix
    - Countermeasure against the Klima-Pokorny-Rosa extension of
@@ -1969,7 +1975,7 @@ openssl (0.9.7b-1) unstable; urgency=high
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed, 16 Apr 2003 10:32:57 +0200
 
-openssl (0.9.7a-1) unstable; urgency=high
+openssl-qoriq (0.9.7a-1) unstable; urgency=high
 
   * upstream Security fix
     - In ssl3_get_record (ssl/s3_pkt.c), minimize information leaked
@@ -1981,7 +1987,7 @@ openssl (0.9.7a-1) unstable; urgency=high
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Fri, 21 Feb 2003 22:39:40 +0100
 
-openssl (0.9.7-4) unstable; urgency=low
+openssl-qoriq (0.9.7-4) unstable; urgency=low
 
   * use DH_COMPAT=3 to build
   * move i686 to i686/cmov to fix problems on Via C3. For that to work we
@@ -1991,21 +1997,21 @@ openssl (0.9.7-4) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Fri, 24 Jan 2003 10:22:56 +0100
 
-openssl (0.9.7-3) unstable; urgency=low
+openssl-qoriq (0.9.7-3) unstable; urgency=low
 
   * enable build of ultrasparc code on non ultrasparc machines (closes:
     #177024)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Fri, 17 Jan 2003 08:22:13 +0100
 
-openssl (0.9.7-2) unstable; urgency=low
+openssl-qoriq (0.9.7-2) unstable; urgency=low
 
   * include changes between 0.9.6g-9 and -10
     * fix problem in build-process on i386 with libc6 version number
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon, 13 Jan 2003 14:26:56 +0100
 
-openssl (0.9.7-1) unstable; urgency=low
+openssl-qoriq (0.9.7-1) unstable; urgency=low
 
   * new upstream
     * includes engine support
@@ -2017,27 +2023,27 @@ openssl (0.9.7-1) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat, 11 Jan 2003 09:12:16 +0100
 
-openssl (0.9.6g-10) unstable; urgency=low
+openssl-qoriq (0.9.6g-10) unstable; urgency=low
 
   * fix problem in build-process on i386 with libc6 version number
     (closes: #167096)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon,  4 Nov 2002 12:27:21 +0100
 
-openssl (0.9.6g-9) unstable; urgency=low
+openssl-qoriq (0.9.6g-9) unstable; urgency=low
 
   * fix typo in i386 libc6 depend (sigh) (closes: #163848)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Tue,  8 Oct 2002 23:29:20 +0200
 
-openssl (0.9.6g-8) unstable; urgency=low
+openssl-qoriq (0.9.6g-8) unstable; urgency=low
 
   * fix libc6 depends. Only needed for i386 (closes: #163701)
   * remove SHLIB section for bsds from Configure (closes: #163585)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Tue,  8 Oct 2002 10:57:35 +0200
 
-openssl (0.9.6g-7) unstable; urgency=low
+openssl-qoriq (0.9.6g-7) unstable; urgency=low
 
   * enable i686 optimisation and depend on fixed glibc (closes: #163500)
   * remove transition package ssleay
@@ -2046,13 +2052,13 @@ openssl (0.9.6g-7) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sun,  6 Oct 2002 14:07:12 +0200
 
-openssl (0.9.6g-6) unstable; urgency=low
+openssl-qoriq (0.9.6g-6) unstable; urgency=low
 
   * temporarily disable i686 optimisation (See bug in glibc #161788)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat, 21 Sep 2002 18:56:49 +0200
 
-openssl (0.9.6g-5) unstable; urgency=low
+openssl-qoriq (0.9.6g-5) unstable; urgency=low
 
   * i486 can use i586 assembler
   * include set -xe in the for loops in the rules files to make it abort
@@ -2060,26 +2066,26 @@ openssl (0.9.6g-5) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat, 21 Sep 2002 16:23:11 +0200
 
-openssl (0.9.6g-4) unstable; urgency=low
+openssl-qoriq (0.9.6g-4) unstable; urgency=low
 
   * fix optimization for alpha and sparc
   * add optimization for i486
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Fri, 20 Sep 2002 22:36:19 +0200
 
-openssl (0.9.6g-3) unstable; urgency=low
+openssl-qoriq (0.9.6g-3) unstable; urgency=low
 
   * add optimized libraries for i586, i686, ev4, ev5 and v9 (closes: #139783)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Thu, 19 Sep 2002 18:33:04 +0200
 
-openssl (0.9.6g-2) unstable; urgency=low
+openssl-qoriq (0.9.6g-2) unstable; urgency=low
 
   * fix manpage names (closes: #156717, #156718, #156719, #156721)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Thu, 15 Aug 2002 11:26:37 +0200
 
-openssl (0.9.6g-1) unstable; urgency=low
+openssl-qoriq (0.9.6g-1) unstable; urgency=low
 
   * new upstream version
   * Use proper error handling instead of 'assertions' in buffer
@@ -2091,13 +2097,13 @@ openssl (0.9.6g-1) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed, 14 Aug 2002 13:59:22 +0200
 
-openssl (0.9.6e-1) unstable; urgency=high
+openssl-qoriq (0.9.6e-1) unstable; urgency=high
 
   * fixes remote exploits (see DSA-136-1)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Tue, 30 Jul 2002 18:32:28 +0200
 
-openssl (0.9.6d-1) unstable; urgency=low
+openssl-qoriq (0.9.6d-1) unstable; urgency=low
 
   * new upstream (minor) version
   * includes Configure lines for debian-*bsd-* (closes: #130413)
@@ -2108,44 +2114,44 @@ openssl (0.9.6d-1) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon,  3 Jun 2002 19:42:10 +0200
 
-openssl (0.9.6c-2) unstable; urgency=low
+openssl-qoriq (0.9.6c-2) unstable; urgency=low
 
   * moved from non-US to main
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Tue, 19 Mar 2002 14:48:39 +0100
 
-openssl (0.9.6c-1) unstable; urgency=low
+openssl-qoriq (0.9.6c-1) unstable; urgency=low
 
   * new upstream version with a lot of bugfixes
-  * remove directory /usr/include/openssl from openssl package (closes:
+  * remove directory /usr/include/openssl-qoriq from openssl-qoriq package (closes:
     bug #121226)
   * remove selfdepends from libssl0.9.6
-  * link openssl binary shared again
+  * link openssl-qoriq binary shared again
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat,  5 Jan 2002 19:04:31 +0100
 
-openssl (0.9.6b-4) unstable; urgency=low
+openssl-qoriq (0.9.6b-4) unstable; urgency=low
 
   * build with -D_REENTRANT for threads support on all architectures
     (closes: #112329, #119239)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat, 24 Nov 2001 12:17:51 +0100
 
-openssl (0.9.6b-3) unstable; urgency=low
+openssl-qoriq (0.9.6b-3) unstable; urgency=low
 
   * disable idea, mdc2 and rc5 because they are not free (closes: #65368)
   * ready to be moved from nonus to main
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed, 21 Nov 2001 17:51:41 +0100
 
-openssl (0.9.6b-2) unstable; urgency=high
+openssl-qoriq (0.9.6b-2) unstable; urgency=high
 
   * fix definition of crypt in des.h (closes: #107533)
   * fix descriptions (closes: #109503)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon, 17 Sep 2001 15:38:27 +0200
 
-openssl (0.9.6b-1) unstable; urgency=medium
+openssl-qoriq (0.9.6b-1) unstable; urgency=medium
 
   * new upstream fixes some security issues (closes: #105835, #100146)
   * added support for s390 (closes: #105681)
@@ -2156,31 +2162,31 @@ openssl (0.9.6b-1) unstable; urgency=medium
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Fri, 20 Jul 2001 15:52:42 +0200
 
-openssl (0.9.6a-3) unstable; urgency=medium
+openssl-qoriq (0.9.6a-3) unstable; urgency=medium
 
   * add perl-base to builddeps
   * include static libraries in libssl-dev (closes: #93688)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon, 14 May 2001 20:16:06 +0200
 
-openssl (0.9.6a-2) unstable; urgency=medium
+openssl-qoriq (0.9.6a-2) unstable; urgency=medium
 
   * change Architecture of ssleay from any to all (closes: #92913)
   * depend libssl-dev on the exact same version of libssl0.9.6 (closes:
     #88939)
-  * remove lib{crypto,ssl}.a from openssl (closes: #93666)
+  * remove lib{crypto,ssl}.a from openssl-qoriq (closes: #93666)
   * rebuild with newer gcc to fix atexit problem (closes: #94036)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed,  2 May 2001 12:28:39 +0200
 
-openssl (0.9.6a-1) unstable; urgency=medium
+openssl-qoriq (0.9.6a-1) unstable; urgency=medium
 
   * new upstream, fixes some security bugs (closes: #90584)
   * fix typo in s_server manpage (closes: #89756)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Tue, 10 Apr 2001 12:13:11 +0200
 
-openssl (0.9.6-2) unstable; urgency=low
+openssl-qoriq (0.9.6-2) unstable; urgency=low
 
   * policy: reorganisation of package names: libssl096 -> libssl0.9.6,
     libssl096-dev -> libssl-dev (closes: #83426)
@@ -2196,7 +2202,7 @@ openssl (0.9.6-2) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Thu,  8 Mar 2001 14:24:00 +0100
 
-openssl (0.9.6-1) unstable; urgency=low
+openssl-qoriq (0.9.6-1) unstable; urgency=low
 
   * New upstream version (Thanks to Enrique Zanardi <ezanard@debian.org>)
     (closes: #72388)
@@ -2204,20 +2210,20 @@ openssl (0.9.6-1) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon, 13 Nov 2000 22:30:46 +0100
 
-openssl (0.9.5a-5) unstable; urgency=low
+openssl-qoriq (0.9.5a-5) unstable; urgency=low
 
   * move manpages in standard directories with section ssl (closes:
     #72152, #69809)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Thu,  5 Oct 2000 19:56:20 +0200
 
-openssl (0.9.5a-4) unstable; urgency=low
+openssl-qoriq (0.9.5a-4) unstable; urgency=low
 
   * include edg_rand_bytes patch from and for apache-ssl
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat, 23 Sep 2000 16:48:06 +0200
 
-openssl (0.9.5a-3) unstable; urgency=low
+openssl-qoriq (0.9.5a-3) unstable; urgency=low
 
   * fix call to dh_makeshlibs to create correct shlibs file and make
     dependend programs link correctly (closes: Bug#61658)
@@ -2226,14 +2232,14 @@ openssl (0.9.5a-3) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat, 16 Sep 2000 19:10:50 +0200
 
-openssl (0.9.5a-2) unstable; urgency=low
+openssl-qoriq (0.9.5a-2) unstable; urgency=low
 
   * try to fix the sharedlib problem. change soname of library
   (closes: Bug#4622, #66102, #66538, #66123)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed, 12 Jul 2000 03:26:30 +0200
 
-openssl (0.9.5a-1) unstable; urgency=low
+openssl-qoriq (0.9.5a-1) unstable; urgency=low
 
   * new upstream version (major changes see file NEWS) (closes: Bug#63976,
     #65239, #65358)
@@ -2245,60 +2251,60 @@ openssl (0.9.5a-1) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sun, 11 Jun 2000 15:17:35 +0200
 
-openssl (0.9.4-5) frozen unstable; urgency=medium
+openssl-qoriq (0.9.4-5) frozen unstable; urgency=medium
 
   * cleanup of move of doc directories to /usr/share/doc (closes:
     Bug#56430)
   * lintian issues (closes: Bug#49358)
-  * move demos from openssl to libssl09-dev (closes: Bug#59201)
+  * move demos from openssl-qoriq to libssl09-dev (closes: Bug#59201)
   * move to debhelpers
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat, 11 Mar 2000 10:38:04 +0100
 
-openssl (0.9.4-4) unstable; urgency=medium
+openssl-qoriq (0.9.4-4) unstable; urgency=medium
 
   * Added 'debian-arm' in 'Configure'. (closes: Bug#54251, #54766)
   * Fixed Configure for 'debian-m68k' (closes: Bug#53636)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat, 15 Jan 2000 13:16:18 +0100
 
-openssl (0.9.4-3) unstable; urgency=low
+openssl-qoriq (0.9.4-3) unstable; urgency=low
 
   * define symbol SSLeay_add_ssl_algorithms for backward compatibility
     (closes: Bug#46882)
-  * remove manpages from /usr/doc/openssl (closes: Bug#46791)
+  * remove manpages from /usr/doc/openssl-qoriq (closes: Bug#46791)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Thu, 14 Oct 1999 16:51:08 +0200
 
-openssl (0.9.4-2) unstable; urgency=low
+openssl-qoriq (0.9.4-2) unstable; urgency=low
 
   * include some more docu in pod format (Bug #43933)
   * removed -mv8 from sparc flags (Bug #44769)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Tue, 14 Sep 1999 22:04:06 +0200
 
-openssl (0.9.4-1) unstable; urgency=low
+openssl-qoriq (0.9.4-1) unstable; urgency=low
 
   * new upstream version (Closes: #42926)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sat, 28 Aug 1999 17:04:23 +0200
 
-openssl (0.9.3a-1) unstable; urgency=low
+openssl-qoriq (0.9.3a-1) unstable; urgency=low
 
   * new upstream version (Bug #38345, #38627)
   * sparc is big-endian (Bug #39973)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed,  7 Jul 1999 16:03:37 +0200
 
-openssl (0.9.2b-3) unstable; urgency=low
+openssl-qoriq (0.9.2b-3) unstable; urgency=low
 
   * correct move conffiles to /etc/ssl (Bug #38570)
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Mon, 31 May 1999 21:08:07 +0200
 
-openssl (0.9.2b-2) unstable; urgency=low
+openssl-qoriq (0.9.2b-2) unstable; urgency=low
 
-  * added convenience package ssleay to help upgrade to openssl (Bug
+  * added convenience package ssleay to help upgrade to openssl-qoriq (Bug
     #37185, #37623, #36326)
   * added some missing dependencies from libssl09 (Bug #36681, #35867,
     #36326)
@@ -2308,9 +2314,9 @@ openssl (0.9.2b-2) unstable; urgency=low
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Sun, 23 May 1999 14:57:48 +0200
 
-openssl (0.9.2b-1) unstable; urgency=medium
+openssl-qoriq (0.9.2b-1) unstable; urgency=medium
 
-  * First openssl version
+  * First openssl-qoriq version
 
  -- Christoph Martin <christoph.martin@uni-mainz.de>  Wed, 31 Mar 1999 15:54:26 +0200
 

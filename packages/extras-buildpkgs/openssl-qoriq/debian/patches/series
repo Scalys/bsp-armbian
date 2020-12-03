@@ -5,15 +5,15 @@ pic.patch
 c_rehash-compat.patch
 Set-systemwide-default-settings-for-libssl-users.patch
 UBUNTU-Revert-Set-systemwide-default-settings-for-libssl-users.patch
-CVE-2018-0734-1.patch
-CVE-2018-0734-2.patch
-CVE-2018-0734-3.patch
-CVE-2018-0735.patch
-69f6b3ceaba493e70e1296880ea6c93e40714f0f.patch
-f426625b6ae9a7831010750490a5f0ad689c5ba3.patch
-f725fe5b4b6504df08e30f5194d321c3025e2336.patch
-OPENSSL_malloc_init_hang.patch
-CVE-2019-1547.patch
-CVE-2019-1549.patch
-CVE-2019-1551.patch
-CVE-2019-1563.patch
+# CVE-2018-0734-1.patch
+# CVE-2018-0734-2.patch
+# CVE-2018-0734-3.patch
+# CVE-2018-0735.patch
+# 69f6b3ceaba493e70e1296880ea6c93e40714f0f.patch
+# f426625b6ae9a7831010750490a5f0ad689c5ba3.patch
+# f725fe5b4b6504df08e30f5194d321c3025e2336.patch
+# OPENSSL_malloc_init_hang.patch
+# CVE-2019-1547.patch
+# CVE-2019-1549.patch
+# CVE-2019-1551.patch
+# CVE-2019-1563.patch

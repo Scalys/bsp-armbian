@@ -130,11 +130,12 @@ install_deb_chroot()
 	local package=$1
 	local variant=$2
 	local transfer=$3
+	local root=${4:-$SDCARD}
 	local name
 	local desc
 	if [[ ${variant} != remote ]]; then
 		name="/root/"$(basename "${package}")
-		[[ ! -f "${SDCARD}${name}" ]] && cp "${package}" "${SDCARD}${name}"
+		[[ ! -f "${root}${name}" ]] && cp "${package}" "${root}${name}"
 		desc=""
 	else
 		name=$1
@@ -143,7 +144,7 @@ install_deb_chroot()
 
 	display_alert "Installing${desc}" "${name/\/root\//}"
 	[[ $NO_APT_CACHER != yes ]] && local apt_extra="-o Acquire::http::Proxy=\"http://${APT_PROXY_ADDR:-localhost:3142}\" -o Acquire::http::Proxy::localhost=\"DIRECT\""
-	LC_ALL=C LANG=C chroot "${SDCARD}" /bin/bash -c "DEBIAN_FRONTEND=noninteractive apt-get -yqq \
+	LC_ALL=C LANG=C chroot "${root}" /bin/bash -c "DEBIAN_FRONTEND=noninteractive apt-get -yqq \
 		$apt_extra --no-install-recommends install $name" >> "${DEST}"/debug/install.log 2>&1
-	[[ ${variant} == remote && ${transfer} == yes ]] && rsync -rq "${SDCARD}"/var/cache/apt/archives/*.deb ${DEB_STORAGE}/
+	[[ ${variant} == remote && ${transfer} == yes ]] && rsync -rq "${root}"/var/cache/apt/archives/*.deb ${DEB_STORAGE}/
 }

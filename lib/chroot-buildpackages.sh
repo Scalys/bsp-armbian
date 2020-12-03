@@ -79,6 +79,15 @@ create_chroot()
 	fi
 	chroot "${target_dir}" /bin/bash -c "/usr/sbin/update-ccache-symlinks"
 	[[ $release == focal ]] && chroot "${target_dir}" /bin/bash -c "ln -s /usr/bin/python3 /usr/bin/python"
+
+	if [[ "${REPOSITORY_INSTALL}" != *kernel* ]]; then
+		install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KERNEL}_${REVISION}_${ARCH}.deb" "local" "no" "${target_dir}"
+		install_deb_chroot "${DEB_STORAGE}/${CHOSEN_KERNEL/image/headers}_${REVISION}_${ARCH}.deb" "local" "no" "${target_dir}"
+	else
+		install_deb_chroot "linux-image-${BRANCH}-${LINUXFAMILY}" "remote" "no" "${target_dir}"
+		install_deb_chroot "linux-headers-${BRANCH}-${LINUXFAMILY}" "remote" "no" "${target_dir}"
+	fi
+	
 	touch "${target_dir}"/root/.debootstrap-complete
 	display_alert "Debootstrap complete" "${release}/${arch}" "info"
 } #############################################################################

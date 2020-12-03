@@ -118,10 +118,10 @@ override_dh_auto_install-arch:
 	mkdir -p debian/tmp/etc/ssl
 	mv debian/tmp/usr/lib/ssl/{certs,openssl.cnf,private} debian/tmp/etc/ssl/
 	ln -s /etc/ssl/{certs,openssl.cnf,private} debian/tmp/usr/lib/ssl/
-	cp -pf debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libcrypto.so.* debian/libcrypto1.1-udeb/usr/lib/
-	cp -pf debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libssl.so.* debian/libssl1.1-udeb/usr/lib/
-	mkdir -p debian/libssl1.1-udeb/usr/lib/ssl
-	cp debian/tmp/etc/ssl/openssl.cnf debian/libssl1.1-udeb/usr/lib/ssl/
+	cp -pf debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libcrypto.so.* debian/libcrypto1.1-udeb-qoriq/usr/lib/
+	cp -pf debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libssl.so.* debian/libssl1.1-udeb-qoriq/usr/lib/
+	mkdir -p debian/libssl1.1-udeb-qoriq/usr/lib/ssl
+	cp debian/tmp/etc/ssl/openssl.cnf debian/libssl1.1-udeb-qoriq/usr/lib/ssl/
 	cp -auv build_shared/lib*.so* debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/
 	for opt in $(OPTS); \
 		do set -xe; \
@@ -143,9 +143,9 @@ override_dh_fixperms:
 override_dh_compress:
 	dh_compress
 	# symlink doc files
-	for p in openssl libssl-dev; do \
+	for p in openssl-qoriq libssl-dev-qoriq; do \
 	  for f in changelog.Debian.gz changelog.gz copyright; do \
-	    ln -sf ../libssl1.1/$$f debian/$$p/usr/share/doc/$$p/$$f; \
+	    ln -sf ../libssl1.1-qoriq/$$f debian/$$p/usr/share/doc/$$p/$$f; \
 	  done; \
 	done
 
@@ -153,8 +153,8 @@ override_dh_perl:
 	dh_perl -d
 
 override_dh_makeshlibs:
-	dh_makeshlibs -a -V --add-udeb="libcrypto1.1-udeb" -Xengines -- -c4
+	dh_makeshlibs -a -V --add-udeb="libcrypto1.1-udeb-qoriq" -Xengines -- -c4
 
 override_dh_shlibdeps:
-	sed -i '/^udeb: libssl/s/libcrypto1.1-udeb/libssl1.1-udeb/' debian/libssl1.1/DEBIAN/shlibs
-	dh_shlibdeps -a -L libssl1.1
+	sed -i '/^udeb: libssl/s/libcrypto1.1-udeb-qoriq/libssl1.1-udeb-qoriq/' debian/libssl1.1-qoriq/DEBIAN/shlibs
+	dh_shlibdeps -a -L libssl1.1-qoriq

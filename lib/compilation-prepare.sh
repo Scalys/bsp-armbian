@@ -611,11 +611,11 @@ compilation_prepare()
 
 	if linux-version compare "${version}" ge 5.0 && [ "$CRYPTODEV" == yes ]; then
 
-		local cryptodevver="tag:LSDK-20.04"
+		local cryptodevver="branch:master"
 
 		display_alert "Adding" "/dev/crypto device driver"
 
-		fetch_from_repo "https://source.codeaurora.org/external/qoriq/qoriq-components/cryptodev-linux" "cryptodev-linux" "${cryptodevver}" "yes"
+		fetch_from_repo "https://github.com/cryptodev-linux/cryptodev-linux.git" "cryptodev-linux" "${cryptodevver}" "yes"
 
 		cd ${kerneldir}
 		rm -rf ${kerneldir}/crypto/cryptodev
@@ -627,14 +627,20 @@ compilation_prepare()
 		cp -R ${SRC}/cache/sources/cryptodev-linux/${cryptodevver#*:}/Makefile \
 		${kerneldir}/crypto/cryptodev
 
+		mkdir -p ${kerneldir}/include/uapi/crypto/
 		cp -R ${SRC}/cache/sources/cryptodev-linux/${cryptodevver#*:}/crypto/* \
-		${kerneldir}/include/crypto/
+		${kerneldir}/include/uapi/crypto/
+
+		cp "${SRC}/patch/misc/cryptodev.h" $kerneldir/include/crypto/cryptodev.h
 
 		echo "obj-\$(CONFIG_CRYPTODEV) += cryptodev/" >> $kerneldir/crypto/Makefile
 		
 		sed -i '/source "certs\/Kconfig"/a source "crypto\/cryptodev\/Kconfig"' \
 		$kerneldir/crypto/Kconfig
 
+		cat "${SRC}/patch/misc/cryptodev.mk" > $kerneldir/crypto/cryptodev/Makefile
+		sed -i 's/<cryptlib.h>/\"cryptlib.h"/g' $kerneldir/crypto/cryptodev/cryptodev_int.h
+		
 		process_patch_file "${SRC}/patch/misc/cryptodev.patch" "applying"
 	fi
 
