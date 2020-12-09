@@ -4,7 +4,7 @@ Upstream-Contact:
 Source: https://github.com/Thermi/crconf
 
 Files: *
-Copyright: aaa
+Copyright: 2011 secunet Security Networks AG, 2011 Steffen Klassert <steffen.klassert@secunet.com>
 License: GPL-2
  On Debian systems, the full text of the GNU General Public
  License version 2 can be found in the file

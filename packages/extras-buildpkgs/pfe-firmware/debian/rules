@@ -1,17 +1,7 @@
 #!/usr/bin/make -f
 
-MACHINE ?= "trustbox"
-export MACHINE
-
-DEB_DESTDIR = debian/pfe-firmware
-
 %:
 	dh $@
 
-override_dh_auto_install:
-	install -d ${DEB_DESTDIR}/lib/firmware
-	install -m 644 ls1012a/slow_path/*.elf ${DEB_DESTDIR}/lib/firmware
-	install -m 644 ls1012a/u-boot/pfe_fw_sbl.itb ${DEB_DESTDIR}/
-
 override_dh_strip:
-	true
+	

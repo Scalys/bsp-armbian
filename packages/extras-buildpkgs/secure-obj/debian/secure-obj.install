@@ -1,0 +1,9 @@
+#! /usr/bin/dh-exec
+
+secure_storage_ta/ta/b05bcf48-9732-4efa-a9e0-141c7c888c34.ta lib/optee_armtz
+securekey_lib/out/export/lib/libsecure_obj.so usr/lib
+secure_obj-openssl-engine/libeng_secure_obj.so usr/lib/${DEB_HOST_MULTIARCH}/openssl-1.0.0/engines
+securekey_lib/out/export/app/*_app usr/bin
+securekey_lib/out/export/app/mp_verify usr/bin
+secure_obj-openssl-engine/app/sobj_eng_app usr/bin
+securekey_lib/out/export/include/* usr/include

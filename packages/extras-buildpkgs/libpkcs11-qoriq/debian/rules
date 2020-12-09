@@ -1,28 +1,16 @@
 #!/usr/bin/make -f
 
-CROSS_COMPILE ?= ""
-export CROSS_COMPILE
+export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
 
-MACHINE ?= "trustbox"
-export MACHINE
+export MACHINE ?= "trustbox"
 
 export TA_DEV_KIT_DIR = /usr/include/optee/export-user_ta
 export OPTEE_CLIENT_EXPORT = /usr
 export OPENSSL_PATH = /usr
 export SECURE_OBJ_PATH = /usr
 
-DEB_DESTDIR = debian/libpkcs11-qoriq
-
 %:
 	dh $@
 
-# override_dh_auto_build:
-#	$(MAKE) OPENSSL_PATH=/usr
-
 override_dh_auto_install:
-	install -d ${DEB_DESTDIR}/usr/lib
-	install -d ${DEB_DESTDIR}/usr/include 
-	install -d ${DEB_DESTDIR}/usr/bin
-	cp out/export/lib/libpkcs11.so  ${DEB_DESTDIR}/usr/lib
-	cp out/export/include/*.h  ${DEB_DESTDIR}/usr/include
-	cp out/export/app/*  ${DEB_DESTDIR}/usr/bin
+	

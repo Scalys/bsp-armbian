@@ -1,29 +1,22 @@
 #!/usr/bin/make -f
 
-CROSS_COMPILE ?= ""
-export CROSS_COMPILE
+include /usr/share/dpkg/architecture.mk
+include /usr/share/dpkg/pkg-info.mk
 
-MACHINE ?= "trustbox"
-export MACHINE
-
-DEB_DESTDIR = debian/ppa-generic
+export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
+export MACHINE = trustbox
 
 %:
 	dh $@
 
 override_dh_auto_clean:
-	@cd ppa/ && ./build dev clean ls1012
+	cd ppa/ && ./build dev clean ls1012
 
 override_dh_auto_configure:
-	@cp /lib/firmware/tee_$(MACHINE).bin ppa/soc-ls1012/tee.bin
+	cp /lib/firmware/tee_$(MACHINE).bin ppa/soc-ls1012/tee.bin
 
 override_dh_auto_build:
-	@cd ppa/ && ./build prod rdb-fit spd=on ls1012
+	cd ppa/ && ./build prod rdb-fit spd=on ls1012
 
 override_dh_strip:
-	true
 
-override_dh_auto_install:
-	install -d ${DEB_DESTDIR}/
-	# install -m 644 ppa/soc-ls1012/build/obj/ppa.itb ${DEB_DESTDIR}/lib/firmware/ppa_${MACHINE}.itb
-	install -m 644 ppa/soc-ls1012/build/obj/ppa.itb ${DEB_DESTDIR}/

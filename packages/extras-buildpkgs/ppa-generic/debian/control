@@ -11,5 +11,4 @@ Vcs-Browser: https://source.codeaurora.org/external/qoriq/qoriq-components/ppa-g
 Package: ppa-generic
 Architecture: linux-any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: OP-TEE OS
-
+Description: PPA Firmware

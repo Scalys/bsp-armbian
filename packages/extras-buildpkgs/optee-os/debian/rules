@@ -5,10 +5,7 @@ include /usr/share/dpkg/pkg-info.mk
 
 export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
 
-
 export MACHINE = "trustbox"
-
-DEB_DESTDIR = debian/optee-os
 
 export PLATFORM=ls-ls1012grapeboard
 
@@ -21,21 +18,6 @@ override_dh_auto_configure:
 override_dh_auto_build:
 	$(MAKE) PLATFORM=ls-ls1012grapeboard CFG_ARM64_core=y ARCH=arm LDFLAGS= CFLAGS= 
 	objcopy -v -O binary out/arm-plat-ls/core/tee.elf out/arm-plat-ls/core/tee_${MACHINE}.bin
-
-#override_dh_auto_install:
-#	install -d ${DEB_DESTDIR}/lib/firmware/
-#	install -m 644 out/arm-plat-ls/core/tee_${MACHINE}.bin ${DEB_DESTDIR}/lib/firmware/tee_${MACHINE}.bin
-	
-
-#	install -d ${DEB_DESTDIR}/usr/include/optee/export-user_ta/
-#	for f in out/arm-plat-ls/export-ta_arm64/* ; do \
-#		cp -aR $$f ${DEB_DESTDIR}/usr/include/optee/export-user_ta/ ; \
-#	done
-
-#	chmod +x ${DEB_DESTDIR}/usr/include/optee/export-user_ta/scripts/*
-#
-#	install -d ${DEB_DESTDIR}/lib/optee_armtz
-#	cp out/arm-plat-ls/ta/*/*.ta $(DEB_DESTDIR)/lib/optee_armtz
 
 override_dh_strip:
 	true

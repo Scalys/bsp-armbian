@@ -1,0 +1,2 @@
+ls1012a/slow_path/*.elf lib/firmware
+ls1012a/u-boot/pfe_fw_sbl.itb .

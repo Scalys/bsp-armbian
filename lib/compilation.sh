@@ -154,6 +154,7 @@ compile_uboot()
 
 	# process compilation for one or multiple targets
 	while read -r target; do
+		echo $BOOTCONFIG
 		local target_make target_patchdir target_files
 		target_make=$(cut -d';' -f1 <<< "${target}")
 		target_patchdir=$(cut -d';' -f2 <<< "${target}")
@@ -603,6 +604,20 @@ install_rkbin_tools()
 		mkdir -p /usr/local/bin/
 		install -m 755 tools/loaderimage /usr/local/bin/
 		install -m 755 tools/trust_merger /usr/local/bin/
+		improved_git rev-parse @ 2>/dev/null > .commit_id
+	fi
+}
+
+compile_freescale_cst()
+{
+	# Compile and install only if git commit hash changed
+	cd "${SRC}"/cache/sources/freescale-cst || exit
+	# need to check if /usr/local/bin/.... to detect new Docker containers with old cached sources
+	if [[ ! -f .commit_id || $(improved_git rev-parse @ 2>/dev/null) != $(<.commit_id) || ! -f /usr/local/bin/cst/create_hdr_esbc ]]; then
+		display_alert "Compiling" "freescale-cst" "info"
+		make -s BIN_DEST_DIR="/usr/local/bin" clean >/dev/null
+		mkdir -p /usr/local/bin/
+		make BIN_DEST_DIR="/usr/local/bin" install >/dev/null 2>&1
 		improved_git rev-parse @ 2>/dev/null > .commit_id
 	fi
 }

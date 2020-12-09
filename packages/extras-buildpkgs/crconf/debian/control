@@ -12,4 +12,3 @@ Package: crconf
 Architecture: linux-any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Linux cryptoapi configuration tool
-

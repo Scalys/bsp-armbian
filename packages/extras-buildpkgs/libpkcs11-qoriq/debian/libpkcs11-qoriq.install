@@ -1,0 +1,3 @@
+out/export/lib/libpkcs11.so usr/lib
+out/export/include/*.h usr/include
+out/export/app/* usr/bin

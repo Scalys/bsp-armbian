@@ -1,7 +1,9 @@
 #!/usr/bin/make -f
 
-CROSS_COMPILE ?= ""
-export CROSS_COMPILE
+include /usr/share/dpkg/architecture.mk
+include /usr/share/dpkg/pkg-info.mk
+
+export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
 
 %:
 	dh $@
