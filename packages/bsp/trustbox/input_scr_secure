@@ -2,6 +2,6 @@ PLATFORM=LS1012
 ESBC=1
 PRI_KEY=srk.pri
 PUB_KEY=srk.pub
-IMAGE_1={trustbox_boot.scr, a0000000, ffffffff}
+IMAGE_1={trustbox_boot.scr, 80000000, ffffffff}
 OUTPUT_HDR_FILENAME=trustbox_boot.scr.hdr
 VERBOSE=0
