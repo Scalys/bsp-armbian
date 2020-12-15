@@ -549,7 +549,7 @@ prepare_partitions()
 	[[ -f $SDCARD/boot/boot.cmd ]] && \
 		mkimage -C none -A arm -T script -d $SDCARD/boot/boot.cmd $SDCARD/boot/boot.scr > /dev/null 2>&1
 
-	[[ -f $SDCARD/boot/$bootscript_dst ]] && \
+	[[ -f $SDCARD/boot/$bootscript_dst ]] && [[ ! -f $SDCARD/boot/$(echo "${bootscript_dst}" | sed -e "s/\.cmd/\.scr/g") ]] && \
 			mkimage -C none -A arm -T script -d $SDCARD/boot/$bootscript_dst ${SDCARD}$(echo "/boot/${bootscript_dst}" | sed -e "s/\.cmd/\.scr/g") > /dev/null 2>&1
 
 } #############################################################################
