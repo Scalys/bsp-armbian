@@ -1,0 +1,15 @@
+Source: open-enclave
+Section: utils
+Priority: optional
+Maintainer: Mikalai Ramanovich <mikalai.ramanovich@edality.by>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.8
+Homepage: https://github.com/openenclave/openenclave
+Vcs-Git: https://github.com/openenclave/openenclave.git
+Vcs-Browser: https://github.com/openenclave/openenclave
+
+Package: open-enclave
+Architecture: linux-any
+Depends: ${misc:Depends}
+Description: OpenEnclave SDK
+
