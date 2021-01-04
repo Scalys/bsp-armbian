@@ -173,7 +173,7 @@ chroot_build_packages()
 			fi
 
 			for plugin in "${SRC}"/packages/extras-buildpkgs/*.conf; do
-				unset package_name package_repo package_ref package_builddeps package_install_chroot package_fetch package_install_target \
+				unset package_name package_repo package_ref package_builddeps package_install_chroot package_fetch package_prepare package_install_target \
 					package_upstream_version needs_building plugin_target_dir package_component "package_builddeps_${release}"
 				source "${plugin}"
 
@@ -224,7 +224,14 @@ chroot_build_packages()
 				export DEBFULLNAME="$MAINTAINER"
 				export DEBEMAIL="$MAINTAINERMAIL"
 				$(declare -f display_alert)
+				$(declare -f package_prepare)
+				
 				cd /root/build
+
+				if [[ \$(type -t package_prepare) == function ]]; then
+					package_prepare
+				fi
+				
 				if [[ -n "${package_builddeps}" ]]; then
 					# can be replaced with mk-build-deps
 					deps=()

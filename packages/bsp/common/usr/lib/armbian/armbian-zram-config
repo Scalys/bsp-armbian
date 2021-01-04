@@ -60,7 +60,10 @@ activate_zram_swap() {
 	# swap file or partition on *capable* storage needs to be chosen and
 	# defined as swap and also in /etc/default/armbian-zram-config SWAP=false
 	# needs to be set.
-	echo 0 >/sys/module/zswap/parameters/enabled 2>/dev/null
+
+	if [[ -f "/sys/module/zswap/parameters/enabled" ]]; then
+		echo 0 >/sys/module/zswap/parameters/enabled 2>/dev/null
+	fi
 
 	# Limit Journal size to 20Mb
 	sed -i "s/.*SystemMaxUse=$/SystemMaxUse=20M/" /etc/systemd/journald.conf
