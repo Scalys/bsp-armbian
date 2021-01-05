@@ -595,9 +595,15 @@ create_image()
 {
 	# stage: create file name
 	local version="Armbian_${REVISION}_${BOARD^}_${RELEASE}_${BRANCH}_${VER/-$LINUXFAMILY/}"
-	[[ $BUILD_DESKTOP == yes ]] && version=${version}_desktop
-	[[ $BUILD_MINIMAL == yes ]] && version=${version}_minimal
-	[[ $ROOTFS_TYPE == nfs ]] && version=${version}_nfsboot
+
+	local edition="main"
+
+	[[ $BUILD_DESKTOP == yes ]] && edition=desktop
+	[[ $BUILD_MINIMAL == yes ]] && edition=minimal
+	[[ $ROOTFS_TYPE == nfs ]] && edition=nfsboot
+
+
+	version="${BOARD}-armbian-${REVISION/\.}-${edition}-$(date +'%Y.%m.%d')"
 
 	if [[ $ROOTFS_TYPE != nfs ]]; then
 		display_alert "Copying files to" "/"
