@@ -313,13 +313,16 @@ install_common()
 	fi
 
 	# install armbian-zsh
-	if [[ "${REPOSITORY_INSTALL}" != *armbian-zsh* ]]; then
-		if [[ $BUILD_MINIMAL != yes ]]; then
-			install_deb_chroot "${DEB_STORAGE}/armbian-zsh_${REVISION}_all.deb"
-		fi
-	else
-		if [[ $BUILD_MINIMAL != yes ]]; then
-			install_deb_chroot "armbian-zsh" "remote"
+
+	if [[ $INSTALL_ZSH != no ]]; then
+		if [[ "${REPOSITORY_INSTALL}" != *armbian-zsh* ]]; then
+			if [[ $BUILD_MINIMAL != yes ]]; then
+				install_deb_chroot "${DEB_STORAGE}/armbian-zsh_${REVISION}_all.deb"
+			fi
+		else
+			if [[ $BUILD_MINIMAL != yes ]]; then
+				install_deb_chroot "armbian-zsh" "remote"
+			fi
 		fi
 	fi
 
