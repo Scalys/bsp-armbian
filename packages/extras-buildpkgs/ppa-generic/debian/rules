@@ -16,7 +16,12 @@ override_dh_auto_configure:
 	cp /lib/firmware/tee_$(MACHINE).bin ppa/soc-ls1012/tee.bin
 
 override_dh_auto_build:
-	cd ppa/ && ./build prod rdb-fit spd=on ls1012
+	cd ppa/; \
+	if [ -f soc-ls1012/fuse_scr.bin ]; then \
+		./build prod rdb-fit spd=on fuse=on ls1012; \
+	else \
+		./build prod rdb-fit spd=on ls1012; \
+	fi
 
 override_dh_strip:
 
