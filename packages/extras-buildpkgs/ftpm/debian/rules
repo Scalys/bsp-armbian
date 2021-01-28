@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+
+export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
+
+export MACHINE = "trustbox"
+
+export TA_DEV_KIT_DIR = /usr/include/optee/export-user_ta
+export TA_CPU = cortex-a53
+
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	mkdir -p "$(shell pwd)/build"
+
+override_dh_auto_clean:
+	$(MAKE) -C "Samples/ARM32-FirmwareTPM/optee_ta/fTPM" O="$(shell pwd)/build" clean
+
+override_dh_auto_build:
+	$(MAKE) -C "Samples/ARM32-FirmwareTPM/optee_ta/fTPM" CFLAGS="$(CFLAGS) -Wno-expansion-to-defined" O="$(shell pwd)/build"

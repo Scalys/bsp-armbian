@@ -1,0 +1,15 @@
+Source: ftpm
+Section: utils
+Priority: optional
+Maintainer: Mikalai Ramanovich <mikalai.ramanovich@edality.by>
+Build-Depends: debhelper (>= 7.0.50~), dh-exec
+Standards-Version: 3.9.8
+Homepage: https://source.codeaurora.org/external/qoriq/qoriq-components/secure_obj
+Vcs-Git: https://source.codeaurora.org/external/qoriq/qoriq-components/secure_obj
+Vcs-Browser: https://source.codeaurora.org/external/qoriq/qoriq-components/secure_obj
+
+Package: ftpm
+Architecture: linux-any
+Depends: tpm2-tools, ${shlibs:Depends}, ${misc:Depends}
+Description: Firmware TPM
+
