@@ -8,3 +8,6 @@ export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
 %:
 	dh $@
 
+override_dh_auto_install:
+	dh_auto_install
+	install -Dm644 tee-supplicant.service debian/optee-client/usr/lib/systemd/system/tee-supplicant.service

@@ -10,6 +10,6 @@ Vcs-Browser: https://source.codeaurora.org/external/qoriq/qoriq-components/secur
 
 Package: ftpm
 Architecture: linux-any
-Depends: tpm2-tools, ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Firmware TPM
 
