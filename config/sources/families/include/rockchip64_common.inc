@@ -8,8 +8,7 @@ BOOTDELAY=0
 OVERLAY_PREFIX='rockchip'
 SERIALCON=${SERIALCON:=$([ $BRANCH == "legacy" ] && echo "ttyFIQ0:1500000" || echo "ttyS2:1500000")}
 GOVERNOR="ondemand"
-BOOTBRANCH="tag:v2020.07"
-[[ $BOARD == nanopi-r4s ]] && BOOTBRANCH="tag:v2020.10"
+BOOTBRANCH="tag:v2020.10"
 PACKAGE_LIST_FAMILY="ethtool"
 
 RKBIN_DIR="$SRC/cache/sources/rkbin-tools"
@@ -58,6 +57,15 @@ elif [[ $BOARD == rockpi-4* ]]; then
 	MINILOADER_BLOB='rk33/rk3399_miniloader_v1.19.bin'
 	BL31_BLOB='rk33/rk3399_bl31_v1.30.elf'
 
+elif [[ $BOARD == station-p1 ]]; then
+
+	BOOT_USE_BLOBS=yes
+	BOOT_SUPPORT_SPI=yes
+	BOOT_SOC=rk3399
+	DDR_BLOB='rk33/rk3399_ddr_933MHz_v1.24.bin'
+	MINILOADER_BLOB='rk33/rk3399_miniloader_v1.19.bin'
+	BL31_BLOB='rk33/rk3399_bl31_v1.30.elf'
+
 elif [[ $BOARD == rockpro64 ]]; then
 
 	BOOT_USE_TPL_SPL_BLOB=yes
@@ -84,7 +92,7 @@ case $BRANCH in
 	current)
 
 		KERNELPATCHDIR='rockchip64-'$BRANCH
-		KERNELBRANCH="branch:linux-5.9.y"
+		KERNELBRANCH="branch:linux-5.10.y"
 		LINUXFAMILY=rockchip64
 		LINUXCONFIG='linux-rockchip64-'$BRANCH
 
@@ -346,7 +354,7 @@ family_tweaks_bsp()
 		install -m 755 $SRC/packages/bsp/rk3399/brcm_patchram_plus_rk3399 $destination/usr/bin
 		cp $SRC/packages/bsp/rk3399/rk3399-bluetooth.service $destination/lib/systemd/system/
 
-		if [[ $BOARD == nanop*4* || $BOARD == firefly* ]]; then
+		if [[ $BOARD == nanop*4* || $BOARD == firefly* || $BOARD == orangepi-rk3399 ]]; then
 			sed -i s%BCM4345C5%BCM4356A2%g $destination/lib/systemd/system/rk3399-bluetooth.service
 		fi
 	fi

@@ -212,9 +212,6 @@ install_common()
 
 	cd $SRC
 
-	# remove cached index file prior to update.
-	# To mitigate sum mismatch problem https://askubuntu.com/questions/41605/trouble-downloading-packages-list-due-to-a-hash-sum-mismatch-error
-	chroot "${SDCARD}" /bin/bash -c "sudo rm -rf /var/lib/apt/lists/*" >> "${DEST}"/debug/install.log 2>&1
 	display_alert "Updating" "package lists"
 	chroot "${SDCARD}" /bin/bash -c "apt-get update" >> "${DEST}"/debug/install.log 2>&1
 
@@ -573,6 +570,9 @@ install_distribution_specific()
 			rm -f "${SDCARD}"/etc/update-motd.d/50-motd-news
 			rm -f "${SDCARD}"/etc/update-motd.d/80-esm
 			rm -f "${SDCARD}"/etc/update-motd.d/80-livepatch
+			rm -f "${SDCARD}"/etc/update-motd.d/90-updates-available
+			rm -f "${SDCARD}"/etc/update-motd.d/91-release-upgrade
+			rm -f "${SDCARD}"/etc/update-motd.d/95-hwe-eol
 
 			# remove motd news from motd.ubuntu.com
 			[[ -f "${SDCARD}"/etc/default/motd-news ]] && sed -i "s/^ENABLED=.*/ENABLED=0/" "${SDCARD}"/etc/default/motd-news
