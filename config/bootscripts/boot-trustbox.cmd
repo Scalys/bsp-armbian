@@ -1,9 +1,9 @@
 pfe stop
 
-setenv kernel_addr_r 0x96000000 # old u-boot environment has a wrong address
+setenv kernel_addr_r 0x96000000
 
 ext4load mmc 0:1 $kernel_addr_r /boot/Image
-ext4load mmc 0:1 $fdt_addr_r /boot/dtb/freescale/trustbox.dtb
+ext4load mmc 0:1 $fdt_addr_r /boot/trustbox.dtb
 
 env exists secureboot && ext4load mmc 0:1 $fdtheader_addr_r /boot/trustbox_dtb.hdr && esbc_validate $fdtheader_addr_r || esbc_halt;
 env exists secureboot && ext4load mmc 0:1 $kernelheader_addr_r /boot/Image.hdr && esbc_validate $kernelheader_addr_r || esbc_halt;
