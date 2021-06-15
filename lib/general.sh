@@ -659,7 +659,7 @@ adding_packages()
 		# add if not already there
 		aptly repo search -architectures="${arch}" -config="${SCRIPTPATH}config/${REPO_CONFIG}" "${1}" 'Name (% '${name}'), $Version (='${version}'), $Architecture (='${arch}')' &>/dev/null
 		if [[ $? -ne 0 ]]; then
-			display_alert "Adding" "$name" "info"
+			display_alert "Adding ${1}" "$name" "info"
 			aptly repo add -force-replace=true -config="${SCRIPTPATH}config/${REPO_CONFIG}" "${1}" "${f}" &>/dev/null
 		fi
 	done
@@ -676,7 +676,7 @@ addtorepo()
 # parameter "delete" remove incoming directory if publishing is succesful
 # function: cycle trough distributions
 
-	local distributions=("xenial" "stretch" "bionic" "buster" "bullseye" "groovy" "focal" "hirsute" "sid")
+	local distributions=("bionic" "buster" "bullseye" "focal" "hirsute" "sid")
 	local errors=0
 
 	for release in "${distributions[@]}"; do
@@ -690,10 +690,11 @@ addtorepo()
 
 		# create local repository if not exist
 		if [[ -z $(aptly repo list -config="${SCRIPTPATH}config/${REPO_CONFIG}" -raw | awk '{print $(NF)}' | grep "${release}") ]]; then
-			display_alert "Creating section" "$release" "info"
+			display_alert "Creating section" "main" "info"
 			aptly repo create -config="${SCRIPTPATH}config/${REPO_CONFIG}" -distribution="${release}" -component="main" \
 			-comment="Armbian main repository" "${release}" >/dev/null
 		fi
+
 		if [[ -z $(aptly repo list -config="${SCRIPTPATH}config/${REPO_CONFIG}" -raw | awk '{print $(NF)}' | grep "^utils") ]]; then
 			aptly repo create -config="${SCRIPTPATH}config/${REPO_CONFIG}" -distribution="${release}" -component="utils" \
 			-comment="Armbian utilities (backwards compatibility)" utils >/dev/null
@@ -719,7 +720,7 @@ addtorepo()
 
 		# adding main distribution packages
 		if find "${DEB_STORAGE}/${release}" -maxdepth 1 -type f -name "*.deb" 2>/dev/null | grep -q .; then
-			adding_packages "$release" "/${release}" "release"
+			adding_packages "${release}-utils" "/${release}" "release packages"
 		else
 			# workaround - add dummy package to not trigger error
 			aptly repo add -config="${SCRIPTPATH}config/${REPO_CONFIG}" "${release}" "${SCRIPTPATH}config/templates/example.deb" >/dev/null
@@ -748,9 +749,17 @@ addtorepo()
 		desknum=$(aptly repo show -with-packages -config="${SCRIPTPATH}config/${REPO_CONFIG}" "${release}-utils" | grep "Number of packages" | awk '{print $NF}')
 
 		if [ $mainnum -gt 0 ] && [ $utilnum -gt 0 ] && [ $desknum -gt 0 ]; then
+
 			# publish
-			aptly publish -force-overwrite -passphrase="${GPG_PASS}" -origin=Armbian -label=Armbian -config="${SCRIPTPATH}config/${REPO_CONFIG}" -component="${COMPONENTS// /,}" \
-				--distribution="${release}" repo "${release}" ${COMPONENTS//main/} >/dev/null
+			aptly publish \
+			-acquire-by-hash \
+			-passphrase="${GPG_PASS}" \
+			-origin="Armbian" \
+			-label="Armbian" \
+			-config="${SCRIPTPATH}config/${REPO_CONFIG}" \
+			-component="${COMPONENTS// /,}" \
+			-distribution="${release}" repo "${release}" ${COMPONENTS//main/} >/dev/null
+
 			if [[ $? -ne 0 ]]; then
 				display_alert "Publishing failed" "${release}" "err"
 				errors=$((errors+1))
@@ -940,12 +949,6 @@ prepare_host_basic()
 	# wait until package manager finishes possible system maintanace
 	wait_for_package_manager
 
-	# need lsb_release to decide what to install
-	if [[ $(dpkg-query -W -f='${db:Status-Abbrev}\n' lsb-release 2>/dev/null) != *ii* ]]; then
-		display_alert "Installing package" "lsb-release"
-		apt-get -q update && apt-get install -q -y --no-install-recommends lsb-release
-	fi
-
 	# need to install dialog if person is starting with a interactive mode
 	if [[ $(dpkg-query -W -f='${db:Status-Abbrev}\n' dialog 2>/dev/null) != *ii* ]]; then
 		display_alert "Installing package" "dialog"
@@ -1019,10 +1022,8 @@ prepare_host()
 # build aarch64
   fi
 
-	local codename=$(lsb_release -sc)
-
 	# Add support for Ubuntu 20.04, 21.04 and Mint Ulyana
-	if [[ $codename =~ ^(focal|groovy|hirsute|ulyana|ulyssa|bullseye)$ ]]; then
+	if [[ $HOSTRELEASE =~ ^(focal|groovy|hirsute|ulyana|ulyssa|bullseye)$ ]]; then
 		hostdeps+=" python2 python3"
 		ln -fs /usr/bin/python2.7 /usr/bin/python2
 		ln -fs /usr/bin/python2.7 /usr/bin/python
@@ -1030,19 +1031,19 @@ prepare_host()
 		hostdeps+=" python libpython-dev"
 	fi
 
-	display_alert "Build host OS release" "${codename:-(unknown)}" "info"
+	display_alert "Build host OS release" "${HOSTRELEASE:-(unknown)}" "info"
 
 	# Ubuntu 20.04.x (Focal) x86_64 is the only fully supported host OS release
 	# Using Docker/VirtualBox/Vagrant is the only supported way to run the build script on other Linux distributions
 	#
 	# NO_HOST_RELEASE_CHECK overrides the check for a supported host system
 	# Disable host OS check at your own risk. Any issues reported with unsupported releases will be closed without discussion
-	if [[ -z $codename || "buster bullseye groovy focal hirsute debbie tricia ulyana ulyssa" != *"$codename"* ]]; then
+	if [[ -z $HOSTRELEASE || "buster bullseye groovy focal hirsute debbie tricia ulyana ulyssa" != *"$HOSTRELEASE"* ]]; then
 		if [[ $NO_HOST_RELEASE_CHECK == yes ]]; then
-			display_alert "You are running on an unsupported system" "${codename:-(unknown)}" "wrn"
+			display_alert "You are running on an unsupported system" "${HOSTRELEASE:-(unknown)}" "wrn"
 			display_alert "Do not report any errors, warnings or other issues encountered beyond this point" "" "wrn"
 		else
-			exit_with_error "It seems you ignore documentation and run an unsupported build system: ${codename:-(unknown)}"
+			exit_with_error "It seems you ignore documentation and run an unsupported build system: ${HOSTRELEASE:-(unknown)}"
 		fi
 	fi
 
@@ -1053,7 +1054,7 @@ prepare_host()
 # build aarch64
   if [[ $(dpkg --print-architecture) == amd64 ]]; then
 
-	if [[ -z $codename || $codename =~ ^(focal|groovy|debbie|buster|bullseye|hirsute|ulyana|ulyssa)$ ]]; then
+	if [[ -z $HOSTRELEASE || $HOSTRELEASE =~ ^(focal|groovy|debbie|buster|bullseye|hirsute|ulyana|ulyssa)$ ]]; then
 	    hostdeps="${hostdeps/lib32ncurses5 lib32tinfo5/lib32ncurses6 lib32tinfo6}"
 	fi
 

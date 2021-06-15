@@ -17,6 +17,7 @@
 # compile_armbian-config
 # compile_sunxi_tools
 # install_rkbin_tools
+# compile_xilinx_bootgen
 # grab_version
 # find_toolchain
 # advanced_patch
@@ -253,6 +254,31 @@ compile_uboot()
 			cp "${f_src}" "$uboottempdir/${uboot_name}/usr/lib/${uboot_name}/${f_dst}"
 		done
 	done <<< "$UBOOT_TARGET_MAP"
+
+	# set up postinstall script
+	if [[ $BOARD == tinkerboard ]]; then
+		cat <<-EOF > "$uboottempdir/${uboot_name}/DEBIAN/postinst"
+		#!/bin/bash
+		source /usr/lib/u-boot/platform_install.sh
+		[[ \$DEVICE == /dev/null ]] && exit 0
+		if [[ -z \$DEVICE ]]; then
+			DEVICE="/dev/mmcblk0"
+			# proceed to other options.
+			[ ! -b \$DEVICE ] && DEVICE="/dev/mmcblk1"
+			[ ! -b \$DEVICE ] && DEVICE="/dev/mmcblk2"
+		fi
+		[[ \$(type -t setup_write_uboot_platform) == function ]] && setup_write_uboot_platform
+		if [[ -b \$DEVICE ]]; then
+			echo "Updating u-boot on \$DEVICE" >&2
+			write_uboot_platform \$DIR \$DEVICE
+			sync
+		else
+			echo "Device \$DEVICE does not exist, skipping" >&2
+		fi
+		exit 0
+		EOF
+		chmod 755 "$uboottempdir/${uboot_name}/DEBIAN/postinst"
+	fi
 
 	# declare -f on non-defined function does not do anything
 	cat <<-EOF > "$uboottempdir/${uboot_name}/usr/lib/u-boot/platform_install.sh"
@@ -638,6 +664,8 @@ compile_armbian-config()
 	display_alert "Building deb" "armbian-config" "info"
 
 	fetch_from_repo "https://github.com/armbian/config" "armbian-config" "branch:master"
+	fetch_from_repo "https://github.com/dylanaraps/neofetch" "neofetch" "tag:7.1.0"
+	fetch_from_repo "https://github.com/complexorganizations/wireguard-manager" "wireguard-manager" "tag:1.0.11"
 
 	mkdir -p "${tmp_dir}/${armbian_config_dir}"/{DEBIAN,usr/bin/,usr/sbin/,usr/lib/armbian-config/}
 
@@ -647,8 +675,8 @@ compile_armbian-config()
 	Version: $REVISION
 	Architecture: all
 	Maintainer: $MAINTAINER <$MAINTAINERMAIL>
-	Replaces: armbian-bsp
-	Depends: bash, iperf3, psmisc, curl, bc, expect, dialog, pv, \
+	Replaces: armbian-bsp, neofetch
+	Depends: bash, iperf3, psmisc, curl, bc, expect, dialog, pv, zip, \
 	debconf-utils, unzip, build-essential, html2text, apt-transport-https, html2text, dirmngr, software-properties-common, debconf, jq
 	Recommends: armbian-bsp
 	Suggests: libpam-google-authenticator, qrencode, network-manager, sunxi-tools
@@ -657,6 +685,11 @@ compile_armbian-config()
 	Description: Armbian configuration utility
 	END
 
+	install -m 755 "${SRC}"/cache/sources/neofetch/neofetch "${tmp_dir}/${armbian_config_dir}"/usr/bin/neofetch
+	cd "${tmp_dir}/${armbian_config_dir}"/usr/bin/
+	process_patch_file "${SRC}/patch/misc/add-armbian-neofetch.patch" "applying"
+
+	install -m 755 "${SRC}"/cache/sources/wireguard-manager/wireguard-manager.sh "${tmp_dir}/${armbian_config_dir}"/usr/bin/wireguard-manager
 	install -m 755 "${SRC}"/cache/sources/armbian-config/scripts/tv_grab_file "${tmp_dir}/${armbian_config_dir}"/usr/bin/tv_grab_file
 	install -m 755 "${SRC}"/cache/sources/armbian-config/debian-config "${tmp_dir}/${armbian_config_dir}"/usr/sbin/armbian-config
 	install -m 644 "${SRC}"/cache/sources/armbian-config/debian-config-jobs "${tmp_dir}/${armbian_config_dir}"/usr/lib/armbian-config/jobs.sh
@@ -717,6 +750,27 @@ compile_freescale_cst()
 		make BIN_DEST_DIR="/usr/local/bin" install >/dev/null 2>&1
 		improved_git rev-parse @ 2>/dev/null > .commit_id
 	fi
+}
+
+compile_xilinx_bootgen()
+{
+	# Source code checkout
+	(fetch_from_repo "https://github.com/Xilinx/bootgen.git" "xilinx-bootgen" "branch:master")
+
+	pushd "${SRC}"/cache/sources/xilinx-bootgen || exit
+
+	# Compile and install only if git commit hash changed
+	# need to check if /usr/local/bin/bootgen to detect new Docker containers with old cached sources
+	if [[ ! -f .commit_id || $(improved_git rev-parse @ 2>/dev/null) != $(<.commit_id) || ! -f /usr/local/bin/bootgen ]]; then
+		display_alert "Compiling" "xilinx-bootgen" "info"
+		make -s clean >/dev/null
+		make -s -j$(nproc) bootgen >/dev/null
+		mkdir -p /usr/local/bin/
+		install bootgen /usr/local/bin >/dev/null 2>&1
+		improved_git rev-parse @ 2>/dev/null > .commit_id
+	fi
+
+	popd
 }
 
 grab_version()
