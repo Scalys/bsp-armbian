@@ -8,7 +8,7 @@ MOTD_DISABLE=""
 ONE_WIRE=""
 SHOW_IP_PATTERN="^bond.*|^[ewr].*|^br.*|^lt.*|^umts.*|^lan.*"
 PRIMARY_INTERFACE="$(ls -1 /sys/class/net/ | grep -v lo | sed -n -e 'H;${x;s/\n/+/g;s/^+//;p;}')"
-PRIMARY_DIRECTION="rx"
+PRIMARY_DIRECTION="off"
 STORAGE=/dev/sda1
 
 # Temperature offset in Celcius degrees
