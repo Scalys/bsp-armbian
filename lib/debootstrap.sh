@@ -1,18 +1,24 @@
-# Copyright (c) 2015 Igor Pecovnik, igor.pecovnik@gma**.com
+#!/bin/bash
+#
+# Copyright (c) 2013-2021 Igor Pecovnik, igor.pecovnik@gma**.com
 #
 # This file is licensed under the terms of the GNU General Public
 # License version 2. This program is licensed "as is" without any
 # warranty of any kind, whether express or implied.
-
+#
 # This file is a part of the Armbian build script
 # https://github.com/armbian/build/
 
 # Functions:
+
 # debootstrap_ng
 # create_rootfs_cache
 # prepare_partitions
 # update_initramfs
 # create_image
+
+
+
 
 # debootstrap_ng
 #
@@ -62,6 +68,10 @@ debootstrap_ng()
 	# NOTE: installing too many packages may fill tmpfs mount
 	customize_image
 
+	# remove packages that are no longer needed. Since we have intrudoced uninstall feature, we might want to clean things that are no longer needed
+	display_alert "No longer needed packages" "purge" "info"
+	chroot $SDCARD /bin/bash -c "apt-get autoremove -y"  >/dev/null 2>&1
+
 	# create list of installed packages for debug purposes
 	chroot $SDCARD /bin/bash -c "dpkg --get-selections" | grep -v deinstall | awk '{print $1}' | cut -f1 -d':' > $DEST/debug/installed-packages-${RELEASE}$([[ ${BUILD_MINIMAL} == yes ]] && echo "-minimal")$([[ ${BUILD_DESKTOP} == yes  ]] && echo "-desktop").list 2>&1
 
@@ -108,7 +118,6 @@ create_rootfs_cache()
 	# seek last cache, proceed to previous otherwise build it
 	for ((n=0;n<${cycles};n++)); do
 
-		local packages_hash=$(get_package_list_hash "$(($ROOTFSCACHE_VERSION - $n))")
 		[[ -z ${FORCED_MONTH_OFFSET} ]] && FORCED_MONTH_OFFSET=${n}
 		local packages_hash=$(get_package_list_hash "$(date -d "$D +${FORCED_MONTH_OFFSET} month" +"%Y-%m-module$ROOTFSCACHE_VERSION" | sed 's/^0*//')")
 		local cache_type="cli"
@@ -118,6 +127,8 @@ create_rootfs_cache()
 		local cache_name=${RELEASE}-${cache_type}-${ARCH}.$packages_hash.tar.lz4
 		local cache_fname=${SRC}/cache/rootfs/${cache_name}
 		local display_name=${RELEASE}-${cache_type}-${ARCH}.${packages_hash:0:3}...${packages_hash:29}.tar.lz4
+
+		[[ "$ROOT_FS_CREATE_ONLY" == force ]] && break
 
 		if [[ -f ${cache_fname} && -f ${cache_fname}.aria2 ]]; then
 			rm ${cache_fname}*
@@ -148,7 +159,7 @@ create_rootfs_cache()
 		# speed up checking
 		if [[ -n "$ROOT_FS_CREATE_ONLY" ]]; then
 			touch $cache_fname.current
-			[[ $use_tmpfs = yes ]] && umount $SDCARD
+			umount --lazy "$SDCARD"
 			rm -rf $SDCARD
 			# remove exit trap
 			trap - INT TERM EXIT
@@ -179,6 +190,7 @@ create_rootfs_cache()
 
 
 		display_alert "Installing base system" "Stage 1/2" "info"
+		cd $SDCARD # this will prevent error sh: 0: getcwd() failed
 		eval 'debootstrap --variant=minbase --include=${DEBOOTSTRAP_LIST// /,} ${PACKAGE_LIST_EXCLUDE:+ --exclude=${PACKAGE_LIST_EXCLUDE// /,}} \
 			--arch=$ARCH --components=${DEBOOTSTRAP_COMPONENTS} $DEBOOTSTRAP_OPTION --foreign $RELEASE $SDCARD/ $apt_mirror' \
 			${PROGRESS_LOG_TO_FILE:+' | tee -a $DEST/debug/debootstrap.log'} \
@@ -354,8 +366,9 @@ create_rootfs_cache()
 			--exclude='./sys/*' . | pv -p -b -r -s $(du -sb $SDCARD/ | cut -f1) -N "$display_name" | lz4 -5 -c > $cache_fname
 
 		# sign rootfs cache archive that it can be used for web cache once. Internal purposes
-		if [[ -n $GPG_PASS ]]; then
-			echo $GPG_PASS | gpg --passphrase-fd 0 --armor --detach-sign --pinentry-mode loopback --batch --yes $cache_fname
+		if [[ -n "${GPG_PASS}" && "${SUDO_USER}" ]]; then
+			[[ -n ${SUDO_USER} ]] && sudo chown -R ${SUDO_USER}:${SUDO_USER} "${DEST}"/images/
+			echo "${GPG_PASS}" | sudo -H -u ${SUDO_USER} bash -c "gpg --passphrase-fd 0 --armor --detach-sign --pinentry-mode loopback --batch --yes ${cache_fname}" || exit 1
 		fi
 
 		# needed for backend to keep current only
@@ -365,7 +378,7 @@ create_rootfs_cache()
 
 	# used for internal purposes. Faster rootfs cache rebuilding
 	if [[ -n "$ROOT_FS_CREATE_ONLY" ]]; then
-		[[ $use_tmpfs = yes ]] && umount $SDCARD
+		umount --lazy "$SDCARD"
 		rm -rf $SDCARD
 		# remove exit trap
 		trap - INT TERM EXIT
@@ -408,7 +421,7 @@ prepare_partitions()
 	# add -N number of inodes to keep mount from running out
 	# create bigger number for desktop builds
 	if [[ $BUILD_DESKTOP == yes ]]; then local node_number=4096; else local node_number=1024; fi
-	if [[ $HOSTRELEASE =~ bionic|buster|bullseye|cosmic|groovy|focal|hirsute|sid ]]; then
+	if [[ $HOSTRELEASE =~ bionic|buster|bullseye|cosmic|focal|hirsute|impish|sid ]]; then
 		mkopts[ext4]="-q -m 2 -O ^64bit,^metadata_csum -N $((128*${node_number}))"
 	elif [[ $HOSTRELEASE == xenial ]]; then
 		mkopts[ext4]="-q -m 2 -N $((128*${node_number}))"
@@ -662,7 +675,14 @@ prepare_partitions()
 update_initramfs()
 {
 	local chroot_target=$1
-	update_initramfs_cmd="update-initramfs -uv -k ${VER}-${LINUXFAMILY}"
+	local target_dir=$(
+		find ${chroot_target}/lib/modules/ -maxdepth 1 -type d -name "*${VER}*"
+	)
+	if [ "$target_dir" != "" ]; then
+		update_initramfs_cmd="update-initramfs -uv -k $(basename $target_dir)"
+	else
+		exit_with_error "No kernel installed for the version" "${VER}"
+	fi
 	display_alert "Updating initramfs..." "$update_initramfs_cmd" ""
 	cp /usr/bin/$QEMU_BINARY $chroot_target/usr/bin/
 	mount_chroot "$chroot_target/"
@@ -753,9 +773,11 @@ create_image()
 	FINALDEST=$DEST/images
 
 	if [[ $BUILD_ALL == yes ]]; then
-		if [[ "$BETA" == yes ]]; then
+		if [[ "$RC" == yes ]]; then
+			FINALDEST=$DEST/images/"${BOARD}"/RC
+		elif [[ "$BETA" == yes ]]; then
 			FINALDEST=$DEST/images/"${BOARD}"/nightly
-			else
+		else
 			FINALDEST=$DEST/images/"${BOARD}"/archive
 		fi
 		install -d -o nobody -g nogroup -m 775 ${FINALDEST}
@@ -763,7 +785,9 @@ create_image()
 
 
 	if [[ -z $SEND_TO_SERVER ]]; then
-
+		# custom post_build_image_modify hook to run before fingerprinting and compression
+		[[ $(type -t post_build_image_modify) == function ]] && display_alert "Custom Hook Detected" "post_build_image_modify" "info" && post_build_image_modify "${DESTIMG}/${version}.img"
+	
 		if [[ $COMPRESS_OUTPUTIMAGE == "" || $COMPRESS_OUTPUTIMAGE == no ]]; then
 			COMPRESS_OUTPUTIMAGE="sha,gpg,img"
 		elif [[ $COMPRESS_OUTPUTIMAGE == yes ]]; then
@@ -779,8 +803,18 @@ create_image()
 		if [[ $COMPRESS_OUTPUTIMAGE == *xz* ]]; then
 			display_alert "Compressing" "${FINALDEST}/${version}.img.xz" "info"
 			# compressing consumes a lot of memory we don't have. Waiting for previous packing job to finish helps to run a lot more builds in parallel
-			[[ ${BUILD_ALL} == yes && $(free | grep Mem | awk '{print $4/$2 * 100.0}' | awk '{print int($1)}') -lt 5 ]] && while [[ $(ps -uax | grep "pixz" | wc -l) -gt 4 ]]; do echo -en "#"; sleep 20; done
-			pixz -8 -p 12 < $DESTIMG/${version}.img > ${FINALDEST}/${version}.img.xz
+			available_cpu=$(grep -c 'processor' /proc/cpuinfo)
+			[[ ${BUILD_ALL} == yes ]] && available_cpu=$(( $available_cpu * 30 / 100 )) # lets use 20% of resources in case of build-all
+			[[ ${available_cpu} -gt 8 ]] && available_cpu=8 # using more cpu cores for compressing is pointless
+			available_mem=$(LC_ALL=c free | grep Mem | awk '{print $4/$2 * 100.0}' | awk '{print int($1)}') # in percentage
+			# build optimisations when memory drops below 5%
+			if [[ ${BUILD_ALL} == yes && ( ${available_mem} -lt 15 || $(ps -uax | grep "pixz" | wc -l) -gt 4 )]]; then
+				while [[ $(ps -uax | grep "pixz" | wc -l) -gt 2 ]]
+					do echo -en "#"
+					sleep 20
+				done
+			fi
+			pixz -7 -p ${available_cpu} -f $(expr ${available_cpu} + 2) < $DESTIMG/${version}.img > ${FINALDEST}/${version}.img.xz
 			compression_type=".xz"
 		fi
 
@@ -799,7 +833,8 @@ create_image()
 			cd ${FINALDEST}
 			if [[ -n $GPG_PASS ]]; then
 				display_alert "GPG signing" "${version}.img${compression_type}" "info"
-				echo $GPG_PASS | gpg --passphrase-fd 0 --armor --detach-sign --pinentry-mode loopback --batch --yes ${FINALDEST}/${version}.img${compression_type} || exit 1
+				[[ -n ${SUDO_USER} ]] && sudo chown -R ${SUDO_USER}:${SUDO_USER} "${FINALDEST}"/
+				echo "${GPG_PASS}" | sudo -H -u ${SUDO_USER} bash -c "gpg --passphrase-fd 0 --armor --detach-sign --pinentry-mode loopback --batch --yes ${FINALDEST}/${version}.img${compression_type}" || exit 1
 			else
 				display_alert "GPG signing skipped - no GPG_PASS" "${version}.img" "wrn"
 			fi
