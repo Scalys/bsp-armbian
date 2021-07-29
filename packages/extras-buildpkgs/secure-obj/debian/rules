@@ -15,10 +15,10 @@ export OPENSSL_PATH = /usr
 
 override_dh_auto_clean:
 	for APP in secure_storage_ta securekey_lib secure_obj-openssl-engine; do \
-		$(MAKE) -C $$APP clean; \
+		$(MAKE) -j1 -C $$APP clean; \
 	done
 
 override_dh_auto_build:
 	for APP in secure_storage_ta securekey_lib secure_obj-openssl-engine; do \
-		$(MAKE) -C $$APP ; \
+		$(MAKE) -j1 -C $$APP ; \
 	done 

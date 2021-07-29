@@ -12,5 +12,8 @@ export SECURE_OBJ_PATH = /usr
 %:
 	dh $@
 
+override_dh_auto_build:
+	$(MAKE) -j1 CFLAGS="-Wno-error=stringop-truncation -fPIC" all
+
 override_dh_auto_install:
 	
