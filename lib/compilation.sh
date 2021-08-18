@@ -745,6 +745,8 @@ compile_freescale_cst()
 	# need to check if /usr/local/bin/.... to detect new Docker containers with old cached sources
 	if [[ ! -f .commit_id || $(improved_git rev-parse @ 2>/dev/null) != $(<.commit_id) || ! -f /usr/local/bin/cst/create_hdr_esbc ]]; then
 		display_alert "Compiling" "freescale-cst" "info"
+		sed -i 's/^struct\ input_field\ file_field/extern\ struct\ input_field\ file_field/g' tools/header_generation/create_hdr_common.c \
+			tools/pbi_creation/create_pbi_common.c > /dev/null
 		make -s BIN_DEST_DIR="/usr/local/bin" clean >/dev/null
 		mkdir -p /usr/local/bin/
 		make BIN_DEST_DIR="/usr/local/bin" install >/dev/null 2>&1

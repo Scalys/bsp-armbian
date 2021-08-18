@@ -2,6 +2,6 @@ PLATFORM=LS1012
 ESBC=1
 PRI_KEY=srk.pri
 PUB_KEY=srk.pub
-IMAGE_1={dtb/freescale/trustbox.dtb, 90000000, ffffffff}
+IMAGE_1={trustbox.dtb, 90000000, ffffffff}
 OUTPUT_HDR_FILENAME=trustbox_dtb.hdr
 VERBOSE=0
