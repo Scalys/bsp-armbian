@@ -1,4 +1,8 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@ --buildsystem=cmake
+	dh $@ # --buildsystem=cmake
+
+override_dh_auto_configure:
+	sed -i '37i  -DBUILD_TESTS=OFF' tools/CMakeLists.txt
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH='/opt/openenclave' -DCPACK_GENERATOR=DEB-DCPACK_GENERATOR=DEB -DCMAKE_TOOLCHAIN_FILE="$(shell pwd)"/cmake/arm-cross.cmake -DOE_TA_DEV_KIT_DIR="/usr/include/optee/export-user_ta" -DBUILD_TESTS=OFF
