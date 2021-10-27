@@ -81,14 +81,18 @@ source "${SRC}"/lib/general.sh                              # general functions
 # shellcheck source=chroot-buildpackages.sh
 source "${SRC}"/lib/chroot-buildpackages.sh                 # chroot packages building
 
+
+# set log path
+LOG_SUBPATH=${LOG_SUBPATH:=debug}
+
 # compress and remove old logs
-mkdir -p "${DEST}"/debug
-(cd "${DEST}"/debug && tar -czf logs-"$(<timestamp)".tgz ./*.log) > /dev/null 2>&1
-rm -f "${DEST}"/debug/*.log > /dev/null 2>&1
-date +"%d_%m_%Y-%H_%M_%S" > "${DEST}"/debug/timestamp
+mkdir -p "${DEST}"/${LOG_SUBPATH}
+(cd "${DEST}"/${LOG_SUBPATH} && tar -czf logs-"$(<timestamp)".tgz ./*.log) > /dev/null 2>&1
+rm -f "${DEST}"/${LOG_SUBPATH}/*.log > /dev/null 2>&1
+date +"%d_%m_%Y-%H_%M_%S" > "${DEST}"/${LOG_SUBPATH}/timestamp
 
 # delete compressed logs older than 7 days
-(cd "${DEST}"/debug && find . -name '*.tgz' -mtime +7 -delete) > /dev/null
+(cd "${DEST}"/${LOG_SUBPATH} && find . -name '*.tgz' -mtime +7 -delete) > /dev/null
 
 if [[ $PROGRESS_DISPLAY == none ]]; then
 
@@ -410,7 +414,7 @@ BSP_CLI_PACKAGE_FULLNAME="${BSP_CLI_PACKAGE_NAME}_${REVISION}_${ARCH}"
 BSP_DESKTOP_PACKAGE_NAME="armbian-bsp-desktop-${BOARD}"
 BSP_DESKTOP_PACKAGE_FULLNAME="${BSP_DESKTOP_PACKAGE_NAME}_${REVISION}_${ARCH}"
 
-CHOSEN_UBOOT=linux-u-boot-${BOARD}-${BRANCH}
+CHOSEN_UBOOT=linux-u-boot-${BRANCH}-${BOARD}
 CHOSEN_KERNEL=linux-image-${BRANCH}-${LINUXFAMILY}
 CHOSEN_ROOTFS=${BSP_CLI_PACKAGE_NAME}
 CHOSEN_DESKTOP=armbian-${RELEASE}-desktop-${DESKTOP_ENVIRONMENT}

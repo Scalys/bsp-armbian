@@ -129,7 +129,7 @@ case $BRANCH in
 	current)
 
 		KERNELBRANCH="branch:linux-5.10.y"
-		if [[ $BOARD == station* || $BOARD == renegade ]]; then
+		if [[ $BOARD == station* ]]; then
 			KERNELPATCHDIR='station-'$BRANCH
 			LINUXFAMILY=station
 			LINUXCONFIG='linux-station-'$BRANCH
@@ -159,7 +159,7 @@ prepare_boot_configuration()
 		ATFSOURCE='https://github.com/ARM-software/arm-trusted-firmware'
 		ATF_COMPILER='aarch64-linux-gnu-'
 		ATFDIR='arm-trusted-firmware'
-		ATFBRANCH='tag:v2.2'
+		ATFBRANCH='tag:v2.5'
 		ATF_USE_GCC='> 6.3'
 		ATF_TARGET_MAP="M0_CROSS_COMPILE=arm-linux-gnueabi- PLAT=$BOOT_SOC bl31;;build/$BOOT_SOC/release/bl31/bl31.elf:bl31.bin"
 		ATF_TOOLCHAIN2="arm-linux-gnueabi-:> 5.0"
@@ -423,12 +423,9 @@ family_tweaks_bsp()
 
 		### Fancontrol tweaks
 		# copy hwmon rules to fix device mapping
-		if [[ $BRANCH == legacy ]]; then
-			install -m 644 $SRC/packages/bsp/helios64/90-helios64-hwmon-legacy.rules $destination/etc/udev/rules.d/
-		else
-			install -m 644 $SRC/packages/bsp/helios64/90-helios64-hwmon.rules $destination/etc/udev/rules.d/
-		fi
-
+		# changed to only use one file regardless of branch
+		install -m 644 $SRC/packages/bsp/helios64/90-helios64-hwmon.rules $destination/etc/udev/rules.d/
+		
 		install -m 644 $SRC/packages/bsp/helios64/fancontrol.service.pid-override $destination/etc/systemd/system/fancontrol.service.d/pid.conf
 
 		# copy fancontrol config
