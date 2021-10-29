@@ -45,6 +45,10 @@ compilation_prepare()
 		display_alert "Adjusting" "packaging" "info"
 		cd "$kerneldir" || exit
 		process_patch_file "${SRC}/patch/misc/general-packaging-5.10.y.patch" "applying"
+
+		sed -i 's/mkdir -p "$dtb_dir\/boot\/dtb-$version"/mkdir -p "$dtb_dir\/boot"/g' scripts/package/builddeb
+		sed -i 's/INSTALL_DTBS_PATH=.* $MAKE.*/cp -f "$srctree\/arch\/$SRCARCH\/boot\/dts\/freescale\/trustbox.dtb" "$dtb_dir\/boot\/"/g' scripts/package/builddeb
+		sed -i '/^.*if \[ "\$3" = "dtb" \]/,/fi$/{d;}' scripts/package/builddeb
 	elif linux-version compare "${version}" ge 5.8.17 \
 		&& linux-version compare "${version}" le 5.9 \
 		|| linux-version compare "${version}" ge 5.9.2; then

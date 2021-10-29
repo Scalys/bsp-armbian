@@ -6,8 +6,11 @@ include /usr/share/dpkg/pkg-info.mk
 export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
 
 %:
-	dh $@
+	dh $@ --with systemd
 
 override_dh_auto_install:
+	# install -Dm644 tee-supplicant.service debian/optee-client/usr/lib/systemd/system/tee-supplicant.service
 	dh_auto_install
-	install -Dm644 tee-supplicant.service debian/optee-client/usr/lib/systemd/system/tee-supplicant.service
+
+override_dh_installinit:
+	dh_installinit --name tee-supplicant

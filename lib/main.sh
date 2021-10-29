@@ -450,7 +450,7 @@ fetch_from_repo "https://github.com/armbian/odroidc2-blobs" "odroidc2-blobs" "br
 fetch_from_repo "https://github.com/armbian/testings" "testing-reports" "branch:master"
 fetch_from_repo "https://github.com/LibreELEC/amlogic-boot-fip" "amlogic-boot-fip" "branch:master"
 
-fetch_from_repo "https://source.codeaurora.org/external/qoriq/qoriq-components/cst" "freescale-cst" "tag:LSDK-20.12"
+fetch_from_repo "https://source.codeaurora.org/external/qoriq/qoriq-components/cst" "freescale-cst" "tag:LSDK-21.08"
 
 compile_sunxi_tools
 install_rkbin_tools
