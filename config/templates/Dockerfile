@@ -95,6 +95,7 @@ RUN apt-get update \
        python3-distutils \
        python3-pkg-resources \
        python3-setuptools \
+       python3-pip \
        qemu \
        qemu-user-static \
        rsync \
@@ -113,7 +114,9 @@ RUN apt-get update \
        zip \
        zlib1g-dev \
        distcc \
-    && rm -rf /var/lib/apt/lists/*
+       tclsh \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install pyelftools pycryptodome pycryptodomex
 RUN locale-gen en_US.UTF-8
 
 # Static port for NFSv3 server used for USB FEL boot
