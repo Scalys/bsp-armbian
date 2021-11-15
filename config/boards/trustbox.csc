@@ -6,6 +6,7 @@ BOOTCONFIG_DEFAULT="trustbox_qspi_defconfig"
 KERNEL_TARGET="current"
 IMAGE_PARTITION_TABLE="gpt"
 
+OPTEE_PLATFORM='ls1012grapeboard'
 
 ROOTPWD=root
 INSTALL_ZSH=no

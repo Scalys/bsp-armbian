@@ -1,1 +1,1 @@
-out/arm-plat-ls/core/tee_trustbox.bin lib/firmware/
+out/arm-plat-ls/core/tee_*.bin lib/firmware/

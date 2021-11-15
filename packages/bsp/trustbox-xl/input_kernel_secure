@@ -1,0 +1,7 @@
+PLATFORM=LS1012
+ESBC=1
+PRI_KEY=srk.pri
+PUB_KEY=srk.pub
+IMAGE_1={Image, 96000000, ffffffff}
+OUTPUT_HDR_FILENAME=Image.hdr
+VERBOSE=0

@@ -1,0 +1,7 @@
+PLATFORM=LS1012
+ESBC=1
+PRI_KEY=srk.pri
+PUB_KEY=srk.pub
+IMAGE_1={ppa.itb, 40280000, ffffffff}
+OUTPUT_HDR_FILENAME=ppa_hdr.out
+VERBOSE=0

@@ -1,0 +1,7 @@
+PLATFORM=LS1012
+ESBC=1
+PRI_KEY=srk.pri
+PUB_KEY=srk.pub
+IMAGE_1={initramfs.img, 98000000, ffffffff}
+OUTPUT_HDR_FILENAME=initramfs_hdr.out
+VERBOSE=0

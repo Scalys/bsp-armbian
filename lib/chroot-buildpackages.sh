@@ -86,6 +86,9 @@ create_chroot()
 	fi
 	chroot "${target_dir}" /bin/bash -c "/usr/sbin/update-ccache-symlinks"
 	[[ $release == bullseye || $release == focal || $release == hirsute || $release == sid ]] && chroot "${target_dir}" /bin/bash -c "ln -s /usr/bin/python3 /usr/bin/python"
+
+	install_deb_chroot "${DEB_STORAGE}/op-tee_${BOARD}/optee-os-dev_3.6.0-1_arm64.deb" "local" "no" "${target_dir}"
+	install_deb_chroot "${DEB_STORAGE}/op-tee_${BOARD}/optee-os-bin_3.6.0-1_arm64.deb" "local" "no" "${target_dir}" 
 	touch "${target_dir}"/root/.debootstrap-complete
 	display_alert "Debootstrap complete" "${release}/${arch}" "info"
 } #############################################################################

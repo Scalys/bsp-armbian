@@ -3,11 +3,13 @@
 include /usr/share/dpkg/architecture.mk
 include /usr/share/dpkg/pkg-info.mk
 
-export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
+# export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
 
-export MACHINE = "trustbox"
+# export MACHINE = "trustbox"
 
-export PLATFORM=ls-ls1012grapeboard
+# export PLATFORM=ls-ls1012grapeboard
+
+export CROSS_COMPILE64 = ${CROSS_COMPILE}
 
 %:
 	dh $@
@@ -16,8 +18,8 @@ override_dh_auto_configure:
 	sed -i 's/from Crypto\./from Cryptodome\./g' scripts/*.py
 
 override_dh_auto_build:
-	$(MAKE) PLATFORM=ls-ls1012grapeboard CFG_ARM64_core=y ARCH=arm LDFLAGS= CFLAGS= 
-	objcopy -v -O binary out/arm-plat-ls/core/tee.elf out/arm-plat-ls/core/tee_${MACHINE}.bin
+	$(MAKE) PLATFORM=ls-${OPTEE_PLATFORM} CFG_ARM64_core=y ARCH=arm LDFLAGS= CFLAGS= 
+	${CROSS_COMPILE}objcopy -v -O binary out/arm-plat-ls/core/tee.elf out/arm-plat-ls/core/tee_${OPTEE_PLATFORM}.bin
 
 override_dh_strip:
 	true

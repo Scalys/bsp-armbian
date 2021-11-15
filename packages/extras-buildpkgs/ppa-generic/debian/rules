@@ -13,7 +13,7 @@ override_dh_auto_clean:
 	cd ppa/ && ./build dev clean ls1012
 
 override_dh_auto_configure:
-	cp /lib/firmware/tee_$(MACHINE).bin ppa/soc-ls1012/tee.bin
+	cp /lib/firmware/tee_ls1012grapeboard.bin ppa/soc-ls1012/tee.bin
 
 override_dh_auto_build:
 	cd ppa/; \

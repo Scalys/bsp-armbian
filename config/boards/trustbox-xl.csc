@@ -7,9 +7,17 @@ KERNEL_TARGET="current"
 IMAGE_PARTITION_TABLE="msdos"
 OFFSET=32
 
-RCWPATH='trustbox-xl/NN_NNQNNPNP_3040_0506/rcw_1600_sdboot.bin'
+declare -A RCWPATH=( \
+	["sd"]="trustbox-xl/NN_NNQNNPNP_3040_0506/rcw_1600_sdboot.bin" \
+	["sd_sec"]="trustbox-xl/NN_NNQNNPNP_3040_0506/rcw_1600_sdboot_sben.bin"\
+)
 
 OPTEE_PLATFORM='ls1046ardb'
+
+TFABOOT=yes
+ATF_PLATFORM='ls1046trustboxxl'
+ATF_BOOT_MODE='sd'
+
 FMAN_UCODE='fsl_fman_ucode_ls1046_r1.0_106_4_18.bin'
 
 
