@@ -166,6 +166,39 @@ chroot_prepare_distccd()
 	chown -R distccd /tmp/distcc
 }
 
+
+# chroot_start_repository
+#
+chroot_start_repository()
+{
+	local  __resultvar=$1
+	local  __target_dir=$2
+	local conf="${SRC}"/config/aptly-temp.conf
+	rm -rf /tmp/aptly-temp/ 2>&1 > /dev/null
+	mkdir -p /tmp/aptly-temp/ 2>&1 > /dev/null
+	aptly -config="${conf}" repo create temp 2>&1 > /dev/null
+	aptly -config="${conf}" repo add temp "${DEB_STORAGE}/extra/${RELEASE}-utils/" 2>&1 > /dev/null
+	aptly -config="${conf}" repo add temp "${DEB_STORAGE}/extra/${RELEASE}-firmware/" 2>&1 > /dev/null
+	aptly -keyring="${SRC}/packages/extras-buildpkgs/buildpkg-public.gpg" -secret-keyring="${SRC}/packages/extras-buildpkgs/buildpkg.gpg" -batch=true -config="${conf}" \
+		 -gpg-key="925644A6" -passphrase="testkey1234" -component=temp -distribution="${RELEASE}" publish repo temp 2>&1 > /dev/null
+	aptly -config="${conf}" -listen=":8189" serve 2>&1 > /dev/null &
+	local res=$!
+	if [[ "$__resultvar" ]]; then
+		eval $__resultvar="'$res'"
+	else
+		echo "$res"
+	fi
+	cat <<-'EOF' > "${__target_dir}"/etc/apt/preferences.d/90-armbian-temp.pref
+	Package: *
+	Pin: origin "localhost"
+	Pin-Priority: 550
+	EOF
+	cat <<-EOF > "${__target_dir}"/etc/apt/sources.list.d/armbian-temp.list
+	deb http://localhost:8189/ ${release} temp
+	EOF
+} #############################################################################
+
+
 # chroot_build_packages
 #
 chroot_build_packages()
@@ -312,8 +345,16 @@ chroot_build_packages()
 				mount -o bind,ro "${SRC}"/cache/sources/extra/ "${target_dir}"/root/sources
 				mount -t tmpfs tmpfs "${target_dir}"/root/build
 
+				display_alert "Starting temp repository" ""
+				local repo_pid
+				chroot_start_repository repo_pid "${target_dir}"
+
+				chroot "${target_dir}" /bin/bash -c "apt-key add /root/overlay/buildpkg.key"
+				chroot "${target_dir}" /bin/bash -c "apt-key add /armbian.key"
+
 				eval chroot "${target_dir}" /bin/bash -c "/root/build.sh" 2>&1 \
 					${PROGRESS_LOG_TO_FILE:+' | tee -a $DEST/debug/buildpkg.log'}
+				kill $repo_pid
 
 				if [[ ${PIPESTATUS[0]} -eq 2 ]]; then
 					failed+=("$package_name:$release/$arch")
@@ -390,6 +431,7 @@ create_build_script ()
 	# copy overlay / "debianization" files
 	[[ -d "/root/overlay/${package_name}/" ]] && rsync -aq /root/overlay/"${package_name}" /root/build/
 
+	apt-get -q update
 	package_builddeps="$package_builddeps"
 	if [ -z "\$package_builddeps" ]; then
 		# Calculate build dependencies by a standard dpkg function
