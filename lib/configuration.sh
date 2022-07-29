@@ -671,7 +671,7 @@ if [[ -n $PACKAGE_LIST_RM ]]; then
 	# the previous one after consuming the spaces.
 	DEBOOTSTRAP_LIST=$(sed -r "s/\W($(tr ' ' '|' <<< ${PACKAGE_LIST_RM}))\W/ /g" <<< " ${DEBOOTSTRAP_LIST} ")
 	PACKAGE_LIST=$(sed -r "s/\W($(tr ' ' '|' <<< ${PACKAGE_LIST_RM}))\W/ /g" <<< " ${PACKAGE_LIST} ")
-	PACKAGE_MAIN_LIST=$(sed -r "s/\W($(tr ' ' '|' <<< ${PACKAGE_LIST_RM}))\W/ /g" <<< " ${PACKAGE_MAIN_LIST} ")
+	PACKAGE_MAIN_LIST=$(sed -r "s/($(tr ' ' '|' <<< ${PACKAGE_LIST_RM}))/ /g" <<< " ${PACKAGE_MAIN_LIST} ")
 	if [[ $BUILD_DESKTOP == "yes" ]]; then
 		PACKAGE_LIST_DESKTOP=$(sed -r "s/\W($(tr ' ' '|' <<< ${PACKAGE_LIST_RM}))\W/ /g" <<< " ${PACKAGE_LIST_DESKTOP} ")
 		# Removing double spaces... AGAIN, since we might have used a sed on them
