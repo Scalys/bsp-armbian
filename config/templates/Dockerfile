@@ -1,6 +1,6 @@
-ARG BASE_IMAGE=ubuntu:jammy
+ARG BASE_IMAGE=ubuntu:focal
 FROM $BASE_IMAGE as armbian_builder
-ARG CUSTOM_PACKAGES='g++-11-arm-linux-gnueabihf libssl3'
+ARG CUSTOM_PACKAGES='g++-10-arm-linux-gnueabihf libssl1.1'
 ENV CUSTOM_PACKAGES $CUSTOM_PACKAGES
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get -y install \
