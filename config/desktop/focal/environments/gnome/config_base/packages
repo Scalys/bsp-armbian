@@ -73,7 +73,6 @@ gpaint
 gpaste
 gvfs-backends
 gvfs-bin
-hunspell-en-us
 inputattach
 language-pack-gnome-de
 language-pack-gnome-es
@@ -223,12 +222,12 @@ x11-session-utils
 x11-utils
 x11-xkb-utils
 x11-xserver-utils
+xarchiver
 xdg-dbus-proxy
 xdg-desktop-portal
 xdg-user-dirs
 xdg-user-dirs-gtk
 xfonts-base
-xinit
 xinput
 xorg
 xorg-docs-core
