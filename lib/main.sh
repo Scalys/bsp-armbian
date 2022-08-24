@@ -456,9 +456,6 @@ if [[ $IGNORE_UPDATES != yes ]]; then
 		fi
 	fi
 
-#fetch_from_repo "https://source.codeaurora.org/external/qoriq/qoriq-components/cst" "freescale-cst" "tag:LSDK-21.08"
-#compile_freescale_cst
-
 	call_extension_method "fetch_sources_tools"  <<- 'FETCH_SOURCES_TOOLS'
 	*fetch host-side sources needed for tools and build*
 	Run early to fetch_from_repo or otherwise obtain sources for needed tools.
@@ -487,6 +484,7 @@ fi
 
 # Compile kernel if packed .deb does not exist or use the one from repository
 if [[ ! -f ${DEB_STORAGE}/${CHOSEN_KERNEL}_${REVISION}_${ARCH}.deb ]]; then
+
 	KDEB_CHANGELOG_DIST=$RELEASE
 	[[ -n $KERNELSOURCE ]] && [[ "${REPOSITORY_INSTALL}" != *kernel* ]] && compile_kernel
 
