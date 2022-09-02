@@ -1,0 +1,108 @@
+From 715aaa4ae49b7db6807e00cb1d55f44a515f5ee6 Mon Sep 17 00:00:00 2001
+From: Siarhei Yasinski <siarhei.yasinski@sintecs.eu>
+Date: Fri, 2 Sep 2022 11:56:07 +0300
+Subject: [PATCH] Add support for TrustSom TBE 201
+
+---
+ Makefile                                   |  1 +
+ trustsom_tbe201/Makefile                   |  1 +
+ trustsom_tbe201/N_SQPP_0x85BE/rcw_1500.rcw | 67 ++++++++++++++++++++++
+ 3 files changed, 69 insertions(+)
+ create mode 100644 trustsom_tbe201/Makefile
+ create mode 100644 trustsom_tbe201/N_SQPP_0x85BE/rcw_1500.rcw
+
+diff --git a/Makefile b/Makefile
+index 103ac30..7aa7ba8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -6,6 +6,7 @@ BOARDS = b4420qds b4860qds \
+ 	 ls1046ardb ls1046aqds ls1046afrwy \
+ 	 ls1088ardb ls1088aqds\
+ 	 ls1028ardb ls1028aqds\
++	 trustsom_tbe201 \
+ 	 ls2088ardb ls2088ardb_rev1.1 ls2088aqds \
+ 	 lx2160ardb lx2160aqds lx2160ardb_rev2 lx2160aqds_rev2 lx2162aqds \
+ 	 p2041rdb p3041ds p4080ds p5020ds p5040ds \
+diff --git a/trustsom_tbe201/Makefile b/trustsom_tbe201/Makefile
+new file mode 100644
+index 0000000..f77e46b
+--- /dev/null
++++ b/trustsom_tbe201/Makefile
+@@ -0,0 +1 @@
++include ../Makefile.inc
+diff --git a/trustsom_tbe201/N_SQPP_0x85BE/rcw_1500.rcw b/trustsom_tbe201/N_SQPP_0x85BE/rcw_1500.rcw
+new file mode 100644
+index 0000000..77a3d9d
+--- /dev/null
++++ b/trustsom_tbe201/N_SQPP_0x85BE/rcw_1500.rcw
+@@ -0,0 +1,67 @@
++/*
++ * SerDes Protocol -  0x85BE
++ *
++ * Frequencies:
++ * Core     -- 1500 MHz
++ * Platform -- 400  MHz
++ * DDR      -- 800 MHz
++ * DDR Data Rate -- 1.600 GT/s
++ * CGA_PLL1 -- 1500 MHz
++ * CGA_PLL2 -- 1200 MHz
++ * FlexSPI  -- 500 MHz
++ * eSDHC    -- 600 MHz
++ * GPU      -- 600 MHz
++ * ENETC    -- 400 MHz
++ */
++
++#include <../ls1028asi/ls1028a.rcwi>
++
++SYS_PLL_RAT=4
++MEM_PLL_RAT=16
++CGA_PLL1_RAT=15
++CGA_PLL2_RAT=12
++HWA_CGA_M1_CLK_SEL=7
++HWA_CGA_M2_CLK_SEL=1
++HWA_CGA_M3_CLK_SEL=6
++HWA_CGA_M4_CLK_SEL=3
++DDR_REFCLK_SEL=2
++DRAM_LAT=1
++BOOT_LOC=21
++FLASH_CFG1=3
++SYSCLK_FREQ=600
++GPIO_LED_NUM=69
++GPIO_LED_EN=1
++IIC2_PMUX=1
++IIC3_PMUX=0
++IIC4_PMUX=1
++IIC5_PMUX=0
++IIC6_PMUX=3
++XSPI1_A_DATA74_PMUX=1
++XSPI1_A_DATA30_PMUX=1
++XSPI1_A_BASE_PMUX=1
++UART2_SOUTSIN_PMUX=1
++CLK_OUT_PMUX=1
++ASLEEP_PMUX=1
++EC1_SAI4_5_PMUX=1
++EC1_SAI3_6_PMUX=1
++USB_DRVVBUS_PMUX=1
++USB_PWRFAULT_PMUX=1
++USB3_CLK_FSEL=39
++ENETC_RCW=3
++GTX_CLK125_PMUX=1
++SRDS_PRTCL_S1_L0=8
++SRDS_PRTCL_S1_L1=5
++SRDS_PRTCL_S1_L2=11
++SRDS_PRTCL_S1_L3=14
++SRDS_DIV_PEX_S1=1
++SRDS_S1_REFCLK_SRC_SEL=3
++
++/* Errata for PCIe controller */
++#include <../ls1028asi/a008851.rcw>
++#include <../ls1028asi/a010477.rcw>
++#include <../ls1028asi/a009531.rcw>
++
++/* Errata for SATA controller */
++#include <../ls1028asi/a010554.rcw>
++/* Increase FSPI clock frequency */
++#include <../ls1028asi/fspi_speed.rcw>
+-- 
+2.25.1
+

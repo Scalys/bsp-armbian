@@ -1,0 +1,1136 @@
+commit 581537d6a8347b26d1b8b93e0bd748a6eb9626dd
+Author: Siarhei Yasinski <siarhei.yasinski@sintecs.eu>
+Date:   Wed Aug 31 11:09:47 2022 +0300
+
+    board: Added new Scalys board trustbox-201
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 9898c7d68e..61df845cc2 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -2085,6 +2085,18 @@ config TARGET_XENGUEST_ARM64
+ 	select SSCANF
+ 	imply OF_HAS_PRIOR_STAGE
+ 
++config TARGET_TRUSTBOX_201
++	bool "Support Scalys TrustBox-201"
++	select ARCH_LS1028A
++	select ARM64
++	select ARMV8_MULTIENTRY
++	select ARCH_SUPPORT_TFABOOT
++	select BOARD_LATE_INIT
++	select GPIO_EXTRA_HEADER
++	help
++	  Support for Scalys TrustBox-201 platform
++	  featuring a NXP QorIQ LS1028A Layerscape Architecture processor.
++
+ endchoice
+ 
+ config SUPPORT_PASSING_ATAGS
+@@ -2344,7 +2356,7 @@ source "board/vscom/baltos/Kconfig"
+ source "board/phytium/durian/Kconfig"
+ source "board/phytium/pomelo/Kconfig"
+ source "board/xen/xenguest_arm64/Kconfig"
+-
++source "board/scalys/trustbox-201/Kconfig"
+ source "arch/arm/Kconfig.debug"
+ 
+ endmenu
+diff --git a/arch/arm/cpu/armv8/Kconfig b/arch/arm/cpu/armv8/Kconfig
+index 09f3f50fa2..e2807bb169 100644
+--- a/arch/arm/cpu/armv8/Kconfig
++++ b/arch/arm/cpu/armv8/Kconfig
+@@ -117,6 +117,7 @@ config PSCI_RESET
+ 		   !TARGET_LS1012A2G5RDB && !TARGET_LS1012AQDS && \
+ 		   !TARGET_LS1012AFRWY && \
+ 		   !TARGET_LS1028ARDB && !TARGET_LS1028AQDS && \
++		   !TARGET_TRUSTBOX_201 && \
+ 		   !TARGET_LS1043ARDB && !TARGET_LS1043AQDS && \
+ 		   !TARGET_LS1046ARDB && !TARGET_LS1046AQDS && \
+ 		   !TARGET_LS1046AFRWY && \
+diff --git a/arch/arm/dts/trustbox-201.dts b/arch/arm/dts/trustbox-201.dts
+new file mode 100644
+index 0000000000..163a7e0e76
+--- /dev/null
++++ b/arch/arm/dts/trustbox-201.dts
+@@ -0,0 +1,396 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Device Tree file for Scalys TrustSOM on Trustbox Edge 201 Carrier.
++ *
++ * Copyright 2018-2019 NXP
++ * Copyright 2021-2022 Scalys
++ *
++ * opensource@scalys.com
++ *
++ */
++
++/dts-v1/;
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++#include "fsl-ls1028a.dtsi"
++
++/ {
++	model = "Scalys TrustSOM on Trustbox Edge 201 Carrier";
++	compatible = "fsl,ls1028a";
++
++	aliases {
++		crypto = &crypto;
++		serial0 = &duart0;
++		serial1 = &duart1;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x0 0x80000000 0x1 0x0000000>;
++	};
++
++	/* Fix incorrectly named node such that bootloader can find it */
++	/delete-node/ clock-sysclk;
++	sysclk: sysclk {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <100000000>;
++		clock-output-names = "sysclk";
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		led0: redled  {
++			label = "redled";
++			color = <LED_COLOR_ID_RED>;
++			gpio = <&gpio3 5 GPIO_ACTIVE_HIGH>; /* GPIO3_5 */
++			default-state = "off";
++		};
++
++		led1: greenled  {
++			label = "greenled";
++			color = <LED_COLOR_ID_GREEN>;
++			gpio = <&gpio3 3 GPIO_ACTIVE_HIGH>; /* GPIO3_3 */
++			default-state = "on";
++		};
++
++		 led2: blueled  {
++			label = "blueled";
++			color = <LED_COLOR_ID_BLUE>;
++			gpio = <&gpio3 2 GPIO_ACTIVE_HIGH>; /* GPIO3_2 */
++			default-state = "off";
++		};
++	};
++
++	sfp0: sfp {
++		compatible = "sff,sfp";
++		i2c-bus = <&i2c2>;
++		mod-def0-gpios = <&gpio3 1 GPIO_ACTIVE_LOW>;
++		los-gpios = <&gpio3 7 GPIO_ACTIVE_HIGH>;
++		tx-fault-gpios = <&gpio3 6 GPIO_ACTIVE_HIGH>;
++		tx-disable-gpios = <&gpio3 0 GPIO_ACTIVE_HIGH>;
++		maximum-power-milliwatt = <2000>;
++	};
++};
++
++&gpio1 {
++	gpio-line-names = "", "", "", "", "", "", "UART_2_SIN", "UART_2_SOUT",
++		"", "", "UART_1_SIN", "UART_1_SOUT", "", "", "", "", "", "", "", "",
++		"", "", "USB_2_DRVVBUS", "USB_2_PWRFAULT", "", "", "", "", "", "",
++		"SDHC_1_WP", "SDHC_1_CD";
++
++	SDHC_1_WP {
++		gpio-hog;
++		gpios = <30 0>;
++		output-low;
++		line-name = "SDHC_1_WP";
++	};
++
++	gpio1_default_output_low {
++		gpio-hog;
++		gpios = <6 0>, <7 0>, <22 0>, <23 0>, <26 0>, <27 0>;
++		output-low;
++		line-name = "gpio1_default_output_low";
++	};
++};
++
++&gpio2 {
++	gpio-line-names = "", "", "", "", "", "", "ASLEEP", "CLKOUT", "", "", "",
++		"", "", "", "", "", "", "", "", "", "M2_E_W_DISABLE_1_N", "EXPANSION PIN4",
++		"EXPANSION PIN6", "M2_B_W_DISABLE_1_N", "M2_B_POWER_OFF_N", "EXPANSION PIN8",
++		"M2_B_CONFIG_0", "ALERT_5V_SOM_N", "M2_B_CONFIG_2", "ALERT_12V_N",
++		"M2_B_CONFIG_3", "M2_B_CONFIG_1";
++
++	gpio2_default_output_low {
++		gpio-hog;
++		gpios = <7 0>;
++		output-low;
++		line-name = "gpio2_default_output_low";
++	};
++
++	gpio2_default_output_high {
++		gpio-hog;
++		gpios = <20 0>, <23 0>, <24 0>;
++		output-high;
++		line-name = "gpio2_default_output_high";
++	};
++};
++
++&gpio3 {
++	gpio-line-names = "SFP_TX_DISABLE", "SFP_MOD_ABS", "MDINT_N", "DP_PWR_EN",
++		"EXPANSION PIN2", "DP_PWR_FAULT_N", "SFP_TX_FAULT", "SFP_LOS", "RESET_TPM_N",
++		"PROG_SFP_EN", "INT_TPM_N", "NT_RTC_N", "ALERT_TEMP", "", "", "", "",
++		"USB_PWRFAULT", "USB_DRVVBUS", "", "", "", "", "", "", "", "", "", "", "", "", "";
++
++	RESET_TPM_N {
++		gpio-hog;
++		gpios = <8 0>;
++		output-high;
++		line-name = "RESET_TPM_N";
++	};
++
++	PROG_SFP_EN {
++		gpio-hog;
++		gpios = <9 0>;
++		output-low;
++		line-name = "PROG_SFP_EN";
++	};
++
++	INT_TPM_N {
++		gpio-hog;
++		gpios = <10 0>;
++		input;
++		line-name = "INT_TPM_N";
++	};
++
++	INT_RTC_N {
++		gpio-hog;
++		gpios = <11 0>;
++		input;
++		line-name = "INT_RTC_N";
++	};
++
++	ALERT_TEMP {
++		gpio-hog;
++		gpios = <12 0>;
++		input;
++		line-name = "ALERT_TEMP";
++	};
++
++	gpio3_default_output_low {
++		gpio-hog;
++		gpios = <4 0>;
++		output-low;
++		line-name = "gpio3_default_output_low";
++	};
++};
++
++&dspi2 {
++	spi-num-chipselects = <1>;
++	status = "okay";
++
++	slb9670: slb9670@0 {
++		compatible = "infineon,slb9670";
++		reg = <0>; /* CE0 */
++		#address-cells = <1>;
++		#size-cells = <0>;
++		spi-max-frequency = <10000000>;
++		status = "okay";
++		/* Interrupt disabled for now */
++		/*interrupt-parent = <&gpio3>;
++		interrupts = <10 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-names = "INT_TPM_N";*/
++	};
++};
++
++&esdhc {
++	sd-uhs-sdr104;
++	sd-uhs-sdr50;
++	sd-uhs-sdr25;
++	sd-uhs-sdr12;
++	status = "okay";
++	cd-gpios = <&gpio1 31 GPIO_ACTIVE_LOW>;
++	disable-wp;
++};
++
++&esdhc1 {
++	voltage-ranges = <1800 1800>;
++	mmc-hs200-1_8v;
++	/*mmc-hs400-1_8v;
++	max-frequency = <150000000>;*/
++	bus-width = <8>;
++	non-removable;
++};
++
++&usb0 {
++	status = "okay";
++};
++
++&usb1 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	rtc@51 {
++		compatible = "nxp,pcf85063tp";
++		reg = <0x51>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-names = "INT_RTC_N";
++	};
++
++	tmp@4c {
++		compatible = "ti,tmp451";
++		reg = <0x4c>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-names = "ALERT_TEMP";
++	};
++};
++
++&i2c2 {
++	clock-frequency = <400000>;
++	status = "okay";
++};
++
++&i2c4 {
++	clock-frequency = <100000>;
++	status = "okay";
++
++	usb_hub@60 {
++		reg = <0x60>;
++		compatible = "cypress,cyusb3304";
++		configuration = [ 	43 59 /* 'C' 'Y' Cypress magic signature */
++					30 /* I2C speed : 100kHz */
++					D4 /* Image type: Only settings, no firmware */
++					C0 /* payload size (192) */
++					B4 04 /* VID */
++					04 65 /* PID */
++					0A 32 /* DID */
++					00 /* Reserved */
++					03 /* DS4 and DS3 have no SuperSpeed port */
++					32 /* bPwrOn2PwrGood : 100 ms */
++					FF /* 4 Downstream ports : all removable (MCU) */
++					11 /* Ganged power switching */
++					A0 /* suspend indicator disabled, power switch control is active high */
++					11 /* BC v1.2 and ghost charging enabled */
++					F0 /* cdp enabled */
++					E8 /* embedded hub, overcurrent input is active low high */
++					00 /* reserved */
++					08 /* USB String descriptors enabled (0x08) / disabled (0x00) */
++					00 00
++					12 00 2C
++					66 66 /* USB3.0 TX driver de-emphasis */
++					69 29 29 29 29 /* TX amplitude */
++					00 /* Reserved */
++					06 65 /* USB 2.0 PID */
++					00 00 00 00 00 00 00 00 /* Reserved */
++					04 03 09 04 /* LangID = 0x0409 US English */
++					36 03 /* Manufacturer string descriptor */
++					32 00 30 00 31 00 34 00 20 00 43 00 79 00 70 00 72 00 65 00 73 00 73 00 20 00
++					53 00 65 00 6D 00 69 00 63 00 6F 00 6E 00 64 00 75 00 63 00 74 00 6F 00 72 00
++					16 03 /* Product string descriptor */
++					43 00 59 00 2D 00 48 00 58 00 33 00 20 00 48 00 55 00 42 00
++					14 03 /* Serial string descriptor */
++					54 00 42 00 45 00 32 00 30 00 31 00 ];
++	};
++};
++
++&can1 {
++	status = "disabled";
++};
++
++&fspi {
++	status = "disabled";
++};
++
++&duart0 {
++	status = "okay";
++};
++
++&duart1 {
++	status = "disabled";
++};
++
++&enetc_mdio_pf3 {
++	/* VSC8514 QSGMII quad PHY */
++	qsgmii_phy0: ethernet-phy@4 {
++		reg = <0x4>;
++	};
++
++	qsgmii_phy1: ethernet-phy@5 {
++		reg = <0x5>;
++	};
++
++	qsgmii_phy2: ethernet-phy@6 {
++		reg = <0x6>;
++	};
++
++	qsgmii_phy3: ethernet-phy@7 {
++		reg = <0x7>;
++	};
++};
++
++&enetc_port0 {
++	phy-connection-type = "sgmii";
++	sfp = <&sfp0>;
++	managed = "in-band-status";
++	status = "okay";
++};
++
++&enetc_port2 {
++	status = "okay";
++};
++
++&enetc_port3 {
++	status = "okay";
++};
++
++&mscc_felix {
++	status = "okay";
++};
++
++&mscc_felix_port0 {
++	label = "swp0";
++	managed = "in-band-status";
++	phy-handle = <&qsgmii_phy0>;
++	phy-mode = "qsgmii";
++	status = "okay";
++};
++
++&mscc_felix_port1 {
++	label = "swp1";
++	managed = "in-band-status";
++	phy-handle = <&qsgmii_phy1>;
++	phy-mode = "qsgmii";
++	status = "okay";
++};
++
++&mscc_felix_port2 {
++	label = "swp2";
++	managed = "in-band-status";
++	phy-handle = <&qsgmii_phy2>;
++	phy-mode = "qsgmii";
++	status = "okay";
++};
++
++&mscc_felix_port3 {
++	label = "swp3";
++	managed = "in-band-status";
++	phy-handle = <&qsgmii_phy3>;
++	phy-mode = "qsgmii";
++	status = "okay";
++};
++
++&mscc_felix_port4 {
++	ethernet = <&enetc_port2>;
++	status = "okay";
++};
++
++&mscc_felix_port5 {
++	ethernet = <&enetc_port3>;
++	status = "okay";
++};
++
++&malidp0 {
++	status = "disabled";
++};
++
++&sata {
++	status = "okay";
++};
++
++&optee {
++	status = "okay";
++};
++
++&pcie2 {
++	status = "okay";
++};
+diff --git a/board/scalys/common/Makefile b/board/scalys/common/Makefile
+new file mode 100644
+index 0000000000..3478e877af
+--- /dev/null
++++ b/board/scalys/common/Makefile
+@@ -0,0 +1,87 @@
++# SPDX-License-Identifier: GPL-2.0+
++#
++# (C) Copyright 2006
++# Wolfgang Denk, DENX Software Engineering, wd@denx.de.
++
++MINIMAL=
++
++ifdef CONFIG_SPL_BUILD
++ifdef CONFIG_SPL_INIT_MINIMAL
++MINIMAL=y
++endif
++endif
++
++ifdef MINIMAL
++# necessary to create built-in.o
++obj- := __dummy__.o
++else
++# include i2c_common.o once if either VID or FSL_USE_PCA9547_MUX
++I2C_COMMON=
++ifdef CONFIG_VID
++I2C_COMMON=y
++endif
++ifdef CONFIG_FSL_USE_PCA9547_MUX
++I2C_COMMON=y
++endif
++
++obj-$(CONFIG_FSL_CADMUS)	+= ../../freescale/common/cadmus.o
++obj-$(CONFIG_FSL_VIA)		+= ../../freescale/common/cds_via.o
++obj-$(CONFIG_FMAN_ENET)	+= ../../freescale/common/fman.o
++obj-$(CONFIG_FSL_PIXIS)	+= ../../freescale/common/pixis.o
++ifndef CONFIG_SPL_BUILD
++obj-$(CONFIG_FSL_NGPIXIS)	+= ../../freescale/common/ngpixis.o
++endif
++obj-$(I2C_COMMON)		+= ../../freescale/common/i2c_common.o
++obj-$(CONFIG_FSL_USE_PCA9547_MUX)		+= ../../freescale/common/i2c_mux.o
++obj-$(CONFIG_$(SPL_)VID)	+= ../../freescale/common/vid.o
++obj-$(CONFIG_PQ_MDS_PIB)	+= ../../freescale/common/pq-mds-pib.o
++ifndef CONFIG_SPL_BUILD
++obj-$(CONFIG_ID_EEPROM)	+= ../../freescale/common/sys_eeprom.o
++endif
++obj-$(CONFIG_FSL_SGMII_RISER)	+= ../../freescale/common/sgmii_riser.o
++ifndef CONFIG_RAMBOOT_PBL
++obj-$(CONFIG_FSL_FIXED_MMC_LOCATION)	+= ../../freescale/common/sdhc_boot.o
++endif
++
++ifdef CONFIG_ARM
++obj-$(CONFIG_DEEP_SLEEP)		+= ../../freescale/common/arm_sleep.o
++else
++obj-$(CONFIG_DEEP_SLEEP)		+= ../../freescale/common/mpc85xx_sleep.o
++endif
++
++obj-$(CONFIG_TARGET_MPC8548CDS)	+= ../../freescale/common/cds_pci_ft.o
++
++obj-$(CONFIG_TARGET_MPC8536DS)	+= ../../freescale/common/ics307_clk.o
++obj-$(CONFIG_TARGET_P1022DS)		+= ../../freescale/common/ics307_clk.o
++obj-$(CONFIG_P2020DS)		+= ../../freescale/common/ics307_clk.o
++obj-$(CONFIG_TARGET_P3041DS)		+= ../../freescale/common/ics307_clk.o
++obj-$(CONFIG_TARGET_P4080DS)		+= ../../freescale/common/ics307_clk.o
++obj-$(CONFIG_TARGET_P5040DS)		+= ../../freescale/common/ics307_clk.o
++obj-$(CONFIG_VSC_CROSSBAR)    += ../../freescale/common/vsc3316_3308.o
++obj-$(CONFIG_ZM7300)		+= ../../freescale/common/zm7300.o
++obj-$(CONFIG_POWER_PFUZE100)	+= ../../freescale/common/pfuze.o
++obj-$(CONFIG_DM_PMIC_PFUZE100)	+= ../../freescale/common/pfuze.o
++obj-$(CONFIG_POWER_MC34VR500)	+= ../../freescale/common/mc34vr500.o
++ifneq (,$(filter $(SOC), imx8ulp))
++obj-y				+= ../../freescale/common/mmc.o
++endif
++
++obj-$(CONFIG_LS102XA_STREAM_ID)	+= ../../freescale/common/ls102xa_stream_id.o
++
++obj-$(CONFIG_EMC2305)              += ../../freescale/common/emc2305.o
++
++# deal with common files for P-series corenet based devices
++obj-$(CONFIG_TARGET_P2041RDB)	+= ../../freescale/common/p_corenet/
++obj-$(CONFIG_TARGET_P3041DS)	+= ../../freescale/common/p_corenet/
++obj-$(CONFIG_TARGET_P4080DS)	+= ../../freescale/common/p_corenet/
++obj-$(CONFIG_TARGET_P5020DS)	+= ../../freescale/common/p_corenet/
++obj-$(CONFIG_TARGET_P5040DS)	+= ../../freescale/common/p_corenet/
++
++obj-$(CONFIG_LAYERSCAPE_NS_ACCESS)	+= ../../freescale/common/ns_access.o
++
++ifdef CONFIG_NXP_ESBC
++obj-$(CONFIG_CMD_ESBC_VALIDATE) += ../../freescale/common/fsl_validate.o ../../freescale/common/cmd_esbc_validate.o
++endif
++obj-$(CONFIG_CHAIN_OF_TRUST) += ../../freescale/common/fsl_chain_of_trust.o
++
++endif
+diff --git a/board/scalys/trustbox-201/Kconfig b/board/scalys/trustbox-201/Kconfig
+new file mode 100644
+index 0000000000..05e128a558
+--- /dev/null
++++ b/board/scalys/trustbox-201/Kconfig
+@@ -0,0 +1,25 @@
++if TARGET_TRUSTBOX_201
++
++config SYS_BOARD
++	default "trustbox-201"
++
++config SYS_VENDOR
++	default "scalys"
++
++config SYS_SOC
++	default "fsl-layerscape"
++
++config SYS_CONFIG_NAME
++	default "trustbox-201"
++
++config EMMC_BOOT
++	bool "Support for booting from EMMC"
++
++config SYS_TEXT_BASE
++	default 0x96000000 if SD_BOOT || EMMC_BOOT
++	default 0x82000000 if TFABOOT
++	default 0x20100000
++
++source "board/freescale/common/Kconfig"
++
++endif
+diff --git a/board/scalys/trustbox-201/Makefile b/board/scalys/trustbox-201/Makefile
+new file mode 100644
+index 0000000000..d09f5480e8
+--- /dev/null
++++ b/board/scalys/trustbox-201/Makefile
+@@ -0,0 +1,8 @@
++#
++# Copyright 2019 NXP
++#
++# SPDX-License-Identifier:	GPL-2.0+
++#
++
++obj-y += trustbox-201.o
++obj-y += ddr.o
+diff --git a/board/scalys/trustbox-201/ddr.c b/board/scalys/trustbox-201/ddr.c
+new file mode 100644
+index 0000000000..3e976da6b3
+--- /dev/null
++++ b/board/scalys/trustbox-201/ddr.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2019 NXP
++ */
++
++#include <common.h>
++#include <fsl_ddr_sdram.h>
++#include <fsl_ddr_dimm_params.h>
++#include <asm/global_data.h>
++
++DECLARE_GLOBAL_DATA_PTR;
++
++int fsl_initdram(void)
++{
++	gd->ram_size = tfa_get_dram_size();
++
++	if (!gd->ram_size)
++		gd->ram_size = fsl_ddr_sdram_size();
++
++	return 0;
++}
+diff --git a/board/scalys/trustbox-201/tb201.env b/board/scalys/trustbox-201/tb201.env
+new file mode 100644
+index 0000000000..f2d0891a42
+--- /dev/null
++++ b/board/scalys/trustbox-201/tb201.env
+@@ -0,0 +1,77 @@
++/* The main part of the evnvironment */
++mmc_dev=0
++mmc_bootpart=1
++fdt_addr=0xa8000000
++kernel_addr=0xa0000000
++image=boot/Image
++fdt_file=boot/trustsom-tbe201.dtb
++setargs=setenv bootargs console=ttyS0,115200 earlycon=uart8250,mmio,0x21c0500 default_hugepagesz=2m hugepagesz=2m hugepages=256 cma=256M
++addmmc=setenv bootargs ${bootargs} root=/dev/mmcblk${mmc_dev}p${mmc_bootpart} rootwait
++mmcboot=ext4load mmc ${mmc_dev}:${mmc_bootpart} ${kernel_addr} ${image}; ext4load mmc ${mmc_dev}:${mmc_bootpart} ${fdt_addr} ${fdt_file}; booti ${kernel_addr} - ${fdt_addr}
++
++/* This command is called in bootcmd */
++sd_bootcmd=run setargs; run addmmc; run mmcboot
++
++/* Additional part of the environment used for debugging Linux kernel */
++
++ipaddr=10.42.0.10
++serverip=10.42.0.1
++ethact=eth2 // set active ethernet port as swp0
++netboot=tftp $kernel_addr Image; tftp $fdt_addr trustsom-tbe201.dtb; booti $kernel_addr - $fdt_addr
++
++/* Update commands */
++
++bl2_emmc_file=bl2_emmc.pbl
++bl2_sd_file=bl2_sd.pbl
++fip_file=fip_uboot.bin
++load_addr=0xa0000000
++
++mmc_sd_interface=0
++mmc_emmc_interface=1
++
++get_ip_addr=
++    if env exists ipaddr && env exists serverip; then
++         ;
++    else
++        dhcp;
++    fi
++
++update_binary_in_mmc=
++    /* Script for updating mmc part */
++    if env exists mmc_dev && env exists mmc_offset && env exists filesize; then
++        mmc rescan && \
++        mmc dev ${mmc_dev} && \
++        setexpr cnt ${filesize} + 0x1ff && \
++        setexpr cnt ${cnt} / 0x200 && \
++        mmc write ${load_addr} ${mmc_offset} ${cnt};
++    else
++        echo "Something is missing in mmc_dev, mmc_offset or filesize";
++    fi
++
++update_tftp_fip_emmc=
++    /* Update FIP image on EMMC by tftp */
++    run get_ip_addr; tftp ${load_addr} ${update_files_path}/${fip_file} &&  \
++                    setenv mmc_dev ${mmc_emmc_interface} && \
++                    setenv mmc_offset 800 &&  \
++                    run update_binary_in_mmc
++
++update_tftp_fip_sd=
++    /* Update FIP image on SD by tftp */
++    run get_ip_addr; tftp ${load_addr} ${update_files_path}/${fip_file} && \
++                    setenv mmc_dev ${mmc_sd_interface} && \
++                    setenv mmc_offset 800 && \
++                    run update_binary_in_mmc
++
++update_tftp_bl2_emmc=
++    /* Update BL2 image on EMMC by tftp */
++    run get_ip_addr; tftp ${load_addr} ${update_files_path}/${bl2_emmc_file} && \
++                    setenv mmc_dev ${mmc_emmc_interface} && \
++                    setenv mmc_offset 8 && \
++                    run update_binary_in_mmc
++
++update_tftp_bl2_sd=
++    /* Update BL2 image on SD by tftp */
++    run get_ip_addr; tftp ${load_addr} ${update_files_path}/${bl2_sd_file} && \
++                    setenv mmc_dev ${mmc_sd_interface} && \
++                    setenv mmc_offset 8 && \
++                    run update_binary_in_mmc
+diff --git a/board/scalys/trustbox-201/trustbox-201.c b/board/scalys/trustbox-201/trustbox-201.c
+new file mode 100644
+index 0000000000..169b59af09
+--- /dev/null
++++ b/board/scalys/trustbox-201/trustbox-201.c
+@@ -0,0 +1,220 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2019, 2021 NXP
++ */
++
++#include <common.h>
++#include <init.h>
++#include <malloc.h>
++#include <errno.h>
++#include <fsl_ddr.h>
++#include <net.h>
++#include <asm/global_data.h>
++#include <asm/io.h>
++#include <hwconfig.h>
++#include <fdt_support.h>
++#include <linux/libfdt.h>
++#include <env_internal.h>
++#include <asm/arch-fsl-layerscape/soc.h>
++#include <asm/arch-fsl-layerscape/fsl_icid.h>
++#include <i2c.h>
++#include <asm/arch/soc.h>
++#ifdef CONFIG_FSL_LS_PPA
++#include <asm/arch/ppa.h>
++#endif
++#include <fsl_immap.h>
++#include <netdev.h>
++
++#include <fdtdec.h>
++#include <miiphy.h>
++#include "../drivers/net/fsl_enetc.h"
++#include "hx3_hub.h"
++
++DECLARE_GLOBAL_DATA_PTR;
++
++#define CYUSB3304_I2C_BUS		"i2c@2040000"
++#define CYUSB3304_I2C_ADDRESS		0x60
++
++int config_board_mux(void)
++{
++#ifndef CONFIG_LPUART
++#endif
++
++	return 0;
++}
++
++#ifdef CONFIG_LPUART
++u32 get_lpuart_clk(void)
++{
++	return gd->bus_clk / CONFIG_SYS_FSL_LPUART_CLK_DIV;
++}
++#endif
++
++int board_init(void)
++{
++#ifdef CONFIG_FSL_LS_PPA
++	ppa_init();
++#endif
++
++#ifndef CONFIG_SYS_EARLY_PCI_INIT
++	pci_init();
++#endif
++
++#ifdef CONFIG_HX3_HUB
++	/* Configure HX3 HUB */
++	hx3_hub_init(CYUSB3304_I2C_BUS, CYUSB3304_I2C_ADDRESS);
++#endif
++
++	return 0;
++}
++
++int board_eth_init(struct bd_info *bis)
++{
++	return pci_eth_init(bis);
++}
++
++#ifdef CONFIG_MISC_INIT_R
++int misc_init_r(void)
++{
++	config_board_mux();
++
++	return 0;
++}
++#endif
++
++int board_early_init_f(void)
++{
++#ifdef CONFIG_LPUART
++	u8 uart;
++#endif
++
++#if defined(CONFIG_SYS_I2C_EARLY_INIT) && defined(CONFIG_SPL_BUILD)
++	i2c_early_init_f();
++#endif
++
++	fsl_lsch3_early_init_f();
++
++#ifdef CONFIG_LPUART
++	/*
++	 * Field| Function
++	 * --------------------------------------------------------------
++	 * 7-6  | Controls I2C3 routing (net CFG_MUX_I2C3):
++	 * I2C3 | 11= Routes {SCL, SDA} to LPUART1 header as {SOUT, SIN}.
++	 * --------------------------------------------------------------
++	 * 5-4  | Controls I2C4 routing (net CFG_MUX_I2C4):
++	 * I2C4 |11= Routes {SCL, SDA} to LPUART1 header as {CTS_B, RTS_B}.
++	 */
++	/* use lpuart0 as system console */
++#endif
++
++	return 0;
++}
++
++void detail_board_ddr_info(void)
++{
++	puts("\nDDR    ");
++	print_size(gd->bd->bi_dram[0].size + gd->bd->bi_dram[1].size, "");
++	print_ddr_info(0);
++}
++
++int esdhc_status_fixup(void *blob, const char *compat)
++{
++	void __iomem *dcfg_ccsr = (void __iomem *)DCFG_BASE;
++	char esdhc1_path[] = "/soc/mmc@2140000";
++	char esdhc2_path[] = "/soc/mmc@2150000";
++	char dspi1_path[] = "/soc/spi@2100000";
++	char dspi2_path[] = "/soc/spi@2110000";
++	u32 mux_sdhc1, mux_sdhc2;
++	u32 io = 0;
++
++	/*
++	 * The PMUX IO-expander for mux select is used to control
++	 * the muxing of various onboard interfaces.
++	 */
++
++	io = in_le32(dcfg_ccsr + DCFG_RCWSR12);
++	mux_sdhc1 = (io >> DCFG_RCWSR12_SDHC_SHIFT) & DCFG_RCWSR12_SDHC_MASK;
++
++	/* Disable esdhc1/dspi1 if not selected. */
++	if (mux_sdhc1 != 0)
++		do_fixup_by_path(blob, esdhc1_path, "status", "disabled",
++				 sizeof("disabled"), 1);
++	if (mux_sdhc1 != 2)
++		do_fixup_by_path(blob, dspi1_path, "status", "disabled",
++				 sizeof("disabled"), 1);
++
++	io = in_le32(dcfg_ccsr + DCFG_RCWSR13);
++	mux_sdhc2 = (io >> DCFG_RCWSR13_SDHC_SHIFT) & DCFG_RCWSR13_SDHC_MASK;
++
++	/* Disable esdhc2/dspi2 if not selected. */
++	if (mux_sdhc2 != 0)
++		do_fixup_by_path(blob, esdhc2_path, "status", "disabled",
++				 sizeof("disabled"), 1);
++	if (mux_sdhc2 != 2)
++		do_fixup_by_path(blob, dspi2_path, "status", "disabled",
++				 sizeof("disabled"), 1);
++
++	return 0;
++}
++
++#ifdef CONFIG_OF_BOARD_SETUP
++int ft_board_setup(void *blob, struct bd_info *bd)
++{
++	u64 base[CONFIG_NR_DRAM_BANKS];
++	u64 size[CONFIG_NR_DRAM_BANKS];
++
++	ft_cpu_setup(blob, bd);
++
++	/* fixup DT for the two GPP DDR banks */
++	base[0] = gd->bd->bi_dram[0].start;
++	size[0] = gd->bd->bi_dram[0].size;
++	base[1] = gd->bd->bi_dram[1].start;
++	size[1] = gd->bd->bi_dram[1].size;
++
++#ifdef CONFIG_RESV_RAM
++	/* reduce size if reserved memory is within this bank */
++	if (gd->arch.resv_ram >= base[0] &&
++	    gd->arch.resv_ram < base[0] + size[0])
++		size[0] = gd->arch.resv_ram - base[0];
++	else if (gd->arch.resv_ram >= base[1] &&
++		 gd->arch.resv_ram < base[1] + size[1])
++		size[1] = gd->arch.resv_ram - base[1];
++#endif
++
++	fdt_fixup_memory_banks(blob, base, size, 2);
++
++	fdt_fixup_icid(blob);
++
++#ifdef CONFIG_FSL_ENETC
++	fdt_fixup_enetc_mac(blob);
++#endif
++
++	return 0;
++}
++#endif
++
++#ifdef CONFIG_FSL_QIXIS
++int checkboard(void)
++{
++#ifdef CONFIG_TFABOOT
++	enum boot_src src = get_boot_src();
++#endif
++
++#ifdef CONFIG_TFABOOT
++	if (src == BOOT_SOURCE_SD_MMC) {
++		puts("SD\n");
++	} else if (src == BOOT_SOURCE_SD_MMC2) {
++		puts("eMMC\n");
++	} else {
++#endif
++#ifdef CONFIG_SD_BOOT
++		puts("SD\n");
++#elif defined(CONFIG_EMMC_BOOT)
++		puts("eMMC\n");
++#endif
++#ifdef CONFIG_TFABOOT
++	}
++#endif
++	return 0;
++}
++#endif
+diff --git a/configs/trustbox-201_tfa_defconfig b/configs/trustbox-201_tfa_defconfig
+new file mode 100644
+index 0000000000..a4c26e6ba7
+--- /dev/null
++++ b/configs/trustbox-201_tfa_defconfig
+@@ -0,0 +1,96 @@
++CONFIG_ARM=y
++CONFIG_SKIP_LOWLEVEL_INIT=y
++CONFIG_COUNTER_FREQUENCY=100000000
++CONFIG_GIC_V3_ITS=y
++CONFIG_TARGET_TRUSTBOX_201=y
++CONFIG_TFABOOT=y
++CONFIG_SYS_MALLOC_LEN=0x202000
++CONFIG_SYS_MALLOC_F_LEN=0x6000
++CONFIG_NR_DRAM_BANKS=2
++CONFIG_ENV_SIZE=0x2000
++CONFIG_ENV_OFFSET=0x500000
++CONFIG_ENV_SECT_SIZE=0x20000
++CONFIG_DM_GPIO=y
++CONFIG_DEFAULT_DEVICE_TREE="trustbox-201"
++CONFIG_FSPI_AHB_EN_4BYTE=y
++CONFIG_ARMV8_SEC_FIRMWARE_SUPPORT=y
++CONFIG_SEC_FIRMWARE_ARMV8_PSCI=y
++CONFIG_ENV_ADDR=0x20500000
++CONFIG_AHCI=y
++CONFIG_SYS_MEMTEST_START=0x80000000
++CONFIG_SYS_MEMTEST_END=0x9fffffff
++CONFIG_DISTRO_DEFAULTS=y
++CONFIG_REMAKE_ELF=y
++CONFIG_MP=y
++CONFIG_FIT_VERBOSE=y
++CONFIG_OF_BOARD_SETUP=y
++CONFIG_OF_STDOUT_VIA_ALIAS=y
++CONFIG_BOOTDELAY=3
++# CONFIG_USE_BOOTCOMMAND is not set
++CONFIG_CMD_GREPENV=y
++CONFIG_CMD_MEMTEST=y
++CONFIG_CMD_DM=y
++CONFIG_CMD_GPIO=y
++CONFIG_CMD_GPT=y
++CONFIG_CMD_I2C=y
++CONFIG_CMD_MMC=y
++CONFIG_CMD_PCI=y
++CONFIG_CMD_USB=y
++CONFIG_CMD_WDT=y
++CONFIG_CMD_SETEXPR=y
++CONFIG_CMD_CACHE=y
++CONFIG_OF_CONTROL=y
++CONFIG_ENV_OVERWRITE=y
++CONFIG_ENV_IS_IN_MMC=y
++CONFIG_ENV_IS_IN_SPI_FLASH=y
++CONFIG_NET_RANDOM_ETHADDR=y
++CONFIG_NETCONSOLE=y
++CONFIG_SYS_RX_ETH_BUFFER=8
++CONFIG_DM=y
++CONFIG_SCSI_AHCI=y
++CONFIG_FSL_CAAM=y
++# CONFIG_DDR_SPD is not set
++CONFIG_MPC8XXX_GPIO=y
++CONFIG_DM_I2C=y
++CONFIG_I2C_SET_DEFAULT_BUS_NUM=y
++CONFIG_HX3_HUB=y
++CONFIG_FSL_ESDHC=y
++CONFIG_MTD=y
++CONFIG_DM_SPI_FLASH=y
++CONFIG_SPI_FLASH_STMICRO=y
++# CONFIG_SPI_FLASH_USE_4K_SECTORS is not set
++CONFIG_PHYLIB=y
++CONFIG_PHY_ATHEROS=y
++CONFIG_PHY_VITESSE=y
++CONFIG_PHY_FIXED=y
++CONFIG_DM_ETH=y
++CONFIG_DM_MDIO=y
++CONFIG_DM_DSA=y
++CONFIG_PHY_GIGE=y
++CONFIG_E1000=y
++CONFIG_MSCC_FELIX_SWITCH=y
++CONFIG_PCI=y
++CONFIG_PCIE_ECAM_GENERIC=y
++CONFIG_PCIE_LAYERSCAPE_RC=y
++CONFIG_DM_RTC=y
++CONFIG_RTC_PCF85063=y
++CONFIG_SCSI=y
++CONFIG_DM_SCSI=y
++CONFIG_SYS_NS16550=y
++CONFIG_SPI=y
++CONFIG_DM_SPI=y
++CONFIG_FSL_DSPI=y
++CONFIG_NXP_FSPI=y
++CONFIG_USB=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_XHCI_DWC3=y
++CONFIG_USB_HOST_ETHER=y
++CONFIG_USB_ETHER_ASIX=y
++CONFIG_USB_ETHER_ASIX88179=y
++CONFIG_USB_ETHER_RTL8152=y
++CONFIG_WDT=y
++CONFIG_WDT_SP805=y
++CONFIG_TPM=y
++CONFIG_OF_LIBFDT_OVERLAY=y
++CONFIG_EFI_LOADER_BOUNCE_BUFFER=y
++CONFIG_ENV_SOURCE_FILE="tb201"
+\ No newline at end of file
+diff --git a/include/configs/trustbox-201.h b/include/configs/trustbox-201.h
+new file mode 100644
+index 0000000000..62a9698c39
+--- /dev/null
++++ b/include/configs/trustbox-201.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Copyright 2019, 2021 NXP
++ */
++
++#ifndef __TRUSTBOX_201_RDB_H
++#define __TRUSTBOX_201_RDB_H
++
++#include "trustsom_common.h"
++
++#define COUNTER_FREQUENCY_REAL		(get_board_sys_clk() / 4)
++
++#define CONFIG_SYS_RTC_BUS_NUM         0
++
++/* Store environment at top of flash */
++#undef CONFIG_ENV_SIZE
++#define CONFIG_ENV_SIZE			0x4000
++
++/* SATA */
++#define SCSI_VEND_ID 0x1b4b
++#define SCSI_DEV_ID  0x9170
++#define CONFIG_SCSI_DEV_LIST {SCSI_VEND_ID, SCSI_DEV_ID}
++#define CONFIG_SYS_SATA1                        AHCI_BASE_ADDR1
++
++#endif /* __TRUSTBOX_201_RDB_H */
+diff --git a/include/configs/trustsom_common.h b/include/configs/trustsom_common.h
+new file mode 100644
+index 0000000000..b6cf6aa657
+--- /dev/null
++++ b/include/configs/trustsom_common.h
+@@ -0,0 +1,70 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Copyright 2019-2021 NXP
++ * Copyright 2022 Scalys
++ */
++
++#ifndef __TRUSTSOM_COMMON_H
++#define __TRUSTSOM_COMMON_H
++
++#include <asm/arch/stream_id_lsch3.h>
++#include <asm/arch/config.h>
++#include <asm/arch/soc.h>
++
++/* Link Definitions */
++#define CONFIG_SYS_INIT_SP_ADDR		CONFIG_SYS_TEXT_BASE
++
++#define CONFIG_VERY_BIG_RAM
++#define CONFIG_SYS_DDR_SDRAM_BASE	0x80000000UL
++#define CONFIG_SYS_FSL_DDR_SDRAM_BASE_PHY	0
++#define CONFIG_SYS_SDRAM_BASE		CONFIG_SYS_DDR_SDRAM_BASE
++#define CONFIG_SYS_DDR_BLOCK2_BASE	0x2080000000ULL
++#define CONFIG_SYS_FSL_DDR_MAIN_NUM_CTRLS	1
++
++/*
++ * SMP Definitinos
++ */
++#define CPU_RELEASE_ADDR		secondary_boot_addr
++
++/* GPIO */
++
++/* I2C */
++
++/* Serial Port */
++#define CONFIG_SYS_NS16550_SERIAL
++#define CONFIG_SYS_NS16550_REG_SIZE     1
++#define CONFIG_SYS_NS16550_CLK          (get_bus_freq(0) / 2)
++
++/* Miscellaneous configurable options */
++
++/* Physical Memory Map */
++
++#define CONFIG_HWCONFIG
++#define HWCONFIG_BUFFER_SIZE		128
++
++#define BOOT_TARGET_DEVICES(func) \
++	func(MMC, mmc, 0) \
++	func(MMC, mmc, 1)
++#include <config_distro_bootcmd.h>
++
++#define SD_BOOTCOMMAND \
++	"run sd_bootcmd" \
++
++/* Monitor Command Prompt */
++#define CONFIG_SYS_CBSIZE		512	/* Console I/O Buffer Size */
++#define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + \
++					sizeof(CONFIG_SYS_PROMPT) + 16)
++#define CONFIG_SYS_BARGSIZE		CONFIG_SYS_CBSIZE /* Boot args buffer */
++
++#define CONFIG_SYS_MAXARGS		64	/* max command args */
++
++#define CONFIG_SYS_BOOTM_LEN   (64 << 20)      /* Increase max gunzip size */
++
++#define OCRAM_NONSECURE_SIZE		0x00010000
++#define CONFIG_SYS_FSL_QSPI_BASE	0x20000000
++
++#ifdef CONFIG_NXP_ESBC
++#include <asm/fsl_secure_boot.h>
++#endif
++
++#endif /* __TRUSTSOM_COMMON_H */

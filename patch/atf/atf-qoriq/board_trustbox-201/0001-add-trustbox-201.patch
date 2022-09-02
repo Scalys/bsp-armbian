@@ -1,0 +1,411 @@
+From bcff21ddb607e8a586ca93e79b8ebcbc8440212c Mon Sep 17 00:00:00 2001
+From: Siarhei Yasinski <siarhei.yasinski@sintecs.eu>
+Date: Fri, 2 Sep 2022 11:12:04 +0300
+Subject: [PATCH] add trustbox 201
+
+---
+ .../nxp/soc-ls1028a/ls1028trustsom/ddr_init.c | 186 ++++++++++++++++++
+ .../nxp/soc-ls1028a/ls1028trustsom/plat_def.h |  74 +++++++
+ .../nxp/soc-ls1028a/ls1028trustsom/platform.c |  28 +++
+ .../soc-ls1028a/ls1028trustsom/platform.mk    |  35 ++++
+ .../soc-ls1028a/ls1028trustsom/platform_def.h |  13 ++
+ plat/nxp/soc-ls1028a/ls1028trustsom/policy.h  |  16 ++
+ 6 files changed, 352 insertions(+)
+ create mode 100644 plat/nxp/soc-ls1028a/ls1028trustsom/ddr_init.c
+ create mode 100644 plat/nxp/soc-ls1028a/ls1028trustsom/plat_def.h
+ create mode 100644 plat/nxp/soc-ls1028a/ls1028trustsom/platform.c
+ create mode 100644 plat/nxp/soc-ls1028a/ls1028trustsom/platform.mk
+ create mode 100644 plat/nxp/soc-ls1028a/ls1028trustsom/platform_def.h
+ create mode 100644 plat/nxp/soc-ls1028a/ls1028trustsom/policy.h
+
+diff --git a/plat/nxp/soc-ls1028a/ls1028trustsom/ddr_init.c b/plat/nxp/soc-ls1028a/ls1028trustsom/ddr_init.c
+new file mode 100644
+index 000000000..527298d19
+--- /dev/null
++++ b/plat/nxp/soc-ls1028a/ls1028trustsom/ddr_init.c
+@@ -0,0 +1,186 @@
++/*
++ * Copyright 2018-2021 NXP
++ * Copyright 2022 Scalys
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++#include <string.h>
++
++#include <common/debug.h>
++#include <ddr.h>
++#include <lib/utils.h>
++
++#include <platform_def.h>
++
++#ifdef CONFIG_STATIC_DDR
++const struct ddr_cfg_regs static_1600 = {
++	.cs[0].config = U(0x80010422),
++	.cs[0].bnds = U(0xFF),
++	.sdram_cfg[0] = U(0x650C0004),
++	.sdram_cfg[1] = U(0x00401010),
++	.timing_cfg[0] = U(0xFF55000C),
++	.timing_cfg[1] = U(0xBEB40C52),
++	.timing_cfg[2] = U(0x0048D114),
++	.timing_cfg[3] = U(0x01111000),
++	.timing_cfg[4] = U(0xD501),
++	.timing_cfg[5] = U(0x04401400),
++	.timing_cfg[7] = U(0x23300000),
++	.timing_cfg[8] = U(0x02115600),
++	.sdram_mode[0] = U(0x01010210),
++	.sdram_mode[9] = U(0x04800000),
++	.sdram_mode[8] = U(0x0400),
++	.sdram_mode[2] = U(0x00),
++	.sdram_mode[10] = U(0x00),
++	.sdram_mode[11] = U(0x00),
++	.sdram_mode[4] = U(0x00),
++	.sdram_mode[12] = U(0x00),
++	.sdram_mode[13] = U(0x00),
++	.sdram_mode[6] = U(0x00),
++	.sdram_mode[14] = U(0x00),
++	.sdram_mode[15] = U(0x00),
++	.interval = U(0x18600618),
++	.data_init = U(0xdeadbeef),
++	.zq_cntl = U(0x8A090705),
++	.clk_cntl = U(0x02400000),
++	.cdr[0] = U(0x80080000),
++	.cdr[1] = U(0xA180),
++	.wrlvl_cntl[0] = U(0x86750604),
++	.wrlvl_cntl[1] = U(0x05060700),
++	.wrlvl_cntl[2] = U(0x07),
++	.dq_map[0] = U(0x5B65AC58),
++	.dq_map[1] = U(0xB16B0000),
++	.dq_map[2] = U(0),
++	.dq_map[3] = U(0x00100000),
++	.debug[28] = U(0x00700046),
++};
++
++long long board_static_ddr(struct ddr_info *priv)
++{
++	memcpy(&priv->ddr_reg, &static_1600, sizeof(static_1600));
++	return ULL(0x100000000);
++}
++
++#else
++
++static const struct rc_timing rcz[] = {
++	{1600, 8, 5},
++	{}
++};
++
++static const struct board_timing ram[] = {
++	{0x1f, rcz, 0x1020200, 0x00000003},
++};
++
++int ddr_board_options(struct ddr_info *priv)
++{
++	int ret;
++	struct memctl_opt *popts = &priv->opt;
++
++	ret = cal_board_params(priv, ram, ARRAY_SIZE(ram));
++	if (ret != 0) {
++		return ret;
++	}
++
++	popts->bstopre = U(0x40); /* precharge value */
++	popts->half_strength_drive_en = 1;
++	popts->cpo_sample = U(0x46);
++	popts->ddr_cdr1 = DDR_CDR1_DHC_EN |
++			  DDR_CDR1_ODT(DDR_CDR_ODT_80ohm);
++	popts->ddr_cdr2 = DDR_CDR2_ODT(DDR_CDR_ODT_80ohm) |
++			  DDR_CDR2_VREF_OVRD(70); /* Vref = 70% */
++
++	popts->addr_hash = 1; /* address hashing */
++	return 0;
++}
++
++/* DDR model number:  MT40A1G8SA-062E IT:E */
++struct dimm_params ddr_raw_timing = {
++	.n_ranks = U(1),
++	.rank_density = ULL(4294967296),
++	.capacity = ULL(4294967296),
++	.primary_sdram_width = U(32),
++	.ec_sdram_width = U(4),
++	.rdimm = U(0),
++	.mirrored_dimm = U(0),
++	.n_row_addr = U(16),
++	.n_col_addr = U(10),
++	.bank_group_bits = U(2),
++	.edc_config = U(2),
++	.burst_lengths_bitmask = U(0x0c),
++	.tckmin_x_ps = 750,
++	.tckmax_ps = 1900,
++	.caslat_x = U(0x0001FFE00),
++	.taa_ps = 13500,
++	.trcd_ps = 13500,
++	.trp_ps = 13500,
++	.tras_ps = 32000,
++	.trc_ps = 45500,
++	.twr_ps = 15000,
++	.trfc1_ps = 350000,
++	.trfc2_ps = 260000,
++	.trfc4_ps = 160000,
++	.tfaw_ps = 21000,
++	.trrds_ps = 3000,
++	.trrdl_ps = 4900,
++	.tccdl_ps = 5000,
++	.refresh_rate_ps = U(7800000),
++	.dq_mapping[0] = U(0x16),
++	.dq_mapping[1] = U(0x36),
++	.dq_mapping[2] = U(0x16),
++	.dq_mapping[3] = U(0x2c),
++	.dq_mapping[4] = U(0x16),
++	.dq_mapping[5] = U(0x2c),
++	.dq_mapping[6] = U(0x16),
++	.dq_mapping[7] = U(0x2c),
++	.dq_mapping[8] = U(0x0),
++	.dq_mapping[9] = U(0x0),
++	.dq_mapping[10] = U(0x0),
++	.dq_mapping[11] = U(0x0),
++	.dq_mapping[12] = U(0x0),
++	.dq_mapping[13] = U(0x0),
++	.dq_mapping[14] = U(0x0),
++	.dq_mapping[15] = U(0x0),
++	.dq_mapping[16] = U(0x1),
++	.dq_mapping[17] = U(0x0),
++	.dq_mapping_ors = U(0),
++	.rc = U(0x1f),
++};
++
++int ddr_get_ddr_params(struct dimm_params *pdimm,
++			    struct ddr_conf *conf)
++{
++	static const char dimm_model[] = "Fixed DDR on board";
++
++	conf->dimm_in_use[0] = 1;
++	memcpy(pdimm, &ddr_raw_timing, sizeof(struct dimm_params));
++	memcpy(pdimm->mpart, dimm_model, sizeof(dimm_model) - 1);
++
++	return 1;
++}
++#endif
++
++int64_t init_ddr(void)
++{
++	struct ddr_info info;
++	struct sysinfo sys;
++	int64_t dram_size;
++
++	zeromem(&sys, sizeof(sys));
++	get_clocks(&sys);
++	debug("platform clock %lu\n", sys.freq_platform);
++	debug("DDR PLL1 %lu\n", sys.freq_ddr_pll0);
++
++	zeromem(&info, sizeof(struct ddr_info));
++	info.num_ctlrs = 1;
++	info.dimm_on_ctlr = 1;
++	info.clk = get_ddr_freq(&sys, 0);
++	info.ddr[0] = (void *)NXP_DDR_ADDR;
++
++	dram_size = dram_init(&info);
++
++	if (dram_size < 0) {
++		ERROR("DDR init failed.\n");
++	}
++
++	return dram_size;
++}
+diff --git a/plat/nxp/soc-ls1028a/ls1028trustsom/plat_def.h b/plat/nxp/soc-ls1028a/ls1028trustsom/plat_def.h
+new file mode 100644
+index 000000000..a0a68b03c
+--- /dev/null
++++ b/plat/nxp/soc-ls1028a/ls1028trustsom/plat_def.h
+@@ -0,0 +1,74 @@
++/*
++ * Copyright 2018-2021 NXP
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#ifndef PLAT_DEF_H
++#define PLAT_DEF_H
++
++#include <arch.h>
++#include <cortex_a72.h>
++/*
++ * Required without TBBR.
++ * To include the defines for DDR PHY
++ * Images.
++ */
++#include <tbbr_img_def.h>
++
++#include <policy.h>
++#include <soc.h>
++
++
++#define NXP_SYSCLK_FREQ		100000000
++#define NXP_DDRCLK_FREQ		100000000
++
++/* UART related definition */
++#define NXP_CONSOLE_ADDR	NXP_UART_ADDR
++#define NXP_CONSOLE_BAUDRATE	115200
++
++/* Size of cacheable stacks */
++#if defined(IMAGE_BL2)
++#if defined(TRUSTED_BOARD_BOOT)
++#define PLATFORM_STACK_SIZE	0x2000
++#else
++#define PLATFORM_STACK_SIZE	0x1000
++#endif
++#elif defined(IMAGE_BL31)
++#define PLATFORM_STACK_SIZE	0x1000
++#endif
++
++/* SD block buffer */
++#define NXP_SD_BLOCK_BUF_SIZE	(0xC000)
++
++#ifdef SD_BOOT
++#define BL2_LIMIT		(NXP_OCRAM_ADDR + NXP_OCRAM_SIZE \
++				- NXP_SD_BLOCK_BUF_SIZE)
++#else
++#define BL2_LIMIT		(NXP_OCRAM_ADDR + NXP_OCRAM_SIZE)
++#endif
++#define BL2_TEXT_LIMIT		(BL2_LIMIT)
++
++/* IO defines as needed by IO driver framework */
++#define MAX_IO_DEVICES		4
++#define MAX_IO_BLOCK_DEVICES	1
++#define MAX_IO_HANDLES		4
++
++#define BL31_WDOG_SEC		89
++
++/*
++ * Define properties of Group 1 Secure and Group 0 interrupts as per GICv3
++ * terminology. On a GICv2 system or mode, the lists will be merged and treated
++ * as Group 0 interrupts.
++ */
++#define PLAT_LS_G1S_IRQ_PROPS(grp) \
++	INTR_PROP_DESC(BL32_IRQ_SEC_PHY_TIMER, GIC_HIGHEST_SEC_PRIORITY, grp, \
++			GIC_INTR_CFG_EDGE)
++
++/* SGI 15 and Secure watchdog interrupts assigned to Group 0 */
++#define PLAT_LS_G0_IRQ_PROPS(grp)	\
++	INTR_PROP_DESC(BL31_WDOG_SEC, GIC_HIGHEST_SEC_PRIORITY, grp, \
++			GIC_INTR_CFG_EDGE), \
++	INTR_PROP_DESC(15, GIC_HIGHEST_SEC_PRIORITY, grp, \
++			GIC_INTR_CFG_LEVEL)
++#endif /* PLAT_DEF_H */
+diff --git a/plat/nxp/soc-ls1028a/ls1028trustsom/platform.c b/plat/nxp/soc-ls1028a/ls1028trustsom/platform.c
+new file mode 100644
+index 000000000..65d508c97
+--- /dev/null
++++ b/plat/nxp/soc-ls1028a/ls1028trustsom/platform.c
+@@ -0,0 +1,28 @@
++/*
++ * Copyright 2020-2021 NXP
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#include <plat_common.h>
++
++#pragma weak board_enable_povdd
++#pragma weak board_disable_povdd
++
++bool board_enable_povdd(void)
++{
++#ifdef CONFIG_POVDD_ENABLE
++	return true;
++#else
++	return false;
++#endif
++}
++
++bool board_disable_povdd(void)
++{
++#ifdef CONFIG_POVDD_ENABLE
++	return true;
++#else
++	return false;
++#endif
++}
+diff --git a/plat/nxp/soc-ls1028a/ls1028trustsom/platform.mk b/plat/nxp/soc-ls1028a/ls1028trustsom/platform.mk
+new file mode 100644
+index 000000000..dc0c53e45
+--- /dev/null
++++ b/plat/nxp/soc-ls1028a/ls1028trustsom/platform.mk
+@@ -0,0 +1,35 @@
++#
++# Copyright 2020-2021 NXP
++# Copyright 2022 Scalys
++#
++# SPDX-License-Identifier: BSD-3-Clause
++#
++
++# Board-specific build parameters
++BOOT_MODE	?=	sd
++BOARD		:=	ls1028trustsom
++POVDD_ENABLE	:=	no
++WARM_BOOT	:=	no
++
++# DDR build parameters
++NUM_OF_DDRC		:=	1
++CONFIG_DDR_NODIMM	:=	1
++DDR_ECC_EN		:=	yes
++CONFIG_STATIC_DDR	:=	1
++
++# On-board flash
++FLASH_TYPE	:=	MT35XU02G
++XSPI_FLASH_SZ	:=	0x10000000
++
++BL2_SOURCES	+=	${BOARD_PATH}/ddr_init.c \
++			${BOARD_PATH}/platform.c
++
++SUPPORTED_BOOT_MODE	:=	\
++				sd		\
++				emmc
++
++# Add platform board build info
++include plat/nxp/common/plat_make_helper/plat_common_def.mk
++
++# Add SoC build info
++include plat/nxp/soc-ls1028a/soc.mk
+diff --git a/plat/nxp/soc-ls1028a/ls1028trustsom/platform_def.h b/plat/nxp/soc-ls1028a/ls1028trustsom/platform_def.h
+new file mode 100644
+index 000000000..bbad293ae
+--- /dev/null
++++ b/plat/nxp/soc-ls1028a/ls1028trustsom/platform_def.h
+@@ -0,0 +1,13 @@
++/*
++ * Copyright 2021 NXP
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#ifndef PLATFORM_DEF_H
++#define PLATFORM_DEF_H
++
++#include <plat_def.h>
++#include <plat_default_def.h>
++
++#endif /* PLATFORM_DEF_H */
+diff --git a/plat/nxp/soc-ls1028a/ls1028trustsom/policy.h b/plat/nxp/soc-ls1028a/ls1028trustsom/policy.h
+new file mode 100644
+index 000000000..67a8b4502
+--- /dev/null
++++ b/plat/nxp/soc-ls1028a/ls1028trustsom/policy.h
+@@ -0,0 +1,16 @@
++/*
++ * Copyright 2020-2021 NXP
++ *
++ * SPDX-License-Identifier: BSD-3-Clause
++ */
++
++#ifndef POLICY_H
++#define	POLICY_H
++
++/*
++ * Set this to 0x0 to leave the default SMMU page size in sACR
++ * Set this to 0x1 to change the SMMU page size to 64K
++ */
++#define POLICY_SMMU_PAGESZ_64K 0x1
++
++#endif /* POLICY_H */
+-- 
+2.25.1
+

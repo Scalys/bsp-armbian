@@ -24,7 +24,7 @@ compilation_prepare()
 	# Maintaining one from central location starting with 5.3+
 	# Temporally set for new "default->legacy,next->current" family naming
 
-	if linux-version compare "${version}" ge 5.12; then
+	if linux-version compare "${version}" ge 5.10; then
 
 		if test -d ${kerneldir}/debian
 		then
@@ -41,13 +41,8 @@ compilation_prepare()
 
 		chmod 755 ${kerneldir}/scripts/package/{builddeb,mkdebian}
 
-	elif linux-version compare "${version}" ge 5.10; then
-		display_alert "Adjusting" "packaging" "info"
-		cd "$kerneldir" || exit
-		process_patch_file "${SRC}/patch/misc/general-packaging-5.10.y.patch" "applying"
-
 		sed -i 's/mkdir -p "$dtb_dir\/boot\/dtb-$version"/mkdir -p "$dtb_dir\/boot"/g' scripts/package/builddeb
-		sed -i 's/INSTALL_DTBS_PATH=.* $MAKE.*/cp $srctree\/arch\/$SRCARCH\/boot\/dts\/freescale\/trustbox*.dtb $dtb_dir\/boot\//g' scripts/package/builddeb
+		sed -i 's/INSTALL_DTBS_PATH=.* $MAKE.*/cp $srctree\/arch\/$SRCARCH\/boot\/dts\/freescale\/trust*.dtb $dtb_dir\/boot\//g' scripts/package/builddeb
 
 		sed -i '/^.*if \[ "\$3" = "dtb" \]/,/fi$/{d;}' scripts/package/builddeb
 

@@ -1,0 +1,168 @@
+commit dc984dc973667a0d8e6fae12483cc8e46ad149cc
+Author: Siarhei Yasinski <siarhei.yasinski@sintecs.eu>
+Date:   Wed Aug 31 10:43:36 2022 +0300
+
+    drivers: Added support for Cypress USB HX3 Hub CYUSB3304
+
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index 007c72819f..bfeeec9a81 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -578,4 +578,13 @@ config SL28CPLD
+ 	  the base driver which provides common access methods for the
+ 	  sub-drivers.
+ 
++config HX3_HUB
++	tristate "HX3 Hub Controller Configuration Driver"
++	depends on I2C
++	help
++	  This option enables support for configuration via I2C of the
++	  Cypress CYUSB3304 USB 3.0 Hub Controller. Configuration
++	  parameters must be set in devicetree.
++	  Say Y or M here if you need to configure such a device via I2C.
++
+ endmenu
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index b9c54bdd99..d28c87ce07 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -85,3 +85,4 @@ obj-$(CONFIG_K3_AVS0) += k3_avs.o
+ obj-$(CONFIG_ESM_K3) += k3_esm.o
+ obj-$(CONFIG_ESM_PMIC) += esm_pmic.o
+ obj-$(CONFIG_SL28CPLD) += sl28cpld.o
++obj-$(CONFIG_HX3_HUB) += hx3_hub.o
+diff --git a/drivers/misc/hx3_hub.c b/drivers/misc/hx3_hub.c
+new file mode 100644
+index 0000000000..876827860d
+--- /dev/null
++++ b/drivers/misc/hx3_hub.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Driver for Cypress HX3 USB Hub.
++ *
++ * Copyright 2022 Scalys B.V.
++ * opensource@scalys.com
++ */
++
++#include <common.h>
++#include <dm.h>
++#include <dm/device_compat.h>
++#include <i2c.h>
++
++#define HX3_CONFIG_SIZE		192
++#define HX3_CONFIG_BLOB_SIZE	(HX3_CONFIG_SIZE + 5)
++#define MAX_I2C_ATTEMPTS	10
++
++#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
++
++struct hx3_data {
++	struct device *dev;
++	struct i2c_client *i2c;
++	u8 config[HX3_CONFIG_BLOB_SIZE];
++};
++
++static int hx3_probe(struct udevice *parent)
++{
++	struct hx3_data *hub = dev_get_priv(parent);
++	int length, index = 0, i2c_attempts = 0;
++	const int settings_size = sizeof(hub->config);
++	const uint8_t *data = hub->config;
++	int status;
++
++	i2c_set_chip_offset_len(parent, 2);
++
++	while (index < settings_size) {
++		length = MIN(56, (settings_size - index)); // to avoid malloc in dm_i2c_write use message < 64 bytes
++
++		if ((status = dm_i2c_write(parent, index, data, length)) != 0) {
++			if (i2c_attempts < 1)
++				printf("\nWARNING: I2C error %d during configuring USB hub slave. retrying...\n", status);
++			if (++i2c_attempts >= MAX_I2C_ATTEMPTS) {
++				printf("ERROR: Maximum USB hub configuration attempts reached. Exiting now\n");
++				return -EINVAL;
++			}
++			continue;
++		}
++		i2c_attempts = 0; /* reset error count */
++		index += length;
++		data += length;
++	}
++
++	dev_info(parent, "Hub probed successfully\n");
++
++	return 0;
++}
++
++static int hx3_of_to_plat(struct udevice *parent)
++{
++	struct hx3_data *hub = dev_get_priv(parent);
++	bool have_config = false;
++	int conf_size;
++
++	conf_size = dev_read_size(parent, "configuration");
++	if (conf_size > 5 && conf_size <= sizeof(hub->config)) {
++		const uint8_t *ptr = dev_read_u8_array_ptr(parent, "configuration", conf_size);
++		if (ptr) {
++			memcpy(hub->config, ptr, conf_size);
++			memset(hub->config + conf_size, 0, sizeof(hub->config) - conf_size);
++			if (hub->config[4] == HX3_CONFIG_SIZE)
++				have_config = true;
++			else
++				dev_err(parent, "Invalid HX3 HUB configuration size (%d)\n", hub->config[4]);
++		}
++	}
++
++	if (!have_config) {
++		dev_err(parent, "unable read HX3 HUB configuration (%d)\n", conf_size);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++int hx3_hub_init(const char *bus_name, uint chip_addr)
++{
++	struct udevice *bus, *dev;
++	int status;
++
++	status = uclass_get_device_by_seq(UCLASS_I2C, 2, &bus);
++	if (!status) {
++		status = dm_i2c_probe(bus, chip_addr, 0, &dev);
++	}
++
++	return status;
++}
++
++static const struct udevice_id hx3_of_match[] = {
++	{ .compatible = "cypress,cyusb3304" }
++};
++
++U_BOOT_DRIVER(hx3_usb_hub) = {
++	.name		= "hx3usb",
++	.id		= UCLASS_MISC,
++	.of_match	= hx3_of_match,
++	.of_to_plat	= hx3_of_to_plat,
++	.probe		= hx3_probe,
++	.priv_auto	= sizeof(struct hx3_data),
++};
+diff --git a/include/hx3_hub.h b/include/hx3_hub.h
+new file mode 100644
+index 0000000000..7992f8eac4
+--- /dev/null
++++ b/include/hx3_hub.h
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Driver for Cypress HX3 USB Hub.
++ *
++ * Copyright 2022 Scalys B.V.
++ * opensource@scalys.com
++ */
++
++#ifndef HX3_HUB_H
++#define HX3_HUB_H
++
++int hx3_hub_init(const char *bus_name, uint chip_addr);
++
++#endif

@@ -1,0 +1,414 @@
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index db9e36ebe..f4881bb20 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -30,6 +30,7 @@ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2160a-honeycomb.dtb
+ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2160a-qds.dtb
+ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2160a-rdb.dtb
+ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2162a-qds.dtb
++dtb-$(CONFIG_ARCH_LAYERSCAPE) += trustsom-tbe201.dtb
+ 
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-beacon-kit.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb
+diff --git a/arch/arm64/boot/dts/freescale/trustsom-tbe201.dts b/arch/arm64/boot/dts/freescale/trustsom-tbe201.dts
+new file mode 100644
+index 000000000..163a7e0e7
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/trustsom-tbe201.dts
+@@ -0,0 +1,396 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Device Tree file for Scalys TrustSOM on Trustbox Edge 201 Carrier.
++ *
++ * Copyright 2018-2019 NXP
++ * Copyright 2021-2022 Scalys
++ *
++ * opensource@scalys.com
++ *
++ */
++
++/dts-v1/;
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++#include "fsl-ls1028a.dtsi"
++
++/ {
++	model = "Scalys TrustSOM on Trustbox Edge 201 Carrier";
++	compatible = "fsl,ls1028a";
++
++	aliases {
++		crypto = &crypto;
++		serial0 = &duart0;
++		serial1 = &duart1;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x0 0x80000000 0x1 0x0000000>;
++	};
++
++	/* Fix incorrectly named node such that bootloader can find it */
++	/delete-node/ clock-sysclk;
++	sysclk: sysclk {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <100000000>;
++		clock-output-names = "sysclk";
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		led0: redled  {
++			label = "redled";
++			color = <LED_COLOR_ID_RED>;
++			gpio = <&gpio3 5 GPIO_ACTIVE_HIGH>; /* GPIO3_5 */
++			default-state = "off";
++		};
++
++		led1: greenled  {
++			label = "greenled";
++			color = <LED_COLOR_ID_GREEN>;
++			gpio = <&gpio3 3 GPIO_ACTIVE_HIGH>; /* GPIO3_3 */
++			default-state = "on";
++		};
++
++		 led2: blueled  {
++			label = "blueled";
++			color = <LED_COLOR_ID_BLUE>;
++			gpio = <&gpio3 2 GPIO_ACTIVE_HIGH>; /* GPIO3_2 */
++			default-state = "off";
++		};
++	};
++
++	sfp0: sfp {
++		compatible = "sff,sfp";
++		i2c-bus = <&i2c2>;
++		mod-def0-gpios = <&gpio3 1 GPIO_ACTIVE_LOW>;
++		los-gpios = <&gpio3 7 GPIO_ACTIVE_HIGH>;
++		tx-fault-gpios = <&gpio3 6 GPIO_ACTIVE_HIGH>;
++		tx-disable-gpios = <&gpio3 0 GPIO_ACTIVE_HIGH>;
++		maximum-power-milliwatt = <2000>;
++	};
++};
++
++&gpio1 {
++	gpio-line-names = "", "", "", "", "", "", "UART_2_SIN", "UART_2_SOUT",
++		"", "", "UART_1_SIN", "UART_1_SOUT", "", "", "", "", "", "", "", "",
++		"", "", "USB_2_DRVVBUS", "USB_2_PWRFAULT", "", "", "", "", "", "",
++		"SDHC_1_WP", "SDHC_1_CD";
++
++	SDHC_1_WP {
++		gpio-hog;
++		gpios = <30 0>;
++		output-low;
++		line-name = "SDHC_1_WP";
++	};
++
++	gpio1_default_output_low {
++		gpio-hog;
++		gpios = <6 0>, <7 0>, <22 0>, <23 0>, <26 0>, <27 0>;
++		output-low;
++		line-name = "gpio1_default_output_low";
++	};
++};
++
++&gpio2 {
++	gpio-line-names = "", "", "", "", "", "", "ASLEEP", "CLKOUT", "", "", "",
++		"", "", "", "", "", "", "", "", "", "M2_E_W_DISABLE_1_N", "EXPANSION PIN4",
++		"EXPANSION PIN6", "M2_B_W_DISABLE_1_N", "M2_B_POWER_OFF_N", "EXPANSION PIN8",
++		"M2_B_CONFIG_0", "ALERT_5V_SOM_N", "M2_B_CONFIG_2", "ALERT_12V_N",
++		"M2_B_CONFIG_3", "M2_B_CONFIG_1";
++
++	gpio2_default_output_low {
++		gpio-hog;
++		gpios = <7 0>;
++		output-low;
++		line-name = "gpio2_default_output_low";
++	};
++
++	gpio2_default_output_high {
++		gpio-hog;
++		gpios = <20 0>, <23 0>, <24 0>;
++		output-high;
++		line-name = "gpio2_default_output_high";
++	};
++};
++
++&gpio3 {
++	gpio-line-names = "SFP_TX_DISABLE", "SFP_MOD_ABS", "MDINT_N", "DP_PWR_EN",
++		"EXPANSION PIN2", "DP_PWR_FAULT_N", "SFP_TX_FAULT", "SFP_LOS", "RESET_TPM_N",
++		"PROG_SFP_EN", "INT_TPM_N", "NT_RTC_N", "ALERT_TEMP", "", "", "", "",
++		"USB_PWRFAULT", "USB_DRVVBUS", "", "", "", "", "", "", "", "", "", "", "", "", "";
++
++	RESET_TPM_N {
++		gpio-hog;
++		gpios = <8 0>;
++		output-high;
++		line-name = "RESET_TPM_N";
++	};
++
++	PROG_SFP_EN {
++		gpio-hog;
++		gpios = <9 0>;
++		output-low;
++		line-name = "PROG_SFP_EN";
++	};
++
++	INT_TPM_N {
++		gpio-hog;
++		gpios = <10 0>;
++		input;
++		line-name = "INT_TPM_N";
++	};
++
++	INT_RTC_N {
++		gpio-hog;
++		gpios = <11 0>;
++		input;
++		line-name = "INT_RTC_N";
++	};
++
++	ALERT_TEMP {
++		gpio-hog;
++		gpios = <12 0>;
++		input;
++		line-name = "ALERT_TEMP";
++	};
++
++	gpio3_default_output_low {
++		gpio-hog;
++		gpios = <4 0>;
++		output-low;
++		line-name = "gpio3_default_output_low";
++	};
++};
++
++&dspi2 {
++	spi-num-chipselects = <1>;
++	status = "okay";
++
++	slb9670: slb9670@0 {
++		compatible = "infineon,slb9670";
++		reg = <0>; /* CE0 */
++		#address-cells = <1>;
++		#size-cells = <0>;
++		spi-max-frequency = <10000000>;
++		status = "okay";
++		/* Interrupt disabled for now */
++		/*interrupt-parent = <&gpio3>;
++		interrupts = <10 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-names = "INT_TPM_N";*/
++	};
++};
++
++&esdhc {
++	sd-uhs-sdr104;
++	sd-uhs-sdr50;
++	sd-uhs-sdr25;
++	sd-uhs-sdr12;
++	status = "okay";
++	cd-gpios = <&gpio1 31 GPIO_ACTIVE_LOW>;
++	disable-wp;
++};
++
++&esdhc1 {
++	voltage-ranges = <1800 1800>;
++	mmc-hs200-1_8v;
++	/*mmc-hs400-1_8v;
++	max-frequency = <150000000>;*/
++	bus-width = <8>;
++	non-removable;
++};
++
++&usb0 {
++	status = "okay";
++};
++
++&usb1 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	rtc@51 {
++		compatible = "nxp,pcf85063tp";
++		reg = <0x51>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-names = "INT_RTC_N";
++	};
++
++	tmp@4c {
++		compatible = "ti,tmp451";
++		reg = <0x4c>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-names = "ALERT_TEMP";
++	};
++};
++
++&i2c2 {
++	clock-frequency = <400000>;
++	status = "okay";
++};
++
++&i2c4 {
++	clock-frequency = <100000>;
++	status = "okay";
++
++	usb_hub@60 {
++		reg = <0x60>;
++		compatible = "cypress,cyusb3304";
++		configuration = [ 	43 59 /* 'C' 'Y' Cypress magic signature */
++					30 /* I2C speed : 100kHz */
++					D4 /* Image type: Only settings, no firmware */
++					C0 /* payload size (192) */
++					B4 04 /* VID */
++					04 65 /* PID */
++					0A 32 /* DID */
++					00 /* Reserved */
++					03 /* DS4 and DS3 have no SuperSpeed port */
++					32 /* bPwrOn2PwrGood : 100 ms */
++					FF /* 4 Downstream ports : all removable (MCU) */
++					11 /* Ganged power switching */
++					A0 /* suspend indicator disabled, power switch control is active high */
++					11 /* BC v1.2 and ghost charging enabled */
++					F0 /* cdp enabled */
++					E8 /* embedded hub, overcurrent input is active low high */
++					00 /* reserved */
++					08 /* USB String descriptors enabled (0x08) / disabled (0x00) */
++					00 00
++					12 00 2C
++					66 66 /* USB3.0 TX driver de-emphasis */
++					69 29 29 29 29 /* TX amplitude */
++					00 /* Reserved */
++					06 65 /* USB 2.0 PID */
++					00 00 00 00 00 00 00 00 /* Reserved */
++					04 03 09 04 /* LangID = 0x0409 US English */
++					36 03 /* Manufacturer string descriptor */
++					32 00 30 00 31 00 34 00 20 00 43 00 79 00 70 00 72 00 65 00 73 00 73 00 20 00
++					53 00 65 00 6D 00 69 00 63 00 6F 00 6E 00 64 00 75 00 63 00 74 00 6F 00 72 00
++					16 03 /* Product string descriptor */
++					43 00 59 00 2D 00 48 00 58 00 33 00 20 00 48 00 55 00 42 00
++					14 03 /* Serial string descriptor */
++					54 00 42 00 45 00 32 00 30 00 31 00 ];
++	};
++};
++
++&can1 {
++	status = "disabled";
++};
++
++&fspi {
++	status = "disabled";
++};
++
++&duart0 {
++	status = "okay";
++};
++
++&duart1 {
++	status = "disabled";
++};
++
++&enetc_mdio_pf3 {
++	/* VSC8514 QSGMII quad PHY */
++	qsgmii_phy0: ethernet-phy@4 {
++		reg = <0x4>;
++	};
++
++	qsgmii_phy1: ethernet-phy@5 {
++		reg = <0x5>;
++	};
++
++	qsgmii_phy2: ethernet-phy@6 {
++		reg = <0x6>;
++	};
++
++	qsgmii_phy3: ethernet-phy@7 {
++		reg = <0x7>;
++	};
++};
++
++&enetc_port0 {
++	phy-connection-type = "sgmii";
++	sfp = <&sfp0>;
++	managed = "in-band-status";
++	status = "okay";
++};
++
++&enetc_port2 {
++	status = "okay";
++};
++
++&enetc_port3 {
++	status = "okay";
++};
++
++&mscc_felix {
++	status = "okay";
++};
++
++&mscc_felix_port0 {
++	label = "swp0";
++	managed = "in-band-status";
++	phy-handle = <&qsgmii_phy0>;
++	phy-mode = "qsgmii";
++	status = "okay";
++};
++
++&mscc_felix_port1 {
++	label = "swp1";
++	managed = "in-band-status";
++	phy-handle = <&qsgmii_phy1>;
++	phy-mode = "qsgmii";
++	status = "okay";
++};
++
++&mscc_felix_port2 {
++	label = "swp2";
++	managed = "in-band-status";
++	phy-handle = <&qsgmii_phy2>;
++	phy-mode = "qsgmii";
++	status = "okay";
++};
++
++&mscc_felix_port3 {
++	label = "swp3";
++	managed = "in-band-status";
++	phy-handle = <&qsgmii_phy3>;
++	phy-mode = "qsgmii";
++	status = "okay";
++};
++
++&mscc_felix_port4 {
++	ethernet = <&enetc_port2>;
++	status = "okay";
++};
++
++&mscc_felix_port5 {
++	ethernet = <&enetc_port3>;
++	status = "okay";
++};
++
++&malidp0 {
++	status = "disabled";
++};
++
++&sata {
++	status = "okay";
++};
++
++&optee {
++	status = "okay";
++};
++
++&pcie2 {
++	status = "okay";
++};
