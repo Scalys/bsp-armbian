@@ -600,10 +600,14 @@ compile_firmware()
 	mkdir -p "${firmwaretempdir}/${plugin_dir}/lib/firmware"
 
 	fetch_from_repo "$GITHUB_SOURCE/armbian/firmware" "armbian-firmware-git" "branch:master"
+	fetch_from_repo "$MAINLINE_FIRMWARE_SOURCE" "linux-firmware-git" "branch:main"
 	if [[ -n $FULL ]]; then
-		fetch_from_repo "$MAINLINE_FIRMWARE_SOURCE" "linux-firmware-git" "branch:main"
 		# cp : create hardlinks
 		cp -af --reflink=auto "${SRC}"/cache/sources/linux-firmware-git/* "${firmwaretempdir}/${plugin_dir}/lib/firmware/"
+	else
+		cp -af --reflink=auto "${SRC}"/cache/sources/linux-firmware-git/iwlwifi-cc-a0-{66,59}.ucode "${firmwaretempdir}/${plugin_dir}/lib/firmware/"
+		mkdir -p "${firmwaretempdir}/${plugin_dir}/lib/firmware/rtl_nic/"
+		cp -af --reflink=auto "${SRC}"/cache/sources/linux-firmware-git/rtl_nic/rtl8153a-3.fw "${firmwaretempdir}/${plugin_dir}/lib/firmware/rtl_nic/"
 	fi
 	# overlay our firmware
 	# cp : create hardlinks
