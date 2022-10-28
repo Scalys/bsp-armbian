@@ -99,6 +99,7 @@ RUN apt-get update \
        python3-pkg-resources \
        python3-setuptools \
        python3-pip \
+       python3-cryptography \
        python3-pycryptodome \
        python3-pyelftools \
        qemu-utils \

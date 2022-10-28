@@ -12,7 +12,7 @@ declare -A RCWPATH=( \
 	["sd"]="trustsom_tbe201/N_SQPP_0x85BE/rcw_1500.bin" \
 )
 
-OPTEE_PLATFORM='trustsom_tbdconnect'
+OPTEE_PLATFORM='ls1028ardb'
 
 TFABOOT=yes
 ATF_PLATFORM='ls1028trustsom'
